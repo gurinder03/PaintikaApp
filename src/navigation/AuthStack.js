@@ -1,15 +1,16 @@
-import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import SignUpScreen from '../screens/SignUpScreen';
-import LoginScreen from '../screens/LoginScreen';
-import ForgotPassword from '../screens/ForgotPassword';
-import SplashScreen from '../screens/SplashScreen';
-import OtpScreen from '../screens/OTPScreen';
-import HomeScreen from '../screens/HomeScreen';
-import {createStackNavigator} from '@react-navigation/stack';
-import CreatePassword from '../screens/CreatePassword';
-import EditProfile from '../screens/EditProfile';
-import Tabs from './Tabs';
+import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import SignUpScreen from "../screens/SignUpScreen";
+import LoginScreen from "../screens/LoginScreen";
+import ForgotPassword from "../screens/ForgotPassword";
+import SplashScreen from "../screens/SplashScreen";
+import OtpScreen from "../screens/OTPScreen";
+import HomeScreen from "../screens/HomeScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import CreatePassword from "../screens/CreatePassword";
+import EditProfile from "../screens/EditProfile";
+import Tabs from "./Tabs";
+import FilePreview from "../screens/FilePreview";
 
 export default function AuthStack() {
   const Stack = createStackNavigator();
@@ -23,15 +24,15 @@ export default function AuthStack() {
     return () => {};
   }, []);
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {splash ? (
         <Stack.Screen
           name="Splash"
           component={SplashScreen}
           options={{
-            presentation: 'modal',
-            animationTypeForReplace: 'push',
-            animation: 'slide_from_right',
+            presentation: "modal",
+            animationTypeForReplace: "push",
+            animation: "slide_from_right",
           }}
         />
       ) : // <Stack.Screen
@@ -60,6 +61,7 @@ export default function AuthStack() {
       <Stack.Screen name="Tabs" component={Tabs} />
       <Stack.Screen name="Create" component={CreatePassword} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Preview" component={FilePreview} />
       {/* <Stack.Screen
         name="Create"
         component={CreatePassword}
@@ -68,7 +70,7 @@ export default function AuthStack() {
       <Stack.Screen
         name="Edit"
         component={EditProfile}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
