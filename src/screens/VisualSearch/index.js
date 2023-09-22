@@ -6,7 +6,11 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { ImagePicker, launchImageLibrary } from "react-native-image-picker";
+import {
+  ImagePicker,
+  launchImageLibrary,
+  launchCamera,
+} from "react-native-image-picker";
 
 export default function VisualSearch({ navigation }) {
   const [avatar, setAvatar] = useState("");
@@ -41,6 +45,24 @@ export default function VisualSearch({ navigation }) {
       }
     });
   };
+
+  const captureImage = () => {
+    launchCamera(options, (response) => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        // setAvatar({ uri: response.uri });
+        // navigation.navigate("Preview", { path: response?.assets[0]?.uri });
+        // here we can call a API to upload image on server
+      }
+    });
+  };
   return (
     <View style={styles.container}>
       <LottieView
@@ -56,7 +78,7 @@ export default function VisualSearch({ navigation }) {
           Search for an painting by taking a photo or uploading an image.
         </Text>
         <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.uploadBtn1}>
+          <TouchableOpacity style={styles.uploadBtn1} onPress={captureImage}>
             <Text style={styles.uploadBtnText1}>TAKE A PHOTO</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.uploadBtn2} onPress={selectImage}>
