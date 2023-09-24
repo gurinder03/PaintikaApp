@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  PermissionsAndroid,
+} from "react-native";
 import React, { useState } from "react";
 import styles from "./styles";
 import LottieView from "lottie-react-native";
@@ -45,7 +51,28 @@ export default function VisualSearch({ navigation }) {
       }
     });
   };
-
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "App Camera Permission",
+          message: "App needs access to your camera ",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("Camera permission given");
+        captureImage();
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
   const captureImage = () => {
     launchCamera(options, (response) => {
       console.log("Response = ", response);
@@ -58,7 +85,7 @@ export default function VisualSearch({ navigation }) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
         // setAvatar({ uri: response.uri });
-        // navigation.navigate("Preview", { path: response?.assets[0]?.uri });
+        navigation.navigate("Preview", { path: response?.assets[0]?.uri });
         // here we can call a API to upload image on server
       }
     });
@@ -78,7 +105,10 @@ export default function VisualSearch({ navigation }) {
           Search for an painting by taking a photo or uploading an image.
         </Text>
         <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.uploadBtn1} onPress={captureImage}>
+          <TouchableOpacity
+            style={styles.uploadBtn1}
+            onPress={requestCameraPermission}
+          >
             <Text style={styles.uploadBtnText1}>TAKE A PHOTO</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.uploadBtn2} onPress={selectImage}>
