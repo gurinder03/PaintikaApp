@@ -32,7 +32,7 @@ export default function HomeScreen({ navigation }) {
   function Slide({ data }) {
     console.log("DATA:::::::::::::", data);
     return (
-      <View
+      <TouchableOpacity
         style={{
           height: windowHeight,
           width: windowWidth,
@@ -40,6 +40,7 @@ export default function HomeScreen({ navigation }) {
           alignItems: "center",
           marginTop: 5,
         }}
+        onPress={() => navigation.navigate("Category")}
       >
         <Image
           source={{ uri: data.image }}
@@ -61,7 +62,7 @@ export default function HomeScreen({ navigation }) {
           {data.name.toUpperCase()}
         </Text>
         <Text style={{ fontSize: 18 }}>{data.subtitle}</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
   useEffect(() => {

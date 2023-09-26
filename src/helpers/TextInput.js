@@ -1,7 +1,7 @@
-import {View, Text, StyleSheet, TextInput} from 'react-native';
-import React from 'react';
-import Colors from '../constants/Colors';
-import FontStyles from '../constants/FontStyles';
+import { View, Text, StyleSheet, TextInput } from "react-native";
+import React from "react";
+import Colors from "../constants/Colors";
+import FontStyles from "../constants/FontStyles";
 
 export default function TextInputComponent({
   value,
@@ -24,12 +24,12 @@ export default function TextInputComponent({
 const styles = StyleSheet.create({
   container: {
     height: 100,
-    width: '100%',
-    justifyContent: 'center',
+    width: "100%",
+    justifyContent: "center",
     paddingHorizontal: 10,
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 60,
     borderBottomWidth: 1,
     borderBottomColor: Colors.black,

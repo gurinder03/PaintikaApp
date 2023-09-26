@@ -1,5 +1,5 @@
-import { View, Text, Image } from "react-native";
-import React from "react";
+import { View, Text, Image, ScrollView } from "react-native";
+import React, { useState } from "react";
 import FontStyles from "../../constants/FontStyles";
 import {
   heightPercentageToDP as hp,
@@ -7,8 +7,19 @@ import {
 } from "react-native-responsive-screen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Colors from "../../constants/Colors";
+import TextInputComponent from "../../helpers/TextInput";
+import CustomPicker from "../../helpers/CustomPicker";
 
 export default function FilePreview({ route }) {
+  const [data, setData] = useState({
+    name: "",
+    size: "",
+    theme: "",
+    medium: "",
+    quality: "",
+    price: "",
+    category: "",
+  });
   const { path } = route?.params;
   console.log("🚀 ~ file: index.js:6 ~ FilePreview ~ path:", path);
   return (
@@ -22,7 +33,7 @@ export default function FilePreview({ route }) {
     >
       <View
         style={{
-          height: "60%",
+          height: "40%",
           width: "100%",
           justifyContent: "center",
           alignItems: "center",
@@ -30,20 +41,27 @@ export default function FilePreview({ route }) {
       >
         <Image
           source={{ uri: path }}
-          style={{ width: "100%", height: "80%", borderWidth: 2 }}
+          style={{ width: "80%", height: "80%", borderWidth: 2 }}
         />
       </View>
       <View
         style={{
-          height: "40%",
+          height: "60%",
           width: "100%",
           justifyContent: "space-around",
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 20, fontFamily: FontStyles.manRopeSemiBold }}>
-          Tap on the upload button below.
-        </Text>
+        <ScrollView style={{ width: wp(90) }}>
+          <TextInputComponent title={"Name"} />
+          <TextInputComponent title={"Size"} />
+          <TextInputComponent title={"Painting Theme"} />
+          <TextInputComponent title={"Medium"} />
+          <TextInputComponent title={"Framing Quality"} />
+          <TextInputComponent title={"Price"} />
+          <CustomPicker title={"Category"} />
+        </ScrollView>
+
         <View
           style={{
             height: hp(10),
