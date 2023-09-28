@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -14,7 +14,17 @@ import {
 import FontStyles from "../../constants/FontStyles";
 import HeartIcon from "react-native-vector-icons/AntDesign";
 import Colors from "../../constants/Colors";
-export default function CategoryList() {
+import { useDispatch, useSelector } from "react-redux";
+import { getRelatedData } from "../../redux/actions";
+export default function CategoryList({ navigation, route }) {
+  const { item } = route.params || {};
+  const dispatch = useDispatch();
+  const savedList = useSelector((state) => state.saveDataReducer.relatedData);
+  console.log(
+    "🚀 ~ file: CategoryList.js:23 ~ CategoryList ~ savedList:",
+    savedList
+  );
+  console.log("🚀 ~ file: CategoryList.js:19 ~ CategoryList ~ item:", item);
   const data = [
     {
       name: "FANCY ART",
@@ -47,11 +57,10 @@ export default function CategoryList() {
       price: "499",
     },
   ];
-
   const RenderItem = ({ item }) => {
     return (
       <>
-        <View
+        <TouchableOpacity
           style={{
             width: wp(100),
             height: hp(60),
@@ -61,6 +70,7 @@ export default function CategoryList() {
             marginTop: hp(3),
             backgrounColor: "pink",
           }}
+          onPress={() => navigation.navigate("Detail")}
         >
           <Image
             source={require("../../../assets/art.jpg")}
@@ -102,10 +112,23 @@ export default function CategoryList() {
               <HeartIcon name="hearto" size={30} />
             </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
       </>
     );
   };
+
+  useEffect(() => {
+    if (item !== null) {
+      dispatch(
+        getRelatedData({
+          page: 1,
+          limit: 10,
+          category: [item?._id],
+        })
+      );
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <View
@@ -145,7 +168,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     height: "100%",
-    backgrounColor: "pink",
     justifyContent: "center",
     alignItems: "center",
   },

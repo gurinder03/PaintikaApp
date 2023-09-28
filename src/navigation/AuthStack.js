@@ -12,6 +12,7 @@ import EditProfile from "../screens/EditProfile";
 import Tabs from "./Tabs";
 import FilePreview from "../screens/FilePreview";
 import CategoryList from "../screens/CategoryList/CategoryList";
+import ProductDetail from "../screens/ProductDetail";
 
 export default function AuthStack() {
   const Stack = createStackNavigator();
@@ -65,6 +66,7 @@ export default function AuthStack() {
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Preview" component={FilePreview} />
       <Stack.Screen name="Category" component={CategoryList} />
+      <Stack.Screen name="Detail" component={ProductDetail} />
       {/* <Stack.Screen
         name="Create"
         component={CreatePassword}

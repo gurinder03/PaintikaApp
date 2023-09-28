@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import FontStyles from "../../constants/FontStyles";
 import {
@@ -22,6 +22,30 @@ export default function FilePreview({ route }) {
   });
   const { path } = route?.params;
   console.log("🚀 ~ file: index.js:6 ~ FilePreview ~ path:", path);
+
+  const handleChange = (name, e) => {
+    if (name == "name") {
+      setData({ ...data, name: e });
+    } else if (name == "size") {
+      setData({ ...data, size: e });
+    } else if (name == "theme") {
+      setData({ ...data, theme: e });
+    } else if (name == "medium") {
+      setData({ ...data, medium: e });
+    } else if (name == "quality") {
+      setData({ ...data, quality: e });
+    } else if (name == "price") {
+      setData({ ...data, price: e });
+    } else if (name == "category") {
+      setData({ ...data, category: e });
+    }
+  };
+
+  const handleUpload = () => {
+    Alert.alert(
+      `name ${data.name} size = ${data?.size} theme ${data.theme} medium ${data?.medium} quality ${data?.quality} price ${data?.price} category ${data?.category}`
+    );
+  };
   return (
     <View
       style={{
@@ -53,13 +77,41 @@ export default function FilePreview({ route }) {
         }}
       >
         <ScrollView style={{ width: wp(90) }}>
-          <TextInputComponent title={"Name"} />
-          <TextInputComponent title={"Size"} />
-          <TextInputComponent title={"Painting Theme"} />
-          <TextInputComponent title={"Medium"} />
-          <TextInputComponent title={"Framing Quality"} />
-          <TextInputComponent title={"Price"} />
-          <CustomPicker title={"Category"} />
+          <TextInputComponent
+            title={"Name"}
+            onChange={(e) => handleChange("name", e)}
+            value={data.name}
+          />
+          <TextInputComponent
+            title={"Size"}
+            onChange={(e) => handleChange("size", e)}
+            value={data.size}
+          />
+          <TextInputComponent
+            title={"Painting Theme"}
+            onChange={(e) => handleChange("theme", e)}
+            value={data?.theme}
+          />
+          <TextInputComponent
+            title={"Medium"}
+            onChange={(e) => handleChange("medium", e)}
+            value={data?.medium}
+          />
+          <TextInputComponent
+            title={"Framing Quality"}
+            onChange={(e) => handleChange("quality", e)}
+            value={data?.quality}
+          />
+          <TextInputComponent
+            title={"Price"}
+            onChange={(e) => handleChange("price", e)}
+            value={data?.quality}
+          />
+          <CustomPicker
+            title={"Category"}
+            onChange={(e) => handleChange("category", e)}
+            value={data?.category}
+          />
         </ScrollView>
 
         <View
@@ -79,6 +131,7 @@ export default function FilePreview({ route }) {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onPress={() => handleUpload()}
           >
             <Text
               style={{

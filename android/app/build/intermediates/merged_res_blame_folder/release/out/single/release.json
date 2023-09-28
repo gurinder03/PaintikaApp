@@ -56,6 +56,10 @@
         "source": "com.paintapp-res-28:/drawable-mdpi/assets_google.png"
     },
     {
+        "merged": "com.paintapp-merged_res-34:/drawable-mdpi_assets_art.jpg.flat",
+        "source": "com.paintapp-res-28:/drawable-mdpi/assets_art.jpg"
+    },
+    {
         "merged": "com.paintapp-merged_res-34:/drawable-mdpi_assets_facebook.png.flat",
         "source": "com.paintapp-res-28:/drawable-mdpi/assets_facebook.png"
     },

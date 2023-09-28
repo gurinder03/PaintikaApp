@@ -40,7 +40,7 @@ export default function HomeScreen({ navigation }) {
           alignItems: "center",
           marginTop: 5,
         }}
-        onPress={() => navigation.navigate("Category")}
+        onPress={() => navigation.navigate("Category", { item: data })}
       >
         <Image
           source={{ uri: data.image }}
