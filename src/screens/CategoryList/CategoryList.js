@@ -5,8 +5,9 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  TextInput,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -16,9 +17,14 @@ import HeartIcon from "react-native-vector-icons/AntDesign";
 import Colors from "../../constants/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import { getRelatedData } from "../../redux/actions";
+import CustomPicker from "../../helpers/CustomPicker";
+import { Picker } from "@react-native-picker/picker";
+import Search from "react-native-vector-icons/Feather";
 export default function CategoryList({ navigation, route }) {
   const { item } = route.params || {};
   const dispatch = useDispatch();
+  const [SelectedLanguage, setSelectedLanguage] = useState("");
+  const [searchText, setsearchText] = useState("");
   const savedList = useSelector((state) => state.saveDataReducer.relatedData);
   console.log(
     "🚀 ~ file: CategoryList.js:23 ~ CategoryList ~ savedList:",
@@ -67,8 +73,7 @@ export default function CategoryList({ navigation, route }) {
             backgroundColor: "#fff",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: hp(3),
-            backgrounColor: "pink",
+            marginTop: hp(2),
           }}
           onPress={() => navigation.navigate("Detail")}
         >
@@ -134,12 +139,72 @@ export default function CategoryList({ navigation, route }) {
       <View
         style={{
           width: "100%",
-          height: "10%",
-          justifyContent: "center",
-          alignItems: "center",
+          height: hp(13),
+          // zIndex: 999,
+          // justifyContent: "center",
+          // backgroundColor: "red",
         }}
       >
-        <Text
+        <Picker
+          selectedValue={SelectedLanguage}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedLanguage(itemValue)
+          }
+          style={{
+            borderWidth: 1,
+            width: "100%",
+            height: hp(1),
+          }}
+        >
+          <Picker.Item label="Select City" value="null" />
+          <Picker.Item label="Mohali" value="mohali" />
+          <Picker.Item label="Kharar" value="kharar" />
+          <Picker.Item label="Patiala" value="patiala" />
+          <Picker.Item label="Jalandhar" value="jalandhar" />
+        </Picker>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            height: hp(6),
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextInput
+              style={{
+                width: "95%",
+                height: hp(5),
+                borderRadius: 5,
+                paddingLeft: 15,
+                borderWidth: 0.7,
+                borderColor: Colors.black,
+              }}
+              onChangeText={(e) => setsearchText(e)}
+              value={searchText}
+            />
+          </View>
+
+          <View style={{ width: "10%" }}>
+            <TouchableOpacity
+              style={{
+                justifyContent: "center",
+                alignItems: "flex-start",
+                // backgroundColor: "yellow",
+                // height: "100%",
+              }}
+            >
+              <Search name="search" size={25} color={Colors.black} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* <Text
           style={{
             fontFamily: FontStyles.manRopeSemiBold,
             color: Colors.black,
@@ -147,12 +212,12 @@ export default function CategoryList({ navigation, route }) {
           }}
         >
           Selected Category List
-        </Text>
+        </Text> */}
       </View>
       <View
         style={{
           width: "100%",
-          height: "90%",
+          height: hp(87),
           justifyContent: "center",
           alignItems: "center",
         }}

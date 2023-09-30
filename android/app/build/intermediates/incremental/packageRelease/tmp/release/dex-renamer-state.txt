@@ -1,4 +1,4 @@
-#Tue Sep 26 08:35:17 IST 2023
+#Thu Sep 28 14:26:55 IST 2023
 base.1=/Users/simran/Documents/myProjects/PaintikaApp/android/app/build/intermediates/dex/release/mergeDexRelease/classes2.dex
 path.1=classes2.dex
 base.0=/Users/simran/Documents/myProjects/PaintikaApp/android/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
