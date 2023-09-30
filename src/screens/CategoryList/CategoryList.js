@@ -20,6 +20,9 @@ import { getRelatedData } from "../../redux/actions";
 import CustomPicker from "../../helpers/CustomPicker";
 import { Picker } from "@react-native-picker/picker";
 import Search from "react-native-vector-icons/Feather";
+import Bag from "react-native-vector-icons/FontAwesome";
+import Rupee from "react-native-vector-icons/FontAwesome";
+import BookMark from "react-native-vector-icons/Feather";
 export default function CategoryList({ navigation, route }) {
   const { item } = route.params || {};
   const dispatch = useDispatch();
@@ -27,7 +30,7 @@ export default function CategoryList({ navigation, route }) {
   const [searchText, setsearchText] = useState("");
   const savedList = useSelector((state) => state.saveDataReducer.relatedData);
   console.log(
-    "🚀 ~ file: CategoryList.js:23 ~ CategoryList ~ savedList:",
+    "🚀 ~ file: CategoryList.js:23 ~ CategoryList ~ savedList:SAVED",
     savedList
   );
   console.log("🚀 ~ file: CategoryList.js:19 ~ CategoryList ~ item:", item);
@@ -64,21 +67,21 @@ export default function CategoryList({ navigation, route }) {
     },
   ];
   const RenderItem = ({ item }) => {
+    console.log("Render item console:::::::::", item);
     return (
       <>
         <TouchableOpacity
           style={{
             width: wp(100),
-            height: hp(60),
+            height: hp(80),
             backgroundColor: "#fff",
-            justifyContent: "center",
             alignItems: "center",
             marginTop: hp(2),
           }}
           onPress={() => navigation.navigate("Detail")}
         >
           <Image
-            source={require("../../../assets/art.jpg")}
+            source={{ uri: item?.image }}
             style={{ width: "100%", height: "90%" }}
           />
           <View
@@ -94,27 +97,49 @@ export default function CategoryList({ navigation, route }) {
             <View style={{}}>
               <Text
                 style={{
-                  fontSize: 20,
-                  fontFamily: FontStyles.manRopeSemiBold,
+                  fontSize: 15,
+                  fontFamily: FontStyles.manRopeRegular,
                   textAlign: "left",
                   color: Colors.black,
                 }}
               >
                 FANCY ART
               </Text>
-              <Text
+              <View
                 style={{
-                  fontFamily: FontStyles.manRopeSemiBold,
-                  color: Colors.black,
-                  marginTop: -4,
+                  flexDirection: "row",
+                  marginTop: 5,
                 }}
               >
-                PRICE : {item.price}
-              </Text>
+                <Rupee name="rupee" size={17} />
+                <Text
+                  style={{
+                    fontFamily: FontStyles.manRopeRegular,
+                    color: Colors.black,
+                    marginTop: -3,
+                    fontSize: 14,
+                    marginLeft: 3,
+                  }}
+                >
+                  {item.price}
+                </Text>
+              </View>
             </View>
 
-            <TouchableOpacity>
-              <HeartIcon name="hearto" size={30} />
+            <TouchableOpacity
+              style={{
+                // position: "absolute",
+                // top: hp(-45),
+                // left: wp(87),
+                backgroundColor: "#fff",
+                width: wp(11),
+                height: hp(5.6),
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 50,
+              }}
+            >
+              <BookMark name="bookmark" size={18} />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -222,7 +247,10 @@ export default function CategoryList({ navigation, route }) {
           alignItems: "center",
         }}
       >
-        <FlatList data={data} renderItem={RenderItem} />
+        <FlatList
+          data={savedList ? savedList?.data : []}
+          renderItem={RenderItem}
+        />
       </View>
     </View>
   );

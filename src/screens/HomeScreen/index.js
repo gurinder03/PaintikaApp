@@ -19,7 +19,7 @@ import {
 } from "react-native-responsive-screen";
 import FontStyles from "../../constants/FontStyles";
 import Colors from "../../constants/Colors";
-
+import Swiper from "react-native-swiper";
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const savedList = useSelector(
@@ -104,10 +104,10 @@ export default function HomeScreen({ navigation }) {
               style={{
                 fontStyle: FontStyles.manRopeSemiBold,
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 15,
               }}
             >
-              Join as a Painter
+              Join as a Artist
             </Text>
           </TouchableOpacity>
         </View>
@@ -122,13 +122,23 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
       <View style={styles.mainContainer}>
-        <FlatList
-          data={savedList?.data}
-          style={{ flex: 1 }}
-          renderItem={({ item }) => {
-            return <Slide data={item} />;
-          }}
-        />
+        <Swiper
+          horizontal={false}
+          showsButtons={false}
+          showsPagination={false}
+          bounces={true}
+        >
+          {/* <FlatList
+            data={savedList?.data}
+            style={{ flex: 1 }}
+            renderItem={({ item }) => {
+              return <Slide data={item} />;
+            }}
+          /> */}
+          {savedList?.data?.map((item) => (
+            <Slide data={item} />
+          ))}
+        </Swiper>
       </View>
     </View>
   );

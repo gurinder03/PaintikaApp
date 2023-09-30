@@ -236,7 +236,7 @@ function* getRelatedData({ payload }) {
     limit: payload?.limit,
     category: payload?.category,
   };
-  const requestUrl = "/home/related/list";
+  const requestUrl = "/home/list";
 
   try {
     console.log("BEFORE FETCHING", BASE_URL + requestUrl, postData);
