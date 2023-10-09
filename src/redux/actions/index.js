@@ -58,3 +58,24 @@ export const getRelatedData = (payload) => {
     payload: payload,
   };
 };
+
+export const getDetailsData = (payload) => {
+  return {
+    type: ActionTypes.GET_DETAILS_DATA,
+    payload: payload,
+  };
+};
+
+export const saveDetailsData = (payload) => {
+  return {
+    type: ActionTypes.SAVE_DETAILS_DATA,
+    payload: payload,
+  };
+};
+
+export const addProduct = (payload) => {
+  return {
+    type: ActionTypes.ADD_PRODUCT,
+    payload: payload,
+  };
+};

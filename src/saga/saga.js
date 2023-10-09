@@ -19,6 +19,17 @@ const GetRecord = (url, data) => {
   });
 };
 
+const GetRecord1 = (url, data) => {
+  console.log(data, " >>>> data", url);
+  return axios({
+    method: "GET",
+    crossDomain: true,
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    url: BASE_URL + url,
+  });
+};
+
 //Saga functions
 
 function* SignUp({ payload }) {
@@ -111,6 +122,7 @@ function* login({ payload }) {
 
       yield put({ type: "SAVE_TOKEN", payload: response?.data?.data?.token });
       let token = JSON.stringify(response?.data?.data?.token);
+      console.log("🚀 ~ file: saga.js:125 ~ function*login ~ token:", token);
       yield AsyncStorage.setItem("authToken", token);
       yield NavigationService.navigate("Home");
     } else {
@@ -229,17 +241,20 @@ function* getCategories({ payload }) {
 }
 
 function* getRelatedData({ payload }) {
-  console.log("get related data ", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     page: payload?.page,
     limit: payload?.limit,
-    category: payload?.category,
+    categories: payload?.category,
   };
   const requestUrl = "/home/list";
 
   try {
-    console.log("BEFORE FETCHING", BASE_URL + requestUrl, postData);
+    console.log(
+      "BEFORE FETCHING RELATED DATA",
+      BASE_URL + requestUrl,
+      postData
+    );
     const response = yield call(GetRecord, requestUrl, postData);
     console.log(
       "🚀 ~ file: saga.js:243 ~ function*getRelatedData ~ response:",
@@ -254,6 +269,45 @@ function* getRelatedData({ payload }) {
     yield put({ type: "SHOW_LOADING", payload: false });
   }
 }
+
+function* getDetails({ payload }) {
+  console.log("GET DETAILS::::::::", payload);
+  yield put({ type: "SHOW_LOADING", payload: true });
+  const requestUrl = `/home/view/${payload}`;
+  console.log("BEFORE FETHING URL", requestUrl);
+  try {
+    const response = yield call(GetRecord1, requestUrl);
+    console.log(
+      "🚀 ~ file: saga.js:267 ~ function*getDetails ~ response:",
+      response?.data
+    );
+    // if (response.statusCode == 200 && response.data !== null) {
+    yield put({ type: "SAVE_DETAILS_DATA", payload: response?.data });
+    // }
+  } catch (e) {
+    console.log("Error in getting Details", e);
+  }
+}
+
+function* addProductToCart({ payload }) {
+  console.log("ADD TO CART PAYLOAD::::", payload);
+  yield put({ type: "SHOW_LOADING", payload: true });
+  const requestUrl = `/cart/add`;
+  console.log("BEFORE FETHING URL CART", requestUrl);
+  try {
+    const response = yield call(GetRecord1, requestUrl);
+    console.log(
+      "🚀 ~ file: saga.js:299 ~ function*addProductToCart ~ response:",
+      response
+    );
+
+    // if (response.statusCode == 200 && response.data !== null) {
+    // yield put({ type: "SAVE_DETAILS_DATA", payload: response?.data });
+    // }
+  } catch (e) {
+    console.log("Error in getting CART", e);
+  }
+}
 function* mySaga() {
   yield takeLatest("SIGN_UP_REQUESTED", SignUp);
   yield takeLatest("LOGIN", login);
@@ -261,6 +315,8 @@ function* mySaga() {
   yield takeLatest("FORGOT_PASSWORD", forgotPassword);
   yield takeLatest("GET_CATEGORIES", getCategories);
   yield takeLatest("RELATED_DATA", getRelatedData);
+  yield takeLatest("GET_DETAILS_DATA", getDetails);
+  yield takeLatest("ADD_PRODUCT", addProductToCart);
 }
 
 export default mySaga;

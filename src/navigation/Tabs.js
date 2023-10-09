@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import CartScreen from "../screens/CartScreen";
@@ -8,8 +8,29 @@ import Icon from "react-native-vector-icons/AntDesign";
 import CreatePassword from "../screens/CreatePassword";
 import EditProfile from "../screens/EditProfile";
 import CategoryList from "../screens/CategoryList/CategoryList";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Tab = createBottomTabNavigator();
 export default function Tabs() {
+  const [authToken, setauthToken] = useState(null);
+  useEffect(() => {
+    getAuthToken();
+  }, []);
+
+  const getAuthToken = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("authToken");
+      console.log(
+        "🚀 ~ file: index.js:38 ~ getAuthToken ~ jsonValue:",
+        jsonValue
+      );
+      if (jsonValue !== null) {
+        setauthToken(jsonValue);
+      }
+    } catch (e) {
+      // error reading value
+      console.log("Error While getting Token", e);
+    }
+  };
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -42,11 +63,14 @@ export default function Tabs() {
         options={{ headerShown: false }}
         component={CartScreen}
       />
-      <Tab.Screen
-        name="Visual"
-        options={{ headerShown: false }}
-        component={VisualSearch}
-      />
+      {authToken ? (
+        <Tab.Screen
+          name="Visual"
+          options={{ headerShown: false }}
+          component={VisualSearch}
+        />
+      ) : null}
+
       <Tab.Screen
         name="Profile"
         options={{ headerShown: false }}

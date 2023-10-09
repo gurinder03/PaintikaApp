@@ -30,7 +30,6 @@ export default function HomeScreen({ navigation }) {
   const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
   function Slide({ data }) {
-    console.log("DATA:::::::::::::", data);
     return (
       <TouchableOpacity
         style={{
@@ -38,7 +37,7 @@ export default function HomeScreen({ navigation }) {
           width: windowWidth,
           justifyContent: "center",
           alignItems: "center",
-          marginTop: 5,
+          // marginTop: 5,
         }}
         onPress={() => navigation.navigate("Category", { item: data })}
       >

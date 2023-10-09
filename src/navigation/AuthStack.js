@@ -37,31 +37,31 @@ export default function AuthStack() {
             animation: "slide_from_right",
           }}
         />
-      ) : // <Stack.Screen
-      //   name="Login"
-      //   component={LoginScreen}
-      //   options={{
-      //     presentation: 'modal',
-      //     animationTypeForReplace: 'push',
-      //     animation: 'slide_from_right',
-      //   }}
-      // />
-      null}
+      ) : null}
 
-      {/* <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{
-          presentation: 'modal',
-          animationTypeForReplace: 'push',
-          animation: 'slide_from_right',
-        }}
-      /> */}
-      {/* <Stack.Screen name="Forgot" component={ForgotPassword} /> */}
-      {/* <Stack.Screen name="Otp" component={OtpScreen} /> */}
       {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       {/* <Stack.Screen name="Category" component={CategoryList} /> */}
       <Stack.Screen name="Tabs" component={Tabs} />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          presentation: "modal",
+          animationTypeForReplace: "push",
+          animation: "slide_from_right",
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          presentation: "modal",
+          animationTypeForReplace: "push",
+          animation: "slide_from_right",
+        }}
+      />
+      <Stack.Screen name="Forgot" component={ForgotPassword} />
+      <Stack.Screen name="Otp" component={OtpScreen} />
       <Stack.Screen name="Create" component={CreatePassword} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Preview" component={FilePreview} />

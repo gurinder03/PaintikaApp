@@ -23,6 +23,7 @@ import Search from "react-native-vector-icons/Feather";
 import Bag from "react-native-vector-icons/FontAwesome";
 import Rupee from "react-native-vector-icons/FontAwesome";
 import BookMark from "react-native-vector-icons/Feather";
+import LottieView from "lottie-react-native";
 export default function CategoryList({ navigation, route }) {
   const { item } = route.params || {};
   const dispatch = useDispatch();
@@ -34,38 +35,6 @@ export default function CategoryList({ navigation, route }) {
     savedList
   );
   console.log("🚀 ~ file: CategoryList.js:19 ~ CategoryList ~ item:", item);
-  const data = [
-    {
-      name: "FANCY ART",
-      image: require("../../../assets/art.jpg"),
-      price: "499",
-    },
-    {
-      name: "FANCY ART",
-      image: require("../../../assets/art.jpg"),
-      price: "499",
-    },
-    {
-      name: "FANCY ART",
-      image: require("../../../assets/art.jpg"),
-      price: "499",
-    },
-    {
-      name: "FANCY ART",
-      image: require("../../../assets/art.jpg"),
-      price: "499",
-    },
-    {
-      name: "FANCY ART",
-      image: require("../../../assets/art.jpg"),
-      price: "499",
-    },
-    {
-      name: "FANCY ART",
-      image: require("../../../assets/art.jpg"),
-      price: "499",
-    },
-  ];
   const RenderItem = ({ item }) => {
     console.log("Render item console:::::::::", item);
     return (
@@ -78,11 +47,16 @@ export default function CategoryList({ navigation, route }) {
             alignItems: "center",
             marginTop: hp(2),
           }}
-          onPress={() => navigation.navigate("Detail")}
+          onPress={() =>
+            navigation.navigate("Detail", {
+              id: item?._id,
+              creatorId: item?.creator_id,
+            })
+          }
         >
           <Image
             source={{ uri: item?.image }}
-            style={{ width: "100%", height: "90%" }}
+            style={{ width: "100%", height: "90%", resizeMode: "contain" }}
           />
           <View
             style={{
@@ -103,7 +77,7 @@ export default function CategoryList({ navigation, route }) {
                   color: Colors.black,
                 }}
               >
-                FANCY ART
+                {item?.name}
               </Text>
               <View
                 style={{
@@ -250,6 +224,25 @@ export default function CategoryList({ navigation, route }) {
         <FlatList
           data={savedList ? savedList?.data : []}
           renderItem={RenderItem}
+          ListEmptyComponent={
+            <View
+              style={{
+                width: wp(100),
+                height: hp(70),
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LottieView
+                source={require("../../../assets/animations/notfound.json")}
+                autoPlay
+                style={{
+                  height: hp(30),
+                  width: wp(70),
+                }}
+              />
+            </View>
+          }
         />
       </View>
     </View>

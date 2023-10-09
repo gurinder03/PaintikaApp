@@ -7,3 +7,6 @@ export const VERIFY_OTP = "VERIFY_OTP";
 export const FORGOT_PASSWORD = "FORGOT_PASSWORD";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const RELATED_DATA = "RELATED_DATA";
+export const GET_DETAILS_DATA = "GET_DETAILS_DATA";
+export const SAVE_DETAILS_DATA = "SAVE_DETAILS_DATA";
+export const ADD_PRODUCT = "ADD_PRODUCT";

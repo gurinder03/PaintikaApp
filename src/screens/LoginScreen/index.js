@@ -1,38 +1,38 @@
-import {View, Text, Image, Alert, StyleSheet, TextInput} from 'react-native';
-import React, {useState} from 'react';
-import TextInputComponent from '../../helpers/TextInput';
-import CustomButton from '../../helpers/CustomButton';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useDispatch, useSelector} from 'react-redux';
-import RightIcon from 'react-native-vector-icons/FontAwesome';
-import Colors from '../../constants/Colors';
-import FontStyles from '../../constants/FontStyles';
-import ToggleSwitch from 'toggle-switch-react-native';
-import {login} from '../../redux/actions';
-export default function LoginScreen({navigation}) {
+import { View, Text, Image, Alert, StyleSheet, TextInput } from "react-native";
+import React, { useState } from "react";
+import TextInputComponent from "../../helpers/TextInput";
+import CustomButton from "../../helpers/CustomButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import RightIcon from "react-native-vector-icons/FontAwesome";
+import Colors from "../../constants/Colors";
+import FontStyles from "../../constants/FontStyles";
+import ToggleSwitch from "toggle-switch-react-native";
+import { login } from "../../redux/actions";
+export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
-  const userData = useSelector(state => state.saveDataReducer.signUpData);
+  const userData = useSelector((state) => state.saveDataReducer.signUpData);
   const [inputValue, setinputValue] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [isPainter, setisPainter] = useState(false);
   const gotToSignUp = () => {
-    navigation.navigate('SignUp');
+    navigation.navigate("SignUp");
   };
 
   const handleChange = (name, e) => {
-    if (name == 'email') {
-      setinputValue({...inputValue, email: e});
+    if (name == "email") {
+      setinputValue({ ...inputValue, email: e });
     } else {
-      setinputValue({...inputValue, password: e});
+      setinputValue({ ...inputValue, password: e });
     }
   };
   const saveData = () => {
-    if (inputValue.email == '') {
-      Alert.alert('Email is required.');
-    } else if (inputValue.password == '') {
-      Alert.alert('Password is required.');
+    if (inputValue.email == "") {
+      Alert.alert("Email is required.");
+    } else if (inputValue.password == "") {
+      Alert.alert("Password is required.");
     } else {
       // dispatch(saveSignInData(inputValue));
       // navigation.navigate('Home');
@@ -40,8 +40,8 @@ export default function LoginScreen({navigation}) {
         login({
           email: inputValue.email,
           password: inputValue.password,
-          role: isPainter ? 'PAINTER' : 'USER',
-        }),
+          role: isPainter ? "PAINTER" : "USER",
+        })
       );
     }
   };
@@ -73,95 +73,103 @@ export default function LoginScreen({navigation}) {
         <View
           style={{
             height: 45,
-            justifyContent: 'center',
-            alignItems: 'flex-end',
+            justifyContent: "center",
+            alignItems: "flex-end",
             paddingHorizontal: 10,
-          }}>
+          }}
+        >
           <ToggleSwitch
             isOn={isPainter}
-            onColor="green"
+            onColor={Colors.black}
             offColor="#C8C8C8"
-            label="Are you Painter?"
+            label="Are you Artist?"
             labelStyle={{
               color: `${Colors.black}`,
               fontSize: 18,
               fontStyle: FontStyles.manRopeMedium,
             }}
             size="medium"
-            onToggle={isOn => setisPainter(isOn)}
+            onToggle={(isOn) => setisPainter(isOn)}
           />
         </View>
         <TextInput
           style={styles.input}
-          onChangeText={e => handleChange('email', e)}
+          onChangeText={(e) => handleChange("email", e)}
           value={inputValue.email}
           placeholder="Email or Phone Number"
         />
         <TextInput
           style={styles.input}
-          onChangeText={e => handleChange('password', e)}
+          onChangeText={(e) => handleChange("password", e)}
           value={inputValue.password}
           placeholder="Password"
         />
         <View style={styles.forgotPasswrd}>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}>
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
             <View
               style={{
                 height: 30,
-                justifyContent: 'center',
-              }}>
-              <Text style={styles.forgotPasswrdTitle}>
-                Forgot your password?
-              </Text>
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
+                <Text style={styles.forgotPasswrdTitle}>
+                  Forgot your password ?
+                </Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Forgot')}>
-              <Text style={{marginLeft: 5}}>
+            {/* <Text style={{ marginLeft: 5 }}>
                 <RightIcon
                   name="long-arrow-right"
                   size={30}
                   color={Colors.black}
                 />
-              </Text>
-            </TouchableOpacity>
+              </Text> */}
           </View>
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <CustomButton title={'LOGIN'} onPress={saveData} />
+        <CustomButton title={"LOGIN"} onPress={saveData} />
         <View
           style={{
             height: 45,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               height: 25,
-            }}>
+            }}
+          >
             <Text
               style={{
                 fontSize: 14,
-                fontWeight: '400',
+                fontWeight: "400",
                 fontFamily: FontStyles.manRopeRegular,
-              }}>
-              Don't have an account ?{' '}
+              }}
+            >
+              Don't have an account ?{" "}
             </Text>
             <TouchableOpacity
               style={{
-                justifyContent: 'center',
+                justifyContent: "center",
               }}
-              onPress={() => navigation.navigate('SignUp')}>
+              onPress={() => navigation.navigate("SignUp")}
+            >
               <Text
                 style={{
                   color: `${Colors.black}`,
-                  fontWeight: '600',
+                  fontWeight: "600",
                   fontFamily: FontStyles.manRopeRegular,
-                }}>
+                }}
+              >
                 Sign Up
               </Text>
             </TouchableOpacity>
@@ -173,13 +181,13 @@ export default function LoginScreen({navigation}) {
         <View style={styles.socialLinks}>
           <View style={styles.iconContainer}>
             <Image
-              source={require('../../../assets/facebook.png')}
+              source={require("../../../assets/facebook.png")}
               style={styles.icon}
             />
           </View>
           <View style={styles.iconContainer}>
             <Image
-              source={require('../../../assets/Google.png')}
+              source={require("../../../assets/Google.png")}
               style={styles.googleIcon}
             />
           </View>
@@ -195,8 +203,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   heading: {
-    height: '20%',
-    width: '100%',
+    height: "20%",
+    width: "100%",
     padding: 5,
   },
   headingTitle: {
@@ -207,16 +215,16 @@ const styles = StyleSheet.create({
     marginTop: 9,
   },
   inputContainer: {
-    height: '40%',
-    justifyContent: 'center',
+    height: "40%",
+    justifyContent: "center",
   },
   buttonContainer: {
-    height: '20%',
+    height: "20%",
   },
   socialLogin: {
-    height: '20%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "20%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   input: {
     height: 65,
@@ -228,11 +236,11 @@ const styles = StyleSheet.create({
     fontFamily: FontStyles.manRopeRegular,
   },
   socialLinks: {
-    height: '70%',
-    width: '60%',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    height: "70%",
+    width: "60%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
   socialTitle: {
     fontSize: 14,
@@ -244,8 +252,8 @@ const styles = StyleSheet.create({
     width: 80,
     backgroundColor: Colors.white,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   icon: {
     width: 25,
@@ -257,18 +265,18 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     height: 55,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   forgotPasswrd: {
     height: 40,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end",
     paddingHorizontal: 15,
   },
   forgotPasswrdTitle: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.black,
     fontFamily: FontStyles.manRopeRegular,
   },

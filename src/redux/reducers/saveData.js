@@ -6,6 +6,7 @@ const intialState = {
   savedEmail: "",
   savedCategories: [],
   relatedData: [],
+  detailsData: [],
 };
 
 const saveDataReducer = (state = intialState, action) => {
@@ -40,6 +41,16 @@ const saveDataReducer = (state = intialState, action) => {
       return {
         ...state,
         relatedData: action.payload,
+      };
+
+    case "SAVE_DETAILS_DATA":
+      console.log(
+        "SAVE_DETAILS_DATASAVE_DETAILS_DATASAVE_DETAILS_DATA",
+        action.payload
+      );
+      return {
+        ...state,
+        detailsData: action.payload,
       };
 
     default:

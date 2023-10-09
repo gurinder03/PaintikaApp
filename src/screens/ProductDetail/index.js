@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -8,7 +8,66 @@ import Colors from "../../constants/Colors";
 import FontStyles from "../../constants/FontStyles";
 import RupeeIcon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
-export default function ProductDetail() {
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct, getDetailsData } from "../../redux/actions";
+import Toast from "react-native-toast-message";
+import Navigation from "../../navigation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+export default function ProductDetail({ navigation, route }) {
+  const dispatch = useDispatch();
+  const { id, creatorId } = route.params || {};
+  const detailsData = useSelector((state) => state.saveDataReducer.detailsData);
+  console.log(
+    "🚀 ~ file: index.js:17 ~ ProductDetail ~ detailsData:",
+    detailsData
+  );
+  console.log("🚀 ~ file: index.js:16 ~ ProductDetail ~ id:", id);
+  const [data, setData] = useState("");
+  const [authToken, setauthToken] = useState(null);
+  console.log("🚀 ~ file: index.js:27 ~ ProductDetail ~ authToken:", authToken);
+  useEffect(() => {
+    if (id !== null) {
+      dispatch(getDetailsData(id));
+      getAuthToken();
+    }
+  }, [id]);
+
+  const addToCart = () => {
+    if (authToken !== null) {
+      dispatch(
+        addProduct({
+          user_id: authToken,
+          art_id: id,
+          creator_id: creatorId,
+          quantity: 1,
+        })
+      );
+    } else {
+      Toast.show({
+        type: "error",
+        text1: `Login or Signup First.`,
+        topOffset: 60,
+      });
+      navigation.navigate("Login");
+    }
+  };
+
+  const getAuthToken = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("authToken");
+      console.log(
+        "🚀 ~ file: index.js:38 ~ getAuthToken ~ jsonValue:",
+        jsonValue
+      );
+      if (jsonValue !== null) {
+        setauthToken(jsonValue);
+      }
+    } catch (e) {
+      // error reading value
+      console.log("Error While getting Token", e);
+    }
+  };
+
   return (
     <View
       style={{
@@ -17,12 +76,10 @@ export default function ProductDetail() {
         alignItems: "center",
       }}
     >
-      <View
-        style={{ backgroundColor: "yellow", height: hp(60), width: wp(100) }}
-      >
+      <View style={{ height: hp(60), width: wp(100) }}>
         <Image
-          source={require("../../../assets/art.jpg")}
-          style={{ width: "100%", height: "100%" }}
+          source={{ uri: detailsData?.data?.image }}
+          style={{ width: "100%", height: "100%", resizeMode: "contain" }}
         />
       </View>
       <View
@@ -43,6 +100,7 @@ export default function ProductDetail() {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={() => addToCart()}
         >
           <Text
             style={{
@@ -68,7 +126,7 @@ export default function ProductDetail() {
               color: Colors.black,
             }}
           >
-            Dynamic Art
+            {detailsData?.data?.name}
           </Text>
           <View
             style={{
@@ -97,7 +155,7 @@ export default function ProductDetail() {
                 marginTop: -5,
               }}
             >
-              899/-
+              {detailsData?.data?.price}
             </Text>
           </View>
           <View style={{ width: wp(90) }}>
@@ -108,14 +166,7 @@ export default function ProductDetail() {
                 fontStyle: FontStyles.manRopeRegular,
               }}
             >
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Inventore, dolores laudantium suscipit exercitationem atque
-              possimus iste illo, odio debitis nemo id maiores aliquid
-              reprehenderit at cum totam consequatur? Aliquid, odit? Lorem ipsum
-              dolor sit, amet consectetur adipisicing elit. Blanditiis ut nisi
-              officia. Aliquam illum veniam soluta autem reprehenderit, eveniet
-              magni nobis vero cum quasi, fugiat quam, numquam debitis commodi
-              earum?
+              {detailsData?.message}
             </Text>
           </View>
         </ScrollView>
