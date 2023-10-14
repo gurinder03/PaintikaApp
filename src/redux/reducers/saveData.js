@@ -7,6 +7,7 @@ const intialState = {
   savedCategories: [],
   relatedData: [],
   detailsData: [],
+  userId: "",
 };
 
 const saveDataReducer = (state = intialState, action) => {
@@ -51,6 +52,12 @@ const saveDataReducer = (state = intialState, action) => {
       return {
         ...state,
         detailsData: action.payload,
+      };
+
+    case "SAVE_USERID":
+      return {
+        ...state,
+        userId: action.payload,
       };
 
     default:

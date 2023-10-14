@@ -17,6 +17,8 @@ export default function ProductDetail({ navigation, route }) {
   const dispatch = useDispatch();
   const { id, creatorId } = route.params || {};
   const detailsData = useSelector((state) => state.saveDataReducer.detailsData);
+  const userId = useSelector((state) => state.saveDataReducer.userId);
+  console.log("🚀 ~ file: index.js:21 ~ ProductDetail ~ userId:", userId);
   console.log(
     "🚀 ~ file: index.js:17 ~ ProductDetail ~ detailsData:",
     detailsData
@@ -36,7 +38,7 @@ export default function ProductDetail({ navigation, route }) {
     if (authToken !== null) {
       dispatch(
         addProduct({
-          user_id: authToken,
+          user_id: userId,
           art_id: id,
           creator_id: creatorId,
           quantity: 1,

@@ -121,9 +121,16 @@ function* login({ payload }) {
       });
 
       yield put({ type: "SAVE_TOKEN", payload: response?.data?.data?.token });
+      yield put({ type: "SAVE_USERID", payload: response?.data?.data?._id });
       let token = JSON.stringify(response?.data?.data?.token);
+      // let userData = JSON.stringify(response?.data?.data?._id);
+      // console.log(
+      //   "🚀 ~ file: saga.js:126 ~ function*login ~ userData:",
+      //   userData
+      // );
       console.log("🚀 ~ file: saga.js:125 ~ function*login ~ token:", token);
       yield AsyncStorage.setItem("authToken", token);
+      // yield AsyncStorage.setItem("userId", userData);
       yield NavigationService.navigate("Home");
     } else {
       Toast.show({

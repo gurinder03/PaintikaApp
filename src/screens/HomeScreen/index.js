@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles";
 import Header from "../../components/HeaderScreen";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,7 @@ export default function HomeScreen({ navigation }) {
     (state) => state.saveDataReducer.savedCategories
   );
   console.log("🚀 ~ file: index.js:27 ~ HomeScreen ~ savedList:", savedList);
-  const [number, onChangeNumber] = React.useState("");
+  const [number, onChangeNumber] = useState("");
   const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
   function Slide({ data }) {
@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() => navigation.navigate("Category", { item: data })}
       >
         <Image
-          source={{ uri: data.image }}
+          source={{ uri: data?.image }}
           style={{
             width: wp(100),
             height: hp(100),
@@ -58,9 +58,9 @@ export default function HomeScreen({ navigation }) {
             left: 40,
           }}
         >
-          {data.name.toUpperCase()}
+          {data?.name?.toUpperCase()}
         </Text>
-        <Text style={{ fontSize: 18 }}>{data.subtitle}</Text>
+        <Text style={{ fontSize: 18 }}>{data?.subtitle}</Text>
       </TouchableOpacity>
     );
   }
@@ -127,16 +127,9 @@ export default function HomeScreen({ navigation }) {
           showsPagination={false}
           bounces={true}
         >
-          {/* <FlatList
-            data={savedList?.data}
-            style={{ flex: 1 }}
-            renderItem={({ item }) => {
-              return <Slide data={item} />;
-            }}
-          /> */}
-          {savedList?.data?.map((item) => (
-            <Slide data={item} />
-          ))}
+          {savedList !== undefined
+            ? savedList?.data?.map((item) => <Slide data={item} />)
+            : null}
         </Swiper>
       </View>
     </View>
