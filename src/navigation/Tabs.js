@@ -63,7 +63,7 @@ export default function Tabs() {
         options={{ headerShown: false }}
         component={CartScreen}
       />
-      {authToken ? (
+      {authToken !== null ? (
         <Tab.Screen
           name="Visual"
           options={{ headerShown: false }}

@@ -7,6 +7,8 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
+  ScrollView,
+  Alert,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles";
@@ -27,7 +29,8 @@ export default function HomeScreen({ navigation }) {
   );
   console.log("🚀 ~ file: index.js:27 ~ HomeScreen ~ savedList:", savedList);
   const [number, onChangeNumber] = useState("");
-  const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
+  const { width: windowWidth, height: windowHeight } =
+    Dimensions?.get("window");
 
   function Slide({ data }) {
     return (
@@ -121,16 +124,13 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
       <View style={styles.mainContainer}>
-        <Swiper
-          horizontal={false}
-          showsButtons={false}
-          showsPagination={false}
-          bounces={true}
-        >
-          {savedList !== undefined
-            ? savedList?.data?.map((item) => <Slide data={item} />)
-            : null}
-        </Swiper>
+        <FlatList
+          data={savedList?.data ? savedList?.data : []}
+          style={{ flex: 1 }}
+          renderItem={({ item }) => {
+            return <Slide data={item} />;
+          }}
+        />
       </View>
     </View>
   );

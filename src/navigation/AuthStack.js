@@ -39,7 +39,7 @@ export default function AuthStack() {
         />
       ) : null}
 
-      <Stack.Screen name="Home" component={HomeScreen} />
+      {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       {/* <Stack.Screen name="Category" component={CategoryList} /> */}
       <Stack.Screen name="Tabs" component={Tabs} />
       <Stack.Screen
