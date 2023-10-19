@@ -17,7 +17,8 @@ export default function ProductDetail({ navigation, route }) {
   const dispatch = useDispatch();
   const { id, creatorId } = route.params || {};
   const detailsData = useSelector((state) => state.saveDataReducer.detailsData);
-  const userId = useSelector((state) => state.saveDataReducer.userId);
+  // const userId = useSelector((state) => state.saveDataReducer.userId);
+  const [userId, setuserId] = useState("");
   console.log("🚀 ~ file: index.js:21 ~ ProductDetail ~ userId:", userId);
   console.log(
     "🚀 ~ file: index.js:17 ~ ProductDetail ~ detailsData:",
@@ -32,7 +33,20 @@ export default function ProductDetail({ navigation, route }) {
       dispatch(getDetailsData(id));
       getAuthToken();
     }
+    getData();
   }, [id]);
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("userId");
+      console.log("🚀 ~ file: index.js:41 ~ getData ~ value:", value);
+      if (value !== null) {
+        setuserId(JSON.parse(value));
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
 
   const addToCart = () => {
     if (authToken !== null) {
@@ -42,6 +56,7 @@ export default function ProductDetail({ navigation, route }) {
           art_id: id,
           creator_id: creatorId,
           quantity: 1,
+          token: authToken,
         })
       );
     } else {

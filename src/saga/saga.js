@@ -30,6 +30,20 @@ const GetRecord1 = (url, data) => {
   });
 };
 
+const GetRecord2 = (url, data, token) => {
+  console.log(data, " >>>> data", url, "token::::::::", token);
+
+  return axios({
+    method: "POST",
+    crossDomain: true,
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    data,
+    url: BASE_URL + url,
+    token: `Bearer ${token}`
+  });
+};
+
 //Saga functions
 
 function* SignUp({ payload }) {
@@ -123,14 +137,14 @@ function* login({ payload }) {
       yield put({ type: "SAVE_TOKEN", payload: response?.data?.data?.token });
       yield put({ type: "SAVE_USERID", payload: response?.data?.data?._id });
       let token = JSON.stringify(response?.data?.data?.token);
-      // let userData = JSON.stringify(response?.data?.data?._id);
-      // console.log(
-      //   "🚀 ~ file: saga.js:126 ~ function*login ~ userData:",
-      //   userData
-      // );
+      let userData = JSON.stringify(response?.data?.data?._id);
+      console.log(
+        "🚀 ~ file: saga.js:126 ~ function*login ~ userData:",
+        userData
+      );
       console.log("🚀 ~ file: saga.js:125 ~ function*login ~ token:", token);
       yield AsyncStorage.setItem("authToken", token);
-      // yield AsyncStorage.setItem("userId", userData);
+      yield AsyncStorage.setItem("userId", userData);
       yield NavigationService.navigate("Home");
     } else {
       Toast.show({
@@ -166,7 +180,7 @@ function* verifyOtp({ payload }) {
         text1: `${response?.data?.message}`,
         topOffset: 60,
       });
-      yield NavigationService.navigate("Home");
+      yield NavigationService.navigate("Login");
     } else {
       Toast.show({
         type: "error",
@@ -301,8 +315,20 @@ function* addProductToCart({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/cart/add`;
   console.log("BEFORE FETHING URL CART", requestUrl);
+  const postData = {
+    user_id: payload?.user_id,
+    art_id: payload?.art_id,
+    creator_id: payload?.creator_id,
+    quantity: payload?.quantity,
+  };
+
   try {
-    const response = yield call(GetRecord1, requestUrl);
+    const response = yield call(
+      GetRecord2,
+      requestUrl,
+      postData,
+      payload?.token
+    );
     console.log(
       "🚀 ~ file: saga.js:299 ~ function*addProductToCart ~ response:",
       response
