@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView, Alert, TextInput } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FontStyles from "../../constants/FontStyles";
 import {
   heightPercentageToDP as hp,
@@ -8,10 +8,11 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Colors from "../../constants/Colors";
 import { Picker } from "@react-native-picker/picker";
-import TextInputComponent from "../../helpers/TextInput";
-import CustomPicker from "../../helpers/CustomPicker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
 
 export default function FilePreview({ route }) {
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     name: "",
     size: "",
@@ -22,6 +23,10 @@ export default function FilePreview({ route }) {
     category: "",
   });
   const [selectedLanguage, setSelectedLanguage] = useState();
+  const [description, setdescription] = useState("");
+  const [role, setrole] = useState("");
+  const [userId, setuserId] = useState("");
+  const [authToken, setauthToken] = useState("");
   const { path } = route?.params;
   console.log("🚀 ~ file: index.js:6 ~ FilePreview ~ path:", path);
 
@@ -44,10 +49,70 @@ export default function FilePreview({ route }) {
   };
 
   const handleUpload = () => {
-    Alert.alert(
-      `name ${data.name} size = ${data?.size} theme ${data.theme} medium ${data?.medium} quality ${data?.quality} price ${data?.price} category ${data?.category}`
-    );
+    let data = new FormData();
+
+    if (path !== null) {
+      data.append("image", path);
+
+      console.log("Data::::::::", data);
+
+      const payloadData = {
+        token: authToken,
+        userId: userId,
+        image: data,
+        description: description,
+      };
+
+      dispatch({ type: "ADD_PREORDER", payload: payloadData });
+    }
   };
+  useEffect(() => {
+    getRole();
+    getData();
+    getAuthToken();
+  }, []);
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("userId");
+      console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      if (value !== null) {
+        setuserId(JSON.parse(value));
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const getAuthToken = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("authToken");
+      console.log(
+        "🚀 ~ file: index.js:200 ~ getAuthToken ~ jsonValue:",
+        jsonValue
+      );
+
+      if (jsonValue !== null) {
+        setauthToken(JSON.parse(jsonValue));
+      }
+    } catch (e) {
+      // error reading value
+      console.log("Error While getting Token", e);
+    }
+  };
+
+  const getRole = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("role");
+      console.log("🚀 ~ file: index.js:55 ~ getRole ~ jsonValue:", jsonValue);
+      if (jsonValue !== null) {
+        setrole(jsonValue);
+      }
+    } catch (e) {
+      // read error
+    }
+  };
+
   return (
     <View
       style={{
@@ -78,114 +143,117 @@ export default function FilePreview({ route }) {
           alignItems: "center",
         }}
       >
-        <ScrollView style={{ width: wp(90) }}>
-          {/* <TextInputComponent
-            title={"Name"}
-            onChange={(e) => handleChange("name", e)}
-            value={data.name}
-          />
-          <TextInputComponent
-            title={"Size"}
-            onChange={(e) => handleChange("size", e)}
-            value={data.size}
-          />
-          <TextInputComponent
-            title={"Painting Theme"}
-            onChange={(e) => handleChange("theme", e)}
-            value={data?.theme}
-          />
-          <TextInputComponent
-            title={"Medium"}
-            onChange={(e) => handleChange("medium", e)}
-            value={data?.medium}
-          />
-          <TextInputComponent
-            title={"Framing Quality"}
-            onChange={(e) => handleChange("quality", e)}
-            value={data?.quality}
-          />
-          <TextInputComponent
-            title={"Price"}
-            onChange={(e) => handleChange("price", e)}
-            value={data?.quality}
-          />
-          <CustomPicker
-            title={"Category"}
-            onChange={(e) => handleChange("category", e)}
-            value={data?.category}
-          /> */}
-
-          <TextInput
-            onChange={() => {}}
-            placeholder="Name"
+        {false ? (
+          <ScrollView style={{ width: wp(90) }}>
+            <TextInput
+              onChange={() => {}}
+              placeholder="Name"
+              style={{
+                height: hp(7),
+                paddingLeft: wp(2),
+                borderBottomWidth: 1,
+              }}
+            />
+            <TextInput
+              onChange={() => {}}
+              placeholder="Size"
+              style={{
+                height: hp(7),
+                paddingLeft: wp(2),
+                borderBottomWidth: 1,
+                marginTop: 2,
+              }}
+            />
+            <TextInput
+              onChange={() => {}}
+              placeholder="Theme"
+              style={{
+                height: hp(7),
+                paddingLeft: wp(2),
+                borderBottomWidth: 1,
+                marginTop: 2,
+              }}
+            />
+            <TextInput
+              onChange={() => {}}
+              placeholder="Medium"
+              style={{
+                height: hp(7),
+                paddingLeft: wp(2),
+                borderBottomWidth: 1,
+                marginTop: 2,
+              }}
+            />
+            <TextInput
+              onChange={() => {}}
+              placeholder="Framing Quality"
+              style={{
+                height: hp(7),
+                paddingLeft: wp(2),
+                borderBottomWidth: 1,
+                marginTop: 2,
+              }}
+            />
+            <TextInput
+              onChange={() => {}}
+              placeholder="Price"
+              style={{
+                height: hp(7),
+                paddingLeft: wp(2),
+                borderBottomWidth: 1,
+                marginTop: 2,
+              }}
+            />
+            <Picker
+              selectedValue={selectedLanguage}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedLanguage(itemValue)
+              }
+              style={{ borderBottomWidth: 1 }}
+            >
+              <Picker.Item label="Category" value={"category"} />
+              <Picker.Item label="Java" value="java" />
+              <Picker.Item label="JavaScript" value="js" />
+            </Picker>
+          </ScrollView>
+        ) : (
+          <View
             style={{
-              height: hp(7),
-              paddingLeft: wp(2),
-              borderBottomWidth: 1,
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              height: hp(20),
             }}
-          />
-          <TextInput
-            onChange={() => {}}
-            placeholder="Size"
-            style={{
-              height: hp(7),
-              paddingLeft: wp(2),
-              borderBottomWidth: 1,
-              marginTop: 2,
-            }}
-          />
-          <TextInput
-            onChange={() => {}}
-            placeholder="Theme"
-            style={{
-              height: hp(7),
-              paddingLeft: wp(2),
-              borderBottomWidth: 1,
-              marginTop: 2,
-            }}
-          />
-          <TextInput
-            onChange={() => {}}
-            placeholder="Medium"
-            style={{
-              height: hp(7),
-              paddingLeft: wp(2),
-              borderBottomWidth: 1,
-              marginTop: 2,
-            }}
-          />
-          <TextInput
-            onChange={() => {}}
-            placeholder="Framing Quality"
-            style={{
-              height: hp(7),
-              paddingLeft: wp(2),
-              borderBottomWidth: 1,
-              marginTop: 2,
-            }}
-          />
-          <TextInput
-            onChange={() => {}}
-            placeholder="Price"
-            style={{
-              height: hp(7),
-              paddingLeft: wp(2),
-              borderBottomWidth: 1,
-              marginTop: 2,
-            }}
-          />
-          <Picker
-            selectedValue={selectedLanguage}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedLanguage(itemValue)
-            }
-            style={{ borderBottomWidth: 1 }}
           >
-            <Picker.Item label="Category" value={"category"} />
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
-          </Picker>
-        </ScrollView>
+            <View style={{ width: "80%" }}>
+              <Text
+                style={{
+                  fontSize: 17,
+                  fontFamily: FontStyles.manRopeSemiBold,
+                  color: Colors.black,
+                }}
+              >
+                Description
+              </Text>
+            </View>
+            <TextInput
+              style={{
+                width: "80%",
+                borderWidth: 1,
+                height: "50%",
+                borderRadius: 10,
+                padding: 5,
+                marginTop: 5,
+              }}
+              onChange={(e) => {
+                setdescription(e);
+              }}
+              numberOfLines={5}
+              multiline
+              placeholder="Enter Description"
+            />
+          </View>
+        )}
 
         <View
           style={{

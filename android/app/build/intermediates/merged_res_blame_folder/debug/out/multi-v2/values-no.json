@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.paintapp-mergeDebugResources-34:/values-no/values-no.xml",
+            "outputFile": "com.paintapp-mergeDebugResources-40:/values-no/values-no.xml",
             "map": [
                 {
                     "source": "/Users/simran/Documents/myProjects/PaintikaApp/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-no/values-no.xml",

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
@@ -13,22 +14,32 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import FontStyles from "../../constants/FontStyles";
-import HeartIcon from "react-native-vector-icons/AntDesign";
+import DropDownPicker from "react-native-dropdown-picker";
+import { Picker } from "@react-native-picker/picker";
 import Colors from "../../constants/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import { getRelatedData } from "../../redux/actions";
-import CustomPicker from "../../helpers/CustomPicker";
-import { Picker } from "@react-native-picker/picker";
 import Search from "react-native-vector-icons/Feather";
-import Bag from "react-native-vector-icons/FontAwesome";
 import Rupee from "react-native-vector-icons/FontAwesome";
 import BookMark from "react-native-vector-icons/Feather";
 import LottieView from "lottie-react-native";
+import BackIcon from "react-native-vector-icons/Ionicons";
+
 export default function CategoryList({ navigation, route }) {
   const { item } = route.params || {};
   const dispatch = useDispatch();
   const [SelectedLanguage, setSelectedLanguage] = useState("");
   const [searchText, setsearchText] = useState("");
+  const [selectedValue, setselectedValue] = useState("");
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Mohali", value: "mohali" },
+    { label: "Kharar", value: "kharar" },
+    { label: "Patiala", value: "patiala" },
+    { label: "Jalandhar", value: "jalandhar" },
+  ]);
+
   const savedList = useSelector((state) => state.saveDataReducer.relatedData);
   console.log(
     "🚀 ~ file: CategoryList.js:23 ~ CategoryList ~ savedList:SAVED",
@@ -138,35 +149,70 @@ export default function CategoryList({ navigation, route }) {
       <View
         style={{
           width: "100%",
-          height: hp(13),
+          height: hp(19),
+          justifyContent: "space-around",
           // zIndex: 999,
           // justifyContent: "center",
           // backgroundColor: "red",
         }}
       >
-        <Picker
-          selectedValue={SelectedLanguage}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage(itemValue)
-          }
-          style={{
-            borderWidth: 1,
-            width: "100%",
-            height: hp(1),
-          }}
-        >
-          <Picker.Item label="Select City" value="null" />
-          <Picker.Item label="Mohali" value="mohali" />
-          <Picker.Item label="Kharar" value="kharar" />
-          <Picker.Item label="Patiala" value="patiala" />
-          <Picker.Item label="Jalandhar" value="jalandhar" />
-        </Picker>
+        <View style={{ height: "20%", marginTop: 15 }}>
+          <TouchableOpacity
+            style={{
+              justifyContent: "center",
+            }}
+            onPress={() => navigation.goBack()}
+          >
+            <BackIcon name={"chevron-back"} size={30} />
+          </TouchableOpacity>
+        </View>
+        {Platform.OS == "ios" ? (
+          <>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              zIndex={1000}
+              style={{
+                width: wp(95),
+                marginTop: hp(3),
+                marginLeft: wp(2),
+              }}
+            />
+          </>
+        ) : (
+          <View style={{ height: "15%", marginBottom: 25 }}>
+            <Picker
+              selectedValue={SelectedLanguage}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedLanguage(itemValue)
+              }
+              style={{
+                borderWidth: 1,
+                width: "100%",
+                height: hp(1),
+              }}
+            >
+              <Picker.Item label="Select City" value="null" />
+              <Picker.Item label="Mohali" value="mohali" />
+              <Picker.Item label="Kharar" value="kharar" />
+              <Picker.Item label="Patiala" value="patiala" />
+              <Picker.Item label="Jalandhar" value="jalandhar" />
+            </Picker>
+          </View>
+        )}
+
         <View
           style={{
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            height: hp(6),
+            // height: hp(6),
+            height: "20%",
+            marginTop: Platform.OS === "ios" ? hp(1) : "",
           }}
         >
           <View
@@ -219,6 +265,7 @@ export default function CategoryList({ navigation, route }) {
           height: hp(87),
           justifyContent: "center",
           alignItems: "center",
+          paddingBottom: hp(5),
         }}
       >
         <FlatList

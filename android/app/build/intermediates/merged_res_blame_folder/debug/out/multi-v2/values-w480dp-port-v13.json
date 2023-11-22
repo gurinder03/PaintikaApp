@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.paintapp-mergeDebugResources-34:/values-w480dp-port-v13/values-w480dp-port-v13.xml",
+            "outputFile": "com.paintapp-mergeDebugResources-40:/values-w480dp-port-v13/values-w480dp-port-v13.xml",
             "map": [
                 {
                     "source": "/Users/simran/.gradle/caches/transforms-3/9300c7fc5aff0974f1ee709fb212c45e/transformed/material-1.1.0/res/values-w480dp-port-v13/values-w480dp-port-v13.xml",

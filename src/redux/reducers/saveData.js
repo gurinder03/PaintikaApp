@@ -8,6 +8,10 @@ const intialState = {
   relatedData: [],
   detailsData: [],
   userId: "",
+  cartList: null,
+  addressData: [],
+  userData: [],
+  isLogged: false,
 };
 
 const saveDataReducer = (state = intialState, action) => {
@@ -58,6 +62,30 @@ const saveDataReducer = (state = intialState, action) => {
       return {
         ...state,
         userId: action.payload,
+      };
+    case "ISLOGGED":
+      return {
+        ...state,
+        isLogged: action.payload,
+      };
+
+    case "SAVE_CART":
+      return {
+        ...state,
+        cartList: action.payload,
+      };
+
+    case "SAVE_ADDRESS":
+      console.log("ADRRES IN REDUCER::::::::", action.payload);
+      return {
+        ...state,
+        addressData: action.payload,
+      };
+
+    case "SET_USER":
+      return {
+        ...state,
+        userData: action.payload,
       };
 
     default:

@@ -48,17 +48,19 @@ export default function HomeScreen({ navigation }) {
           source={{ uri: data?.image }}
           style={{
             width: wp(100),
-            height: hp(100),
+            height: hp(300),
           }}
+          resizeMode="contain"
         ></Image>
         <Text
           style={{
             fontSize: 28,
             color: "#fff",
             position: "absolute",
-            top: "-75%",
+            top: "-45%",
             fontWeight: "900",
             left: 40,
+            zIndex: 999,
           }}
         >
           {data?.name?.toUpperCase()}

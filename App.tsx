@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -14,7 +14,7 @@ import {
   Text,
   useColorScheme,
   View,
-} from 'react-native';
+} from "react-native";
 
 import {
   Colors,
@@ -22,16 +22,14 @@ import {
   Header,
   LearnMoreLinks,
   ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import LoginScreen from './src/screens/LoginScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
-import Navigation from './src/navigation';
-import {Provider} from 'react-redux';
-import Toast from 'react-native-toast-message';
-import {store, persistor} from './src/redux/store/store';
-import {PersistGate} from 'redux-persist/integration/react';
+} from "react-native/Libraries/NewAppScreen";
+import Navigation from "./src/navigation";
+import { Provider } from "react-redux";
+import Toast from "react-native-toast-message";
+import { store, persistor } from "./src/redux/store/store";
+import { PersistGate } from "redux-persist/integration/react";
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === "dark";
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -40,7 +38,7 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={isDarkMode ? "light-content" : "dark-content"}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <Provider store={store}>

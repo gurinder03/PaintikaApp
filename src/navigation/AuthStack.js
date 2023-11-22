@@ -13,6 +13,8 @@ import Tabs from "./Tabs";
 import FilePreview from "../screens/FilePreview";
 import CategoryList from "../screens/CategoryList/CategoryList";
 import ProductDetail from "../screens/ProductDetail";
+import Address from "../screens/Address";
+import AddAddress from "../screens/Address/AddAddress";
 
 export default function AuthStack() {
   const Stack = createStackNavigator();
@@ -67,6 +69,8 @@ export default function AuthStack() {
       <Stack.Screen name="Preview" component={FilePreview} />
       <Stack.Screen name="Category" component={CategoryList} />
       <Stack.Screen name="Detail" component={ProductDetail} />
+      <Stack.Screen name="Address" component={Address} />
+      <Stack.Screen name="AddAddress" component={AddAddress} />
       {/* <Stack.Screen
         name="Create"
         component={CreatePassword}

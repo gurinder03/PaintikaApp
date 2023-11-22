@@ -46,7 +46,7 @@ export default function SignUpScreen({ navigation }) {
           name: inputValue.name,
           email: inputValue.email,
           password: inputValue.password,
-          role: isPainter ? "PAINTER" : "USER",
+          role: isPainter ? "ARTIST" : "USER",
         })
       );
     }
@@ -220,6 +220,8 @@ const styles = StyleSheet.create({
     fontFamily: FontStyles.manRopeRegular,
     backgroundColor: Colors.white,
     elevation: 5,
+    borderColor: Colors.black,
+    borderWidth: 1,
   },
   errorTitle: {
     fontSize: 14,

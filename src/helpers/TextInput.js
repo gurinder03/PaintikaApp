@@ -8,6 +8,7 @@ export default function TextInputComponent({
   onChange,
   placeHolder,
   title,
+  type,
 }) {
   return (
     <View style={styles.container}>
@@ -17,6 +18,7 @@ export default function TextInputComponent({
         onChangeText={onChange}
         value={value}
         placeholder={placeHolder}
+        keyboardType={type == "number" ? "numeric" : "default"}
       />
     </View>
   );

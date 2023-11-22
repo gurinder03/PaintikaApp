@@ -27,6 +27,8 @@ import com.reactnativedocumentpicker.RNDocumentPickerPackage;
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-image-picker
 import com.imagepicker.ImagePickerPackage;
+// react-native-razorpay
+import com.razorpay.rn.RazorpayPackage;
 // react-native-safe-area-context
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
@@ -86,6 +88,7 @@ public class PackageList {
       new RNDocumentPickerPackage(),
       new RNGestureHandlerPackage(),
       new ImagePickerPackage(),
+      new RazorpayPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
       new VectorIconsPackage()

@@ -9,6 +9,7 @@ import Colors from "../../constants/Colors";
 import FontStyles from "../../constants/FontStyles";
 import ToggleSwitch from "toggle-switch-react-native";
 import { login } from "../../redux/actions";
+import BackIcon from "react-native-vector-icons/Ionicons";
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.saveDataReducer.signUpData);
@@ -62,10 +63,11 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <TouchableOpacity style={styles.backIcon}>
-          {/* <Text>
-            <BackIcon name="chevron-back-outline" size={30} color="#000" />
-          </Text> */}
+        <TouchableOpacity
+          style={styles.backIcon}
+          onPress={() => navigation.goBack()}
+        >
+          <BackIcon name="chevron-back-outline" size={30} color="#000" />
         </TouchableOpacity>
         <Text style={styles.headingTitle}>Login</Text>
       </View>
@@ -234,6 +236,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     elevation: 5,
     fontFamily: FontStyles.manRopeRegular,
+    borderColor: Colors.black,
+    borderWidth: 1,
   },
   socialLinks: {
     height: "70%",

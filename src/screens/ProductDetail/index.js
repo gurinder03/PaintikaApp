@@ -11,6 +11,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, getDetailsData } from "../../redux/actions";
 import Toast from "react-native-toast-message";
+import BackIcon from "react-native-vector-icons/Ionicons";
 import Navigation from "../../navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function ProductDetail({ navigation, route }) {
@@ -77,7 +78,7 @@ export default function ProductDetail({ navigation, route }) {
         jsonValue
       );
       if (jsonValue !== null) {
-        setauthToken(jsonValue);
+        setauthToken(JSON.parse(jsonValue));
       }
     } catch (e) {
       // error reading value
@@ -91,9 +92,21 @@ export default function ProductDetail({ navigation, route }) {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: Colors.white,
       }}
     >
-      <View style={{ height: hp(60), width: wp(100) }}>
+      <View
+        style={{
+          width: "100%",
+          height: hp(5),
+          justifyContent: "center",
+        }}
+      >
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <BackIcon name={"chevron-back"} size={32} color={Colors.black} />
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: hp(45), width: wp(100) }}>
         <Image
           source={{ uri: detailsData?.data?.image }}
           style={{ width: "100%", height: "100%", resizeMode: "contain" }}
