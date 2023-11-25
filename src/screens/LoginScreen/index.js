@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
         login({
           email: inputValue.email,
           password: inputValue.password,
-          role: isPainter ? "PAINTER" : "USER",
+          role: isPainter ? "ARTIST" : "USER",
         })
       );
     }

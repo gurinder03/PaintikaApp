@@ -95,7 +95,7 @@ function* SignUp({ payload }) {
       yield put({ type: "SAVE_OTP", payload: response?.data?.data?.OTP });
       yield put({ type: "SAVE_SIGNUPDATA", payload: payload?.email });
 
-      yield NavigationService.navigate("Otp");
+      yield NavigationService.navigate("Otp", { role: payload?.role });
     } else {
       Toast.show({
         type: "error",
@@ -630,7 +630,15 @@ function* logout({ payload }) {
       response?.data
     );
     if (response?.data !== null) {
+      Toast.show({
+        type: "success",
+        text1: `${response?.data?.message}`,
+        topOffset: 60,
+      });
       yield put({ type: "ISLOGGED", payload: false });
+      yield AsyncStorage.removeItem("authToken");
+      yield AsyncStorage.removeItem("userId");
+      yield AsyncStorage.removeItem("role");
     }
   } catch (e) {
     console.log("ERROR IN LOGOUT", e);
