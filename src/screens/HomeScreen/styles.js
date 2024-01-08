@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   filterContainer: {
-    height: hp(7),
+    // height: hp(7),
     width: wp(100),
     justifyContent: "center",
   },

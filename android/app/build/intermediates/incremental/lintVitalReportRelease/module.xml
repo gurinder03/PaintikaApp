@@ -1,12 +1,12 @@
 <lint-module
     format="1"
-    dir="/Users/simran/Documents/myProjects/PaintikaApp/android/app"
+    dir="/home/dell/Downloads/projects/PaintikaApp/android/app"
     name=":app"
     type="APP"
     maven="paintApp:app:"
     gradle="7.4.2"
     buildFolder="build"
-    bootClassPath="/Users/simran/Library/Android/sdk/platforms/android-33/android.jar:/Users/simran/Library/Android/sdk/build-tools/30.0.3/core-lambda-stubs.jar"
+    bootClassPath="/home/dell/Android/Sdk/platforms/android-33/android.jar:/home/dell/Android/Sdk/build-tools/30.0.3/core-lambda-stubs.jar"
     javaSourceLevel="11"
     compileTarget="android-33"
     neverShrinking="true">

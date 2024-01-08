@@ -41,13 +41,7 @@ export default function CategoryList({ navigation, route }) {
   ]);
 
   const savedList = useSelector((state) => state.saveDataReducer.relatedData);
-  console.log(
-    "🚀 ~ file: CategoryList.js:23 ~ CategoryList ~ savedList:SAVED",
-    savedList
-  );
-  console.log("🚀 ~ file: CategoryList.js:19 ~ CategoryList ~ item:", item);
   const RenderItem = ({ item }) => {
-    console.log("Render item console:::::::::", item);
     return (
       <>
         <TouchableOpacity
