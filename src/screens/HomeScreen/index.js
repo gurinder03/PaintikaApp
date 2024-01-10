@@ -16,16 +16,11 @@ import { getCategories } from "../../redux/actions";
 import Slide from "./Slide";
 
 
-
-
-
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const savedList = useSelector((state) => state.saveDataReducer.savedCategories);
   const [filteredData, setFilteredData] = useState(savedList.data);
-  console.log('filteredDatafilteredData with data:', savedList);
-
 
   useEffect(() => {
     setFilteredData(savedList.data)
@@ -55,9 +50,6 @@ export default function HomeScreen({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={[styles.filterSearch, { backgroundColor: '#FFFFFF' }]}>
-            <TextInput style={styles.inputSearch} onChangeText={onChangeSearchText} value={searchText} placeholder="Search" />
-          </View>
           <View style={styles.mainContainer}>
             {filteredData && filteredData.length ? (
               <FlatList
@@ -75,6 +67,11 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
+          <View style={{marginTop:10, position:'absolute', bottom:0, left:0, right:0, zIndex:9999, marginBottom:15}}>
+            <View style={[styles.filterSearch, { backgroundColor: '#FFFFFF' }]}>
+              <TextInput style={styles.inputSearch} onChangeText={onChangeSearchText} value={searchText} placeholder="Search" />
+            </View>
+          </View>
     </View>
   );
 }
@@ -103,7 +100,6 @@ const styles = StyleSheet.create({
   filterSearch: {
     marginHorizontal: 25,
     borderWidth: 1,
-    marginTop: 25,
     borderRadius: 10,
     marginBottom: 15
   },
@@ -111,13 +107,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   mainContainer: {
-
+    marginTop: 25
   },
-  noRocord:{
-    fontSize: 25, 
+  noRocord: {
+    fontSize: 25,
     fontWeight: '600',
-    textAlign:"center",
-    alignItems:'center',
-    justifyContent:'center'
+    textAlign: "center",
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

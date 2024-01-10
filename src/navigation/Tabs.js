@@ -16,8 +16,6 @@ const Tab = createBottomTabNavigator();
 export default function Tabs() {
   const [authToken, setauthToken] = useState(null);
   const isUserLogged = useSelector((state) => state.saveDataReducer.isLogged);
-  console.log("🚀 ~ file: Tabs.js:18 ~ Tabs ~ isUserLogged:", isUserLogged);
-  console.log("🚀 ~ file: Tabs.js:15 ~ Tabs ~ authToken:", authToken);
   useEffect(() => {
     getAuthToken();
   }, [authToken]);

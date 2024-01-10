@@ -1,7 +1,6 @@
 import axios from "axios";
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import Toast from "react-native-toast-message";
-import Colors from "../constants/Colors";
 import * as NavigationService from "../navigation/NavigationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -285,20 +284,15 @@ function* getRelatedData({ payload }) {
     page: payload?.page,
     limit: payload?.limit,
     categories: payload?.category,
+    city: payload && payload.city ? payload.city:'',
+    filter: payload && payload.filter ? payload.filter : ''
   };
   const requestUrl = "/home/list";
 
   try {
-    console.log(
-      "BEFORE FETCHING RELATED DATA",
-      BASE_URL + requestUrl,
-      postData
-    );
+    // console.log("BEFORE FETCHING RELATED DATA", BASE_URL + requestUrl,  postData  );
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log(
-      "🚀 ~ file: saga.js:243 ~ function*getRelatedData ~ response:",
-      response.data
-    );
+    console.log("🚀 ~ file: saga.js:243 ~ function*getRelatedData ~ response:",  response.data );
 
     if (response?.data?.statusCode == 200 && response?.data !== null) {
       yield put({ type: "SAVE_RELATEDDATA", payload: response?.data });
