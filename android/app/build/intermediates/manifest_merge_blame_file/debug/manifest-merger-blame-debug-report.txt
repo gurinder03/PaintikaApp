@@ -1,0 +1,287 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.paintapp"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="33" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/debug/AndroidManifest.xml:5:22-75
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:3:5-67
+12-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:3:22-64
+13    <uses-permission android:name="android.permission.CAMERA" />
+13-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:4:5-65
+13-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:4:22-62
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:5:5-80
+14-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:5:22-78
+15    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+15-->[com.facebook.flipper:flipper:0.182.0] /home/dell/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:5-76
+15-->[com.facebook.flipper:flipper:0.182.0] /home/dell/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:22-73
+16    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+17
+18    <queries>
+18-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:10:5-39:15
+19        <intent>
+19-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:11:9-17:18
+20            <action android:name="android.intent.action.VIEW" />
+20-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:12:13-65
+20-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:12:21-62
+21
+22            <data
+22-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:14:13-16:38
+23                android:mimeType="*/*"
+23-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:15:17-39
+24                android:scheme="*" />
+24-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:16:17-35
+25        </intent>
+26        <intent>
+26-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:18:9-27:18
+27            <action android:name="android.intent.action.VIEW" />
+27-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:12:13-65
+27-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:12:21-62
+28
+29            <category android:name="android.intent.category.BROWSABLE" />
+29-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:21:13-74
+29-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:21:23-71
+30
+31            <data
+31-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:14:13-16:38
+32                android:host="pay"
+33                android:mimeType="*/*"
+33-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:15:17-39
+34                android:scheme="upi" />
+34-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:16:17-35
+35        </intent>
+36        <intent>
+36-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:28:9-30:18
+37            <action android:name="android.intent.action.MAIN" />
+37-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:21:13-65
+37-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:21:21-62
+38        </intent>
+39        <intent>
+39-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:31:9-35:18
+40            <action android:name="android.intent.action.SEND" />
+40-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:32:13-65
+40-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:32:21-62
+41
+42            <data android:mimeType="*/*" />
+42-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:14:13-16:38
+42-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:15:17-39
+43        </intent>
+44        <intent>
+44-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:36:9-38:18
+45            <action android:name="rzp.device_token.share" />
+45-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:13-61
+45-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:21-58
+46        </intent>
+47    </queries> <!-- Include required permissions for Google Maps API to run. -->
+48    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+48-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:5-79
+48-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:22-76
+49
+50    <uses-feature
+50-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
+51        android:glEsVersion="0x00020000"
+51-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
+52        android:required="true" />
+52-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
+53
+54    <permission
+54-->[androidx.core:core:1.9.0] /home/dell/.gradle/caches/transforms-3/6071112da32bfbae80caeb5ecfa6fe8d/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+55        android:name="com.paintapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+55-->[androidx.core:core:1.9.0] /home/dell/.gradle/caches/transforms-3/6071112da32bfbae80caeb5ecfa6fe8d/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+56        android:protectionLevel="signature" />
+56-->[androidx.core:core:1.9.0] /home/dell/.gradle/caches/transforms-3/6071112da32bfbae80caeb5ecfa6fe8d/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+57
+58    <uses-permission android:name="com.paintapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+58-->[androidx.core:core:1.9.0] /home/dell/.gradle/caches/transforms-3/6071112da32bfbae80caeb5ecfa6fe8d/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+58-->[androidx.core:core:1.9.0] /home/dell/.gradle/caches/transforms-3/6071112da32bfbae80caeb5ecfa6fe8d/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+59
+60    <application
+60-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:6:5-25:19
+61        android:name="com.paintapp.MainApplication"
+61-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:7:7-38
+62        android:allowBackup="false"
+62-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:10:7-34
+63        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+63-->[androidx.core:core:1.9.0] /home/dell/.gradle/caches/transforms-3/6071112da32bfbae80caeb5ecfa6fe8d/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+64        android:debuggable="true"
+65        android:icon="@mipmap/ic_launcher"
+65-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:9:7-41
+66        android:label="@string/app_name"
+66-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:8:7-39
+67        android:theme="@style/AppTheme"
+67-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:12:7-38
+68        android:usesCleartextTraffic="true" >
+68-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:11:7-42
+69        <activity
+69-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/debug/AndroidManifest.xml:11:9-111
+70            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+70-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/debug/AndroidManifest.xml:11:19-83
+71            android:exported="false" />
+71-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/debug/AndroidManifest.xml:11:84-108
+72        <activity
+72-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:13:7-24:18
+73            android:name="com.paintapp.MainActivity"
+73-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:14:9-37
+74            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+74-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:16:9-118
+75            android:exported="true"
+75-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:19:9-32
+76            android:label="@string/app_name"
+76-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:15:9-41
+77            android:launchMode="singleTask"
+77-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:17:9-40
+78            android:windowSoftInputMode="adjustPan" >
+78-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:18:9-48
+79            <intent-filter>
+79-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:20:9-23:25
+80                <action android:name="android.intent.action.MAIN" />
+80-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:21:13-65
+80-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:21:21-62
+81
+82                <category android:name="android.intent.category.LAUNCHER" />
+82-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:22:13-73
+82-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:22:23-70
+83            </intent-filter>
+84        </activity>
+85
+86        <provider
+86-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
+87            android:name="com.imagepicker.ImagePickerProvider"
+87-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-63
+88            android:authorities="com.paintapp.imagepickerprovider"
+88-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-71
+89            android:exported="false"
+89-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
+90            android:grantUriPermissions="true" >
+90-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
+91            <meta-data
+91-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
+92                android:name="android.support.FILE_PROVIDER_PATHS"
+92-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
+93                android:resource="@xml/imagepicker_provider_paths" />
+93-->[:react-native-image-picker] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
+94        </provider>
+95
+96        <activity
+96-->[:react-native-razorpay] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-razorpay/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-10:86
+97            android:name="com.razorpay.CheckoutActivity"
+97-->[:react-native-razorpay] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-razorpay/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-57
+98            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+98-->[:react-native-razorpay] /home/dell/Downloads/projects/PaintikaApp/node_modules/react-native-razorpay/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-83
+99            android:exported="false"
+99-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:54:13-37
+100            android:theme="@style/CheckoutTheme" >
+100-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:55:13-49
+101            <intent-filter>
+101-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:56:13-58:29
+102                <action android:name="android.intent.action.MAIN" />
+102-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:21:13-65
+102-->/home/dell/Downloads/projects/PaintikaApp/android/app/src/main/AndroidManifest.xml:21:21-62
+103            </intent-filter>
+104        </activity>
+105
+106        <receiver
+106-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:42:9-49:20
+107            android:name="com.razorpay.RzpTokenReceiver"
+107-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:43:13-57
+108            android:exported="true" >
+108-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:44:13-36
+109            <intent-filter>
+109-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:46:13-48:29
+110                <action android:name="rzp.device_token.share" />
+110-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:13-61
+110-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:21-58
+111            </intent-filter>
+112        </receiver>
+113
+114        <meta-data
+114-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:61:9-63:58
+115            android:name="com.razorpay.plugin.googlepay_all"
+115-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:62:13-61
+116            android:value="com.razorpay.RzpGpayMerged" />
+116-->[com.razorpay:checkout:1.6.36] /home/dell/.gradle/caches/transforms-3/d687e773b72aff922330b016f3d86f54/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:63:13-55
+117
+118        <activity
+118-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:23:9-27:75
+119            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+119-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:24:13-93
+120            android:excludeFromRecents="true"
+120-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:25:13-46
+121            android:exported="false"
+121-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:26:13-37
+122            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+122-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:27:13-72
+123        <!--
+124            Service handling Google Sign-In user revocation. For apps that do not integrate with
+125            Google Sign-In, this service will never be started.
+126        -->
+127        <service
+127-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:33:9-36:110
+128            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+128-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:34:13-89
+129            android:exported="true"
+129-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:35:13-36
+130            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" /> <!-- Needs to be explicitly declared on P+ -->
+130-->[com.google.android.gms:play-services-auth:17.0.0] /home/dell/.gradle/caches/transforms-3/667a369d73fb22ae73d91660104e981d/transformed/jetified-play-services-auth-17.0.0/AndroidManifest.xml:36:13-107
+131        <uses-library
+131-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
+132            android:name="org.apache.http.legacy"
+132-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
+133            android:required="false" />
+133-->[com.google.android.gms:play-services-maps:17.0.0] /home/dell/.gradle/caches/transforms-3/aae6d9c78e52b85d3e06f789b9ef2670/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
+134
+135        <activity
+135-->[com.google.android.gms:play-services-base:17.5.0] /home/dell/.gradle/caches/transforms-3/c351d463f114b7282e5fecbf4e38d2e8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:23:9-26:75
+136            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+136-->[com.google.android.gms:play-services-base:17.5.0] /home/dell/.gradle/caches/transforms-3/c351d463f114b7282e5fecbf4e38d2e8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:24:13-79
+137            android:exported="false"
+137-->[com.google.android.gms:play-services-base:17.5.0] /home/dell/.gradle/caches/transforms-3/c351d463f114b7282e5fecbf4e38d2e8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:25:13-37
+138            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+138-->[com.google.android.gms:play-services-base:17.5.0] /home/dell/.gradle/caches/transforms-3/c351d463f114b7282e5fecbf4e38d2e8/transformed/jetified-play-services-base-17.5.0/AndroidManifest.xml:26:13-72
+139
+140        <meta-data
+140-->[com.google.android.gms:play-services-basement:17.6.0] /home/dell/.gradle/caches/transforms-3/b63984d3b045444cdc55f8997826a36d/transformed/jetified-play-services-basement-17.6.0/AndroidManifest.xml:23:9-25:69
+141            android:name="com.google.android.gms.version"
+141-->[com.google.android.gms:play-services-basement:17.6.0] /home/dell/.gradle/caches/transforms-3/b63984d3b045444cdc55f8997826a36d/transformed/jetified-play-services-basement-17.6.0/AndroidManifest.xml:24:13-58
+142            android:value="@integer/google_play_services_version" />
+142-->[com.google.android.gms:play-services-basement:17.6.0] /home/dell/.gradle/caches/transforms-3/b63984d3b045444cdc55f8997826a36d/transformed/jetified-play-services-basement-17.6.0/AndroidManifest.xml:25:13-66
+143
+144        <provider
+144-->[androidx.emoji2:emoji2:1.2.0] /home/dell/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+145            android:name="androidx.startup.InitializationProvider"
+145-->[androidx.emoji2:emoji2:1.2.0] /home/dell/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+146            android:authorities="com.paintapp.androidx-startup"
+146-->[androidx.emoji2:emoji2:1.2.0] /home/dell/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+147            android:exported="false" >
+147-->[androidx.emoji2:emoji2:1.2.0] /home/dell/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+148            <meta-data
+148-->[androidx.emoji2:emoji2:1.2.0] /home/dell/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+149                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+149-->[androidx.emoji2:emoji2:1.2.0] /home/dell/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+150                android:value="androidx.startup" />
+150-->[androidx.emoji2:emoji2:1.2.0] /home/dell/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+151            <meta-data
+151-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/dell/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
+152                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+152-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/dell/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
+153                android:value="androidx.startup" />
+153-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/dell/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
+154        </provider>
+155
+156        <meta-data
+156-->[com.facebook.soloader:soloader:0.10.5] /home/dell/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:12:9-14:37
+157            android:name="com.facebook.soloader.enabled"
+157-->[com.facebook.soloader:soloader:0.10.5] /home/dell/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:13:13-57
+158            android:value="false" />
+158-->[com.facebook.soloader:soloader:0.10.5] /home/dell/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:14:13-34
+159    </application>
+160
+161</manifest>

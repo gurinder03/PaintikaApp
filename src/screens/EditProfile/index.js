@@ -79,7 +79,7 @@ export default function EditProfile({ navigation }) {
   };
   const selectImage = () => {
     launchImageLibrary(options, (response) => {
-      console.log("Response = ", response);
+      // console.log("Response = ", response);
 
       if (response.didCancel) {
         console.log("User cancelled image picker");

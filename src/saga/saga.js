@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //fetching functions
 const BASE_URL = `https://api.paintikaart.com/api/v1`;
 const GetRecord = (url, data) => {
-  console.log(data, " >>>> data", url);
+  console.log(data, " >>>> data", BASE_URL + url);
   return axios({
     method: "POST",
     crossDomain: true,
@@ -278,13 +278,40 @@ function* getCategories({ payload }) {
   }
 }
 
+
+function* getAllCategories({ payload }) {
+  yield put({ type: "SHOW_LOADING", payload: true });
+  const postData = {
+    page: payload?.page,
+    limit: payload?.limit,
+  };
+  const requestUrl = "/category/list";
+
+
+  try {
+    let config = {
+      headers: {
+        token: `Bearer ${payload?.token}`,
+      },
+    };
+    const response = yield axios.post(`${BASE_URL + requestUrl}`, postData, config);
+    if (response?.data?.statusCode == 200 && response?.data !== null) {
+      yield put({ type: "ALL_CATEGORIES", payload: response?.data });
+    }
+    yield put({ type: "SHOW_LOADING", payload: false });
+  } catch (e) {
+    // console.log("Error in get category OTP::::", e);
+    yield put({ type: "SHOW_LOADING", payload: false });
+  }
+}
+
 function* getRelatedData({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     page: payload?.page,
     limit: payload?.limit,
     categories: payload?.category,
-    city: payload && payload.city ? payload.city:'',
+    city: payload && payload.city ? payload.city : '',
     filter: payload && payload.filter ? payload.filter : ''
   };
   const requestUrl = "/home/list";
@@ -292,7 +319,7 @@ function* getRelatedData({ payload }) {
   try {
     // console.log("BEFORE FETCHING RELATED DATA", BASE_URL + requestUrl,  postData  );
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log("🚀 ~ file: saga.js:243 ~ function*getRelatedData ~ response:",  response.data );
+    console.log("🚀 ~ file: saga.js:243 ~ function*getRelatedData ~ response:", response.data);
 
     if (response?.data?.statusCode == 200 && response?.data !== null) {
       yield put({ type: "SAVE_RELATEDDATA", payload: response?.data });
@@ -640,9 +667,10 @@ function* logout({ payload }) {
 }
 
 function* addPreOrder({ payload }) {
-  console.log("GET PRE ORDER:::::::", payload);
+  // console.log("GET PRE ORDER:::::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
-  const requestUrl = `/preorder/add`;
+
+  let requestUrl = '';
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
@@ -650,33 +678,59 @@ function* addPreOrder({ payload }) {
     },
   };
 
-  const postData = {
-    user_id: payload?.userId,
-    image: payload?.image,
-    description: payload?.description,
-  };
+  // console.log('New Payload ---->', payload);
 
+  let dataVal = new FormData();
+  let secdJsonObj = {}
+  if (payload && payload.role === "ARTIST") {
+    requestUrl = '/art/add';
+    dataVal.append('role', payload.role);
+    dataVal.append('image', JSON.stringify(payload.imagePath));
+    dataVal.append('name', payload.name);
+    dataVal.append('size', payload.size);
+    dataVal.append('theme', payload.theme);
+    dataVal.append('medium', payload.medium);
+    dataVal.append('frame_quality', payload.quality);
+    dataVal.append('price', payload.price);
+    dataVal.append('creator_id', payload.userId);
+    dataVal.append('status', 'active');
+    dataVal.append('category', payload.category?._id);
+  } else {
+    requestUrl = '/preorder/app/add';
+    secdJsonObj = {
+      role: payload.role,
+      image: payload.imagePath,
+      description: payload.description,
+      user_id: payload.userId
+    }
+    // dataVal.append('role', payload.role);
+    // dataVal.append('image', payload.imagePath);
+    // dataVal.append('description', payload.description);
+    // dataVal.append('user_id', payload.userId);
+  }
   try {
-    const response = yield axios.post(
-      `${BASE_URL + requestUrl}`,
-      postData,
-      config
-    );
-    console.log(
-      "🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response:",
-      response?.data
-    );
+    console.log('secdJsonObj =>', secdJsonObj);
+    const response = yield axios.post(`${BASE_URL}${requestUrl}`, secdJsonObj, config);
+    console.log(`${BASE_URL + requestUrl} =>`, BASE_URL + requestUrl);
+    console.log("🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response: ------->>>>>>> ", response?.data);
 
     // yield put({ type: "SAVE_ADDRESS", payload: response?.data?.data });
 
-    // if (response?.data) {
+    if (response?.data) {
+      Toast.show({
+        type: "success",
+        text1: `${response?.data?.message}`,
+        topOffset: 60,
+      });
     //   yield put({
     //     type: "GET_PRODUCTS",
     //     payload: { userId: payload?.userId, token: payload?.token },
     //   });
-    // }
-  } catch (e) {
-    console.log("Error in getting CART List", e);
+    }
+  } catch (error) {
+    console.error("Error in addPreOrder:", error);
+  } finally {
+    yield put({ type: "SHOW_LOADING", payload: false });
   }
 }
 
@@ -835,6 +889,7 @@ function* mySaga() {
   yield takeLatest("VERIFY_OTP", verifyOtp);
   yield takeLatest("FORGOT_PASSWORD", forgotPassword);
   yield takeLatest("GET_CATEGORIES", getCategories);
+  yield takeLatest("ALL_CATEGORIES", getAllCategories);
   yield takeLatest("RELATED_DATA", getRelatedData);
   yield takeLatest("GET_DETAILS_DATA", getDetails);
   yield takeLatest("ADD_PRODUCT", addProductToCart);

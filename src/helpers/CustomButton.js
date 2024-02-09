@@ -14,7 +14,7 @@ export default function CustomButton({title, onPress}) {
 }
 const styles = StyleSheet.create({
   container: {
-    height: 100,
+    // height: 100,
     paddingHorizontal: 5,
     justifyContent: 'center',
   },
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    marginBottom:25
   },
   btnTitle: {
     fontSize: 15,

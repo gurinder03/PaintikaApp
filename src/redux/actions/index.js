@@ -52,6 +52,13 @@ export const getCategories = (payload) => {
   };
 };
 
+export const getAllCategories = (payload) => {
+  return {
+    type: ActionTypes.ALL_CATEGORIES,
+    payload: payload,
+  };
+};
+
 export const getRelatedData = (payload) => {
   return {
     type: ActionTypes.RELATED_DATA,

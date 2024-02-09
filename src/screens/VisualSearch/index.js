@@ -19,6 +19,7 @@ import {
 } from "react-native-image-picker";
 
 export default function VisualSearch({ navigation }) {
+  
   const [avatar, setAvatar] = useState("");
   var options = {
     title: "Select Image",
@@ -33,11 +34,10 @@ export default function VisualSearch({ navigation }) {
       path: "images",
     },
   };
+
   const selectImage = () => {
-    console.log("IMAGE WORKINg");
     launchImageLibrary(options, (response) => {
       console.log("Response = ", response);
-
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.error) {
@@ -46,11 +46,12 @@ export default function VisualSearch({ navigation }) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
         setAvatar({ uri: response.uri });
-        navigation.navigate("Preview", { path: response?.assets[0]?.uri });
+        navigation.navigate("Preview", { path: response?.assets });
         // here we can call a API to upload image on server
       }
     });
   };
+
   const requestCameraPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -73,10 +74,9 @@ export default function VisualSearch({ navigation }) {
       console.warn(err);
     }
   };
+  
   const captureImage = () => {
     launchCamera(options, (response) => {
-      console.log("Response = ", response);
-
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.error) {
@@ -85,7 +85,7 @@ export default function VisualSearch({ navigation }) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
         // setAvatar({ uri: response.uri });
-        navigation.navigate("Preview", { path: response?.assets[0]?.uri });
+        navigation.navigate("Preview", { path: response?.assets });
         // here we can call a API to upload image on server
       }
     });

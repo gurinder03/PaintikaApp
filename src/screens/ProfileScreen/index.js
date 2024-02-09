@@ -36,10 +36,7 @@ export default function ProfileScreen({ navigation }) {
   const [userId, setuserId] = useState("");
   const [authToken, setauthToken] = useState(null);
   const userSavedData = useSelector((state) => state.saveDataReducer.userData);
-  console.log(
-    "🚀 ~ file: index.js:38 ~ ProfileScreen ~ userSavedData:",
-    userSavedData
-  );
+  console.log('Profile Data', userSavedData);
   useEffect(() => {
     getData();
     getAuthToken();
@@ -77,11 +74,6 @@ export default function ProfileScreen({ navigation }) {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log(
-        "🚀 ~ file: index.js:41 ~ getAuthToken ~ jsonValue:",
-        jsonValue
-      );
-
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }
@@ -101,13 +93,14 @@ export default function ProfileScreen({ navigation }) {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.sectionOne}>
+      <View style={[styles.sectionOne, {paddingTop:15}]}>
         <View style={styles.profileSection}>
           <Image
             source={require("../../../assets/download.jpeg")}
             style={styles.userProfilePic}
           />
           <Text style={styles.userName}>{userSavedData?.name}</Text>
+          <Text style={styles.userEmailText}>User Type: {userSavedData?.role}</Text>
           <Text style={styles.userEmailText}>
             {userSavedData?.email_or_mobile_number}
           </Text>

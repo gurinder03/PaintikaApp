@@ -92,7 +92,7 @@ export default function Address({ navigation, route }) {
         image: "", //require('../../images.png')
         currency: "INR", //In USD - only card option will exist rest(like wallet, UPI, EMI etc) will hide
         key: RAZORPAY_KEY,
-        amount: total.toFixed(2),
+        amount: total * 100,
         name: "Paintika",
         order_id: "", //Replace this with an order_id(response.data.orderId) created using Orders API.
         prefill: {
@@ -142,7 +142,6 @@ export default function Address({ navigation, route }) {
 
   const selectItem = (item) => {
     console.log("Selected Item >>>>>>>>>", item);
-
     setselectedAddress(item?._id);
   };
   return (
@@ -213,9 +212,9 @@ export default function Address({ navigation, route }) {
           Saved Address
         </Text>
         {addresses?.length > 0 ? (
-          addresses.map((Item) => {
+          addresses.map((Item, i) => {
             return (
-              <>
+              <View key={i}>
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#D3D3D3",
@@ -271,7 +270,7 @@ export default function Address({ navigation, route }) {
                     </View>
                   </View>
                 </TouchableOpacity>
-              </>
+              </View>
             );
           })
         ) : (

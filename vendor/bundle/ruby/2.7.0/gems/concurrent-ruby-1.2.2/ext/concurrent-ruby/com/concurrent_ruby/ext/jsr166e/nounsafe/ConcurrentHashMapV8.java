@@ -3631,7 +3631,9 @@ public class ConcurrentHashMapV8<K, V>
         private final V value;
         KeySetView(ConcurrentHashMapV8<K, V> map, V value) {  // non-public
             super(map);
-            this.value = value;
+            if(value){
+                this.value = value;
+            }
         }
 
         /**

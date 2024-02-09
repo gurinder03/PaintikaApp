@@ -47,19 +47,7 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
-  // const login = () => {
-  //   let savedEmail = userData?.email;
-  //   let savedPassword = userData?.password;
 
-  //   if (
-  //     inputValue.email == savedEmail &&
-  //     inputValue.password == savedPassword
-  //   ) {
-  //     navigation.navigate('HomeScreen');
-  //   } else {
-  //     Alert.alert('You have Entered Wrong Credentials.');
-  //   }
-  // };
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
@@ -104,6 +92,7 @@ export default function LoginScreen({ navigation }) {
           style={styles.input}
           onChangeText={(e) => handleChange("password", e)}
           value={inputValue.password}
+          secureTextEntry={true}
           placeholder="Password"
         />
         <View style={styles.forgotPasswrd}>
@@ -125,13 +114,6 @@ export default function LoginScreen({ navigation }) {
                 </Text>
               </TouchableOpacity>
             </View>
-            {/* <Text style={{ marginLeft: 5 }}>
-                <RightIcon
-                  name="long-arrow-right"
-                  size={30}
-                  color={Colors.black}
-                />
-              </Text> */}
           </View>
         </View>
       </View>
@@ -182,16 +164,10 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.socialTitle}>Or login with social account</Text>
         <View style={styles.socialLinks}>
           <View style={styles.iconContainer}>
-            <Image
-              source={require("../../../assets/facebook.png")}
-              style={styles.icon}
-            />
+            <Image source={require("../../../assets/facebook.png")}  style={styles.icon} />
           </View>
           <View style={styles.iconContainer}>
-            <Image
-              source={require("../../../assets/Google.png")}
-              style={styles.googleIcon}
-            />
+            <Image source={require("../../../assets/Google.png")}  style={styles.googleIcon} />
           </View>
         </View>
       </View>
@@ -229,10 +205,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    height: 65,
+    height: 50,
     marginHorizontal: 10,
-    marginVertical: 5,
+    marginVertical: 10,
+    borderRadius:8,
     padding: 10,
+    paddingLeft:15,
     backgroundColor: Colors.white,
     elevation: 5,
     fontFamily: FontStyles.manRopeRegular,

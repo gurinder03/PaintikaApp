@@ -36,6 +36,10 @@ export default function CategoryList({ navigation, route }) {
   const [filteredData, setFilteredData] = useState(savedList.data);
 
 
+  useEffect(() => {
+    setFilteredData(savedList.data)
+  }, [savedList]);
+  
   const onChangeSearchText = (text) => {
     setSearchText(text);
     const filtered = savedList.data.filter(item =>
@@ -110,7 +114,7 @@ export default function CategoryList({ navigation, route }) {
         </View>
         <View style={styles.mainContainer}>
           <FlatList
-            data={filteredData && filteredData.length ? filteredData : []}
+            data={filteredData && filteredData.length ? savedList.data : []}
             renderItem={({ item }) => {
               return <RenderItem data={item} nav={navigation} />;
             }}

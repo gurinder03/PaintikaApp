@@ -23,6 +23,8 @@ import com.airbnb.android.react.lottie.LottiePackage;
 import com.henninghall.date_picker.DatePickerPackage;
 // react-native-document-picker
 import com.reactnativedocumentpicker.RNDocumentPickerPackage;
+// react-native-fs
+import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-image-picker
@@ -86,6 +88,7 @@ public class PackageList {
       new LottiePackage(),
       new DatePickerPackage(),
       new RNDocumentPickerPackage(),
+      new RNFSPackage(),
       new RNGestureHandlerPackage(),
       new ImagePickerPackage(),
       new RazorpayPackage(),

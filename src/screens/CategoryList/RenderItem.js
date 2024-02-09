@@ -14,7 +14,6 @@ import BookMark from "react-native-vector-icons/Feather";
 
 
 const RenderItem = ({ data, nav }) => {
-
     const handleDetail = (data) => {
         nav.navigate("Detail", {
             id: data?._id,
@@ -39,7 +38,7 @@ const RenderItem = ({ data, nav }) => {
                             <View style={styles.priceSection}>
                                 <Rupee name="rupee" size={17} />
                                 <Text style={styles.priceMain}>
-                                    {data.price}
+                                    {data?.price}
                                 </Text>
                             </View>
                         </View>

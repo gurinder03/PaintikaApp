@@ -207,12 +207,6 @@ export default function AddAddress({ route, navigation }) {
           placeHolder={"Enter your Pincode"}
           type={"number"}
         />
-        {/* <TextInputComponent
-          title={"Address"}
-          onChange={(e) => onHandleChnage(e, "address")}
-          value={Info?.address}
-          placeHolder={"Enter your Address"}
-        /> */}
         <View style={styles.container}>
           <Text style={styles.placeHolder}>Address</Text>
           <TextInput
@@ -233,12 +227,6 @@ export default function AddAddress({ route, navigation }) {
           placeHolder={"Enter your City"}
           onChange={(e) => onHandleChnage(e, "city")}
         />
-        {/* <TextInputComponent
-          title={"Landmark (optional)"}
-          value={Info?.landmark}
-          placeHolder={"Enter your Landmark"}
-          onChange={(e) => onHandleChnage(e, "landmark")}
-        /> */}
         <View style={styles.container}>
           <Text style={styles.placeHolder}>Landmark</Text>
           <TextInput
@@ -259,12 +247,6 @@ export default function AddAddress({ route, navigation }) {
           customValues={states}
           value={Info?.state}
         />
-        {/* <TextInputComponent
-          title={"Alternate Phone (optional)"}
-          value={Info?.alternate}
-          placeHolder={"Enter your Alternate Phone"}
-          onChange={(e) => onHandleChnage(e, "alternate")}
-        /> */}
         <View style={styles.container}>
           <Text style={styles.placeHolder}>Alternate Mobile</Text>
           <TextInput

@@ -33,11 +33,6 @@ export default function CartScreen({ navigation }) {
   const imgURL =
     "https://m.media-amazon.com/images/I/61L5QgPvgqL._AC_UF1000,1000_QL80_.jpg";
 
-  console.log(
-    "🚀 ~ file: index.js:18 ~ CartScreen ~ detailsData:",
-    detailsData
-  );
-
   const deleteProduct = (id) => {
     dispatch({
       type: "REMOVE_PRODUCT",
@@ -60,26 +55,26 @@ export default function CartScreen({ navigation }) {
     ]);
   };
 
-  const updateProduct = (id, creatorId) => {
-    console.log("INSIDE UPDATE PRODUCT>>>>>>>>>>", id, creatorId);
+  const updateProduct = (data, creatorId) => {
+    console.log("INSIDE UPDATE PRODUCT>>>>>>>>>>", data, creatorId);
     setitemIndex(itemIndex + 1);
+    // console.log(".........................................>>>>>>>>>>", itemIndex);
     dispatch(
       addProduct({
         user_id: userId,
-        art_id: id,
+        art_id: data._id,
         creator_id: creatorId,
-        quantity: itemIndex,
+        quantity: 1,
         token: authToken,
       })
     );
-    dispatch({
-      type: "GET_PRODUCTS",
-      payload: { userId: userId, token: authToken },
-    });
+    // dispatch({
+    //   type: "GET_PRODUCTS",
+    //   payload: { userId: userId, token: authToken },
+    // });
   };
 
   const RenderItem = ({ item }) => {
-    console.log("Working >>>>>>>>>>>>>>", item);
     return (
       <>
         <View style={styles.productContainer}>
@@ -125,7 +120,7 @@ export default function CartScreen({ navigation }) {
                   marginLeft: 9,
                 }}
               >
-                Lorem Ipsum
+                {item.name}
               </Text>
               <Text
                 style={{
@@ -155,7 +150,7 @@ export default function CartScreen({ navigation }) {
                   marginLeft: 9,
                 }}
               >
-                {`₹ ${item.price}`}
+                {`₹ ${item.price * item.quantity}`}
               </Text>
               <View
                 style={{
@@ -207,7 +202,7 @@ export default function CartScreen({ navigation }) {
                     justifyContent: "center",
                     alignItems: "center",
                   }}
-                  onPress={() => updateProduct(item?._id, item?.creator_id)}
+                  onPress={() => updateProduct(item, item?.creator_id)}
                 >
                   <Text>
                     <AddIcon size={25} name="add" />

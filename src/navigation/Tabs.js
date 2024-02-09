@@ -16,6 +16,9 @@ const Tab = createBottomTabNavigator();
 export default function Tabs() {
   const [authToken, setauthToken] = useState(null);
   const isUserLogged = useSelector((state) => state.saveDataReducer.isLogged);
+  const userSavedData = useSelector((state) => state.saveDataReducer.userData);
+
+  console.log('userSavedData =>', userSavedData);
   useEffect(() => {
     getAuthToken();
   }, [authToken]);
@@ -23,10 +26,7 @@ export default function Tabs() {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log(
-        "🚀 ~ file: index.js:38 ~ getAuthToken ~ jsonValue:",
-        jsonValue
-      );
+      console.log("Token =>", jsonValue);
       if (jsonValue !== null) {
         setauthToken(jsonValue);
       }
@@ -88,8 +88,13 @@ export default function Tabs() {
           />
 
           <Tab.Screen
-            name="Visual"
-            options={{ headerShown: false }}
+            name={userSavedData && userSavedData.role == "ARTIST" ? "Upload Paint" : "Pre-Upload"}
+            options={{
+                headerShown: false,
+                tabBarIcon: () => (
+                  <Icon name='camerao' size={22} color={'gray'} />
+                )
+            }}
             component={VisualSearch}
           />
 

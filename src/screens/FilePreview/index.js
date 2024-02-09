@@ -1,18 +1,30 @@
-import { View, Text, Image, ScrollView, Alert, TextInput } from "react-native";
+import { View, Text, Image, ScrollView, Alert, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import FontStyles from "../../constants/FontStyles";
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Colors from "../../constants/Colors";
-import { Picker } from "@react-native-picker/picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch } from "react-redux";
+import SelectDropdown from 'react-native-select-dropdown'
+import Icon from 'react-native-vector-icons/AntDesign';
 
-export default function FilePreview({ route }) {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../../redux/actions";
+import RNFS from 'react-native-fs';
+
+const whiteBackground = {
+  backgroundColor: '#FFFFFF',
+  color: '#676767',
+  height: 40,
+  width: "100%",
+  borderRadius: 8
+};
+
+const filterDrodwn = {
+  color: '#676767',
+  fontSize: 12,
+  textAlign: 'left'
+};
+
+export default function FilePreview({navigation, route }) {
   const dispatch = useDispatch();
+  const countries = ["Instagram Users", "TikTok Users"];
   const [data, setData] = useState({
     name: "",
     size: "",
@@ -22,15 +34,20 @@ export default function FilePreview({ route }) {
     price: "",
     category: "",
   });
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  const [description, setdescription] = useState("");
+  const [descriptionData, setDescriptionData] = useState("");
+  const [imgUpload, setImgUpload] = useState("");
+
+  const savedList = useSelector((state) => state.saveDataReducer.allCategories);
+  const [category, setCategory] = useState([]);
   const [role, setrole] = useState("");
+  const userSavedData = useSelector((state) => state.saveDataReducer.userData);
+
   const [userId, setuserId] = useState("");
   const [authToken, setauthToken] = useState("");
   const { path } = route?.params;
-  console.log("🚀 ~ file: index.js:6 ~ FilePreview ~ path:", path);
 
   const handleChange = (name, e) => {
+    console.log('selectedItem =>', name, e);
     if (name == "name") {
       setData({ ...data, name: e });
     } else if (name == "size") {
@@ -48,50 +65,44 @@ export default function FilePreview({ route }) {
     }
   };
 
-  const handleUpload = () => {
-    let data = new FormData();
-
-    if (path !== null) {
-      data.append("image", path);
-
-      console.log("Data::::::::", data);
-
-      const payloadData = {
-        token: authToken,
-        userId: userId,
-        image: data,
-        description: description,
-      };
-
-      dispatch({ type: "ADD_PREORDER", payload: payloadData });
-    }
-  };
-  useEffect(() => {
-    getRole();
-    getData();
-    getAuthToken();
-  }, []);
-
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem("userId");
-      console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
-      if (value !== null) {
-        setuserId(JSON.parse(value));
+  const handleUpload = async() => {
+   
+    if (path !== null && data) {
+      if(userSavedData && userSavedData.role == "ARTIST"){
+        data.token = authToken
+        data.imagePath = path
+        data.role = 'ARTIST'
+        data.userId = userId
+        dispatch({ type: "ADD_PREORDER", payload: data });
+        navigation.navigate("Home");
+      }else{
+        RNFS.readFile(path[0].uri, 'base64').then((base64Image) => {
+          let dataPre = {
+            description: descriptionData,
+            imagePath: base64Image,
+            role:'USER',
+            token: authToken,
+            userId: userId
+          }
+          setImgUpload(base64Image)
+          if(base64Image){
+            dispatch({ type: "ADD_PREORDER", payload:dataPre });
+            navigation.navigate("Home");
+          }
+        })
+        .catch((error) => {
+          console.error('Error reading image file:', error);
+        });        
       }
-    } catch (e) {
-      // error reading value
+    }else{
+
     }
   };
 
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log(
-        "🚀 ~ file: index.js:200 ~ getAuthToken ~ jsonValue:",
-        jsonValue
-      );
-
+      dispatch(getAllCategories({ page: 1, limit: 100, token: JSON.parse(jsonValue)}))
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }
@@ -101,10 +112,32 @@ export default function FilePreview({ route }) {
     }
   };
 
+  useEffect(() => {
+    getRole();
+    getData();
+    getAuthToken();
+  }, []);
+
+  useEffect(() => {
+    setCategory(savedList.data)
+  }, [savedList]);
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("userId");
+      console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      if (value !== null) {
+        setuserId(JSON.parse(value));
+      }
+    } catch (e) {
+    }
+  };
+
+ 
+
   const getRole = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("role");
-      console.log("🚀 ~ file: index.js:55 ~ getRole ~ jsonValue:", jsonValue);
       if (jsonValue !== null) {
         setrole(jsonValue);
       }
@@ -113,178 +146,183 @@ export default function FilePreview({ route }) {
     }
   };
 
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 8,
-      }}
-    >
-      <View
-        style={{
-          height: "40%",
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Image
-          source={{ uri: path }}
-          style={{ width: "80%", height: "80%", borderBottomWidth: 2 }}
-        />
-      </View>
-      <View
-        style={{
-          height: "60%",
-          width: "100%",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        {false ? (
-          <ScrollView style={{ width: wp(90) }}>
-            <TextInput
-              onChange={() => {}}
-              placeholder="Name"
-              style={{
-                height: hp(7),
-                paddingLeft: wp(2),
-                borderBottomWidth: 1,
-              }}
-            />
-            <TextInput
-              onChange={() => {}}
-              placeholder="Size"
-              style={{
-                height: hp(7),
-                paddingLeft: wp(2),
-                borderBottomWidth: 1,
-                marginTop: 2,
-              }}
-            />
-            <TextInput
-              onChange={() => {}}
-              placeholder="Theme"
-              style={{
-                height: hp(7),
-                paddingLeft: wp(2),
-                borderBottomWidth: 1,
-                marginTop: 2,
-              }}
-            />
-            <TextInput
-              onChange={() => {}}
-              placeholder="Medium"
-              style={{
-                height: hp(7),
-                paddingLeft: wp(2),
-                borderBottomWidth: 1,
-                marginTop: 2,
-              }}
-            />
-            <TextInput
-              onChange={() => {}}
-              placeholder="Framing Quality"
-              style={{
-                height: hp(7),
-                paddingLeft: wp(2),
-                borderBottomWidth: 1,
-                marginTop: 2,
-              }}
-            />
-            <TextInput
-              onChange={() => {}}
-              placeholder="Price"
-              style={{
-                height: hp(7),
-                paddingLeft: wp(2),
-                borderBottomWidth: 1,
-                marginTop: 2,
-              }}
-            />
-            <Picker
-              selectedValue={selectedLanguage}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)
-              }
-              style={{ borderBottomWidth: 1 }}
-            >
-              <Picker.Item label="Category" value={"category"} />
-              <Picker.Item label="Java" value="java" />
-              <Picker.Item label="JavaScript" value="js" />
-            </Picker>
-          </ScrollView>
-        ) : (
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              height: hp(20),
-            }}
-          >
-            <View style={{ width: "80%" }}>
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontFamily: FontStyles.manRopeSemiBold,
-                  color: Colors.black,
-                }}
-              >
-                Description
-              </Text>
-            </View>
-            <TextInput
-              style={{
-                width: "80%",
-                borderWidth: 1,
-                height: "50%",
-                borderRadius: 10,
-                padding: 5,
-                marginTop: 5,
-              }}
-              onChange={(e) => {
-                setdescription(e);
-              }}
-              numberOfLines={5}
-              multiline
-              placeholder="Enter Description"
-            />
-          </View>
-        )}
+  const _renderIconButton = () => {
+    return (
+      <TouchableOpacity activeOpacity={0.5}>
+        <Icon name='caretdown' color='#181C2E' size={12} />
+      </TouchableOpacity>
+    );
+  };
 
-        <View
-          style={{
-            height: hp(10),
-            width: wp(90),
-            justifyContent: "center",
-            alignItems: "flex-end",
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              height: hp(7),
-              width: wp(40),
-              backgroundColor: Colors.black,
-              borderRadius: wp(8),
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => handleUpload()}
-          >
-            <Text
-              style={{
-                color: Colors.white,
-                fontFamily: FontStyles.manRopeSemiBold,
-              }}
-            >
-              UPLOAD
-            </Text>
-          </TouchableOpacity>
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={{ alignItems: 'center' }}>
+          <Image source={{ uri: path[0].uri }} style={styles.imgMain} />
+        </View>
+        <View style={styles.inputSection}>
+          {userSavedData && userSavedData.role == "ARTIST" ? (
+            <View>
+              <View>
+                <TextInput
+                  onChange={(e) => handleChange('name', e.nativeEvent.text)}
+                  placeholder="Name"
+                  style={styles.inputArea}
+                />
+              </View>
+              <View style={{ marginTop: 15 }}>
+                <TextInput
+                  onChange={(e) => handleChange('size', e.nativeEvent.text)}
+                  placeholder="Size"
+                  style={styles.inputArea}
+                />
+              </View>
+              <View style={{ marginTop: 15 }}>
+                <TextInput
+                  onChange={(e) => handleChange('theme', e.nativeEvent.text)}
+                  placeholder="Theme"
+                  style={styles.inputArea}
+                />
+              </View>
+              <View style={{ marginTop: 15 }}>
+                <TextInput
+                  onChange={(e) => handleChange('medium', e.nativeEvent.text)}
+                  placeholder="Medium"
+                  style={styles.inputArea}
+                />
+              </View>
+              <View style={{ marginTop: 15 }}>
+                <TextInput
+                  onChange={(e) => handleChange('quality', e.nativeEvent.text)}
+                  placeholder="Framing Quality"
+                  style={styles.inputArea}
+                />
+              </View>
+              <View style={{ marginTop: 15 }}>
+                <TextInput
+                  onChange={(e) => handleChange('price', e.nativeEvent.text)}
+                  placeholder="Price"
+                  style={styles.inputArea}
+                />
+              </View>
+              <View style={styles.selected}>
+                <SelectDropdown
+                  data={category}
+                  onSelect={(selectedItem, index) => handleChange('category', selectedItem)}
+                  buttonStyle={whiteBackground}
+                  renderDropdownIcon={_renderIconButton}
+                  dropdownIconPosition='right'
+                  // @ts-expect-error
+                  buttonTextStyle={filterDrodwn}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem.name
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item.name
+                  }}
+                />
+              </View>
+            </View>
+          ) : (
+            <View>
+              <View>
+                <Text style={styles.dis}>Description</Text>
+                <TextInput
+                  style={styles.disText}
+                  onChange={(e) => {
+                    setDescriptionData(e.nativeEvent.text);
+                  }}
+                  numberOfLines={5}
+                  textAlignVertical="top"
+                  multiline
+                  placeholder="Enter Description"
+                />
+              </View>
+            </View>
+          )}
+          <View style={styles.btn}>
+            <TouchableOpacity style={styles.buttonText} onPress={() => handleUpload()}>
+              <Text style={{ color: "#FFFFFF" }}> UPLOAD </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
+
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 15,
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: '#E1E1E1',
+    borderRadius: 15,
+    marginBottom: 15,
+    overflow: Platform.OS === "android" ? "hidden" : "visible",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  imgMain: {
+    resizeMode: "contain",
+    width: "94%",
+    height: 350,
+    borderRadius: 10,
+  },
+  inputSection: {
+    marginHorizontal: 20,
+    marginBottom: 15,
+    marginTop: 15
+  },
+  inputArea: {
+    borderWidth: 1,
+    paddingLeft: 15,
+    height: 45,
+    borderRadius: 10
+  },
+  selected: {
+    borderWidth: 1,
+    marginTop: 15,
+    borderRadius: 10,
+    marginBottom: 15
+  },
+  valueSelect: {
+
+  },
+  dis: {
+    fontSize: 17,
+    color: "#000",
+  },
+  disText: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 5,
+    marginTop: 5,
+    paddingTop: 15,
+    paddingLeft: 15
+  },
+  btn: {
+    marginTop: 15,
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+  buttonText: {
+    backgroundColor: "#000",
+    borderRadius: 50,
+    padding: 15,
+    paddingHorizontal: 25,
+    justifyContent: "center",
+    alignItems: "center",
+  }
+
+})

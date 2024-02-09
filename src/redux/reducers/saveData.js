@@ -5,10 +5,12 @@ const intialState = {
   isLoading: false,
   savedEmail: "",
   savedCategories: [],
+  allCategories: [],
   relatedData: [],
   detailsData: [],
   userId: "",
   cartList: null,
+  reponseBackData:[],
   addressData: [],
   userData: [],
   isLogged: false,
@@ -41,7 +43,11 @@ const saveDataReducer = (state = intialState, action) => {
         ...state,
         savedCategories: action.payload,
       };
-
+    case "ALL_CATEGORIES":
+      return {
+        ...state,
+        allCategories: action.payload,
+      };
     case "SAVE_RELATEDDATA":
       return {
         ...state,
@@ -73,6 +79,12 @@ const saveDataReducer = (state = intialState, action) => {
       return {
         ...state,
         cartList: action.payload,
+      };
+
+    case "RETURN_GET_DATA":
+      return {
+        ...state,
+        reponseBackData: action.payload,
       };
 
     case "SAVE_ADDRESS":
