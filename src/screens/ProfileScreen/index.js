@@ -36,7 +36,7 @@ export default function ProfileScreen({ navigation }) {
   const [userId, setuserId] = useState("");
   const [authToken, setauthToken] = useState(null);
   const userSavedData = useSelector((state) => state.saveDataReducer.userData);
-  console.log('Profile Data', userSavedData);
+  // console.log('Profile Data', userSavedData);
   useEffect(() => {
     getData();
     getAuthToken();

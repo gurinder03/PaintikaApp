@@ -1,28 +1,36 @@
-import { View, Text, Image, ScrollView, Alert, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  Alert,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import SelectDropdown from 'react-native-select-dropdown'
-import Icon from 'react-native-vector-icons/AntDesign';
-
+import SelectDropdown from "react-native-select-dropdown";
+import Icon from "react-native-vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../../redux/actions";
-import RNFS from 'react-native-fs';
+import AWSHelper from "../../Services/AWSHelper";
 
 const whiteBackground = {
-  backgroundColor: '#FFFFFF',
-  color: '#676767',
+  backgroundColor: "#FFFFFF",
+  color: "#676767",
   height: 40,
   width: "100%",
-  borderRadius: 8
+  borderRadius: 8,
 };
 
 const filterDrodwn = {
-  color: '#676767',
+  color: "#676767",
   fontSize: 12,
-  textAlign: 'left'
+  textAlign: "left",
 };
 
-export default function FilePreview({navigation, route }) {
+export default function FilePreview({ navigation, route }) {
   const dispatch = useDispatch();
   const countries = ["Instagram Users", "TikTok Users"];
   const [data, setData] = useState({
@@ -47,7 +55,7 @@ export default function FilePreview({navigation, route }) {
   const { path } = route?.params;
 
   const handleChange = (name, e) => {
-    console.log('selectedItem =>', name, e);
+    console.log("selectedItem =>", name, e);
     if (name == "name") {
       setData({ ...data, name: e });
     } else if (name == "size") {
@@ -65,44 +73,41 @@ export default function FilePreview({navigation, route }) {
     }
   };
 
-  const handleUpload = async() => {
-   
-    if (path !== null && data) {
-      if(userSavedData && userSavedData.role == "ARTIST"){
-        data.token = authToken
-        data.imagePath = path
-        data.role = 'ARTIST'
-        data.userId = userId
-        dispatch({ type: "ADD_PREORDER", payload: data });
-        navigation.navigate("Home");
-      }else{
-        RNFS.readFile(path[0].uri, 'base64').then((base64Image) => {
-          let dataPre = {
-            description: descriptionData,
-            imagePath: base64Image,
-            role:'USER',
-            token: authToken,
-            userId: userId
-          }
-          setImgUpload(base64Image)
-          if(base64Image){
-            dispatch({ type: "ADD_PREORDER", payload:dataPre });
+  const handleUpload = async () => {
+    console.log("ssssss", data);
+    AWSHelper.uploadFile(path[0]).then((res) => {
+        if (res && data) {
+          if (userSavedData && userSavedData.role == "ARTIST") {
+            data.token = authToken;
+            data.imagePath = res.Location;
+            data.role = "ARTIST";
+            data.userId = userId;
+            dispatch({ type: "ADD_PREORDER", payload: data });
+            navigation.navigate("Home");
+          } else {
+            let dataPre = {
+              description: descriptionData,
+              imagePath: res.Location,
+              role: "USER",
+              token: authToken,
+              userId: userId,
+            };
+            dispatch({ type: "ADD_PREORDER", payload: dataPre });
             navigation.navigate("Home");
           }
-        })
-        .catch((error) => {
-          console.error('Error reading image file:', error);
-        });        
-      }
-    }else{
-
-    }
+        } else {
+        }
+      }).catch((err) => {
+        console.log("Error Check", err);
+      });
   };
 
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      dispatch(getAllCategories({ page: 1, limit: 100, token: JSON.parse(jsonValue)}))
+      dispatch(
+        getAllCategories({ page: 1, limit: 100, token: JSON.parse(jsonValue) })
+      );
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }
@@ -119,7 +124,7 @@ export default function FilePreview({navigation, route }) {
   }, []);
 
   useEffect(() => {
-    setCategory(savedList.data)
+    setCategory(savedList.data);
   }, [savedList]);
 
   const getData = async () => {
@@ -129,11 +134,8 @@ export default function FilePreview({navigation, route }) {
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   };
-
- 
 
   const getRole = async () => {
     try {
@@ -149,7 +151,7 @@ export default function FilePreview({navigation, route }) {
   const _renderIconButton = () => {
     return (
       <TouchableOpacity activeOpacity={0.5}>
-        <Icon name='caretdown' color='#181C2E' size={12} />
+        <Icon name="caretdown" color="#181C2E" size={12} />
       </TouchableOpacity>
     );
   };
@@ -157,7 +159,7 @@ export default function FilePreview({navigation, route }) {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: "center" }}>
           <Image source={{ uri: path[0].uri }} style={styles.imgMain} />
         </View>
         <View style={styles.inputSection}>
@@ -165,42 +167,42 @@ export default function FilePreview({navigation, route }) {
             <View>
               <View>
                 <TextInput
-                  onChange={(e) => handleChange('name', e.nativeEvent.text)}
+                  onChange={(e) => handleChange("name", e.nativeEvent.text)}
                   placeholder="Name"
                   style={styles.inputArea}
                 />
               </View>
               <View style={{ marginTop: 15 }}>
                 <TextInput
-                  onChange={(e) => handleChange('size', e.nativeEvent.text)}
+                  onChange={(e) => handleChange("size", e.nativeEvent.text)}
                   placeholder="Size"
                   style={styles.inputArea}
                 />
               </View>
               <View style={{ marginTop: 15 }}>
                 <TextInput
-                  onChange={(e) => handleChange('theme', e.nativeEvent.text)}
+                  onChange={(e) => handleChange("theme", e.nativeEvent.text)}
                   placeholder="Theme"
                   style={styles.inputArea}
                 />
               </View>
               <View style={{ marginTop: 15 }}>
                 <TextInput
-                  onChange={(e) => handleChange('medium', e.nativeEvent.text)}
+                  onChange={(e) => handleChange("medium", e.nativeEvent.text)}
                   placeholder="Medium"
                   style={styles.inputArea}
                 />
               </View>
               <View style={{ marginTop: 15 }}>
                 <TextInput
-                  onChange={(e) => handleChange('quality', e.nativeEvent.text)}
+                  onChange={(e) => handleChange("quality", e.nativeEvent.text)}
                   placeholder="Framing Quality"
                   style={styles.inputArea}
                 />
               </View>
               <View style={{ marginTop: 15 }}>
                 <TextInput
-                  onChange={(e) => handleChange('price', e.nativeEvent.text)}
+                  onChange={(e) => handleChange("price", e.nativeEvent.text)}
                   placeholder="Price"
                   style={styles.inputArea}
                 />
@@ -208,17 +210,19 @@ export default function FilePreview({navigation, route }) {
               <View style={styles.selected}>
                 <SelectDropdown
                   data={category}
-                  onSelect={(selectedItem, index) => handleChange('category', selectedItem)}
+                  onSelect={(selectedItem, index) =>
+                    handleChange("category", selectedItem)
+                  }
                   buttonStyle={whiteBackground}
                   renderDropdownIcon={_renderIconButton}
-                  dropdownIconPosition='right'
+                  dropdownIconPosition="right"
                   // @ts-expect-error
                   buttonTextStyle={filterDrodwn}
                   buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.name
+                    return selectedItem.name;
                   }}
                   rowTextForSelection={(item, index) => {
-                    return item.name
+                    return item.name;
                   }}
                 />
               </View>
@@ -241,14 +245,16 @@ export default function FilePreview({navigation, route }) {
             </View>
           )}
           <View style={styles.btn}>
-            <TouchableOpacity style={styles.buttonText} onPress={() => handleUpload()}>
+            <TouchableOpacity
+              style={styles.buttonText}
+              onPress={() => handleUpload()}
+            >
               <Text style={{ color: "#FFFFFF" }}> UPLOAD </Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
     </ScrollView>
-
   );
 }
 
@@ -257,7 +263,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: "#ffffff",
     borderWidth: 1,
-    borderColor: '#E1E1E1',
+    borderColor: "#E1E1E1",
     borderRadius: 15,
     marginBottom: 15,
     overflow: Platform.OS === "android" ? "hidden" : "visible",
@@ -282,23 +288,21 @@ const styles = StyleSheet.create({
   inputSection: {
     marginHorizontal: 20,
     marginBottom: 15,
-    marginTop: 15
+    marginTop: 15,
   },
   inputArea: {
     borderWidth: 1,
     paddingLeft: 15,
     height: 45,
-    borderRadius: 10
+    borderRadius: 10,
   },
   selected: {
     borderWidth: 1,
     marginTop: 15,
     borderRadius: 10,
-    marginBottom: 15
+    marginBottom: 15,
   },
-  valueSelect: {
-
-  },
+  valueSelect: {},
   dis: {
     fontSize: 17,
     color: "#000",
@@ -309,7 +313,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 5,
     paddingTop: 15,
-    paddingLeft: 15
+    paddingLeft: 15,
   },
   btn: {
     marginTop: 15,
@@ -323,6 +327,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     justifyContent: "center",
     alignItems: "center",
-  }
-
-})
+  },
+});

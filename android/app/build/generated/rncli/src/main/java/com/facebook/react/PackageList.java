@@ -27,6 +27,8 @@ import com.reactnativedocumentpicker.RNDocumentPickerPackage;
 import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
+// react-native-get-random-values
+import org.linusu.RNGetRandomValuesPackage;
 // react-native-image-picker
 import com.imagepicker.ImagePickerPackage;
 // react-native-razorpay
@@ -90,6 +92,7 @@ public class PackageList {
       new RNDocumentPickerPackage(),
       new RNFSPackage(),
       new RNGestureHandlerPackage(),
+      new RNGetRandomValuesPackage(),
       new ImagePickerPackage(),
       new RazorpayPackage(),
       new SafeAreaContextPackage(),

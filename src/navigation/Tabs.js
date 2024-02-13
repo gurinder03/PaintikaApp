@@ -18,7 +18,7 @@ export default function Tabs() {
   const isUserLogged = useSelector((state) => state.saveDataReducer.isLogged);
   const userSavedData = useSelector((state) => state.saveDataReducer.userData);
 
-  console.log('userSavedData =>', userSavedData);
+  // console.log('userSavedData  EEEEEEEEEEEEEEEEEEEEEEEEEEE=>', userSavedData);
   useEffect(() => {
     getAuthToken();
   }, [authToken]);
@@ -26,7 +26,7 @@ export default function Tabs() {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log("Token =>", jsonValue);
+      // console.log("Token =>", jsonValue);
       if (jsonValue !== null) {
         setauthToken(jsonValue);
       }

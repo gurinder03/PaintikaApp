@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //fetching functions
 const BASE_URL = `https://api.paintikaart.com/api/v1`;
 const GetRecord = (url, data) => {
-  console.log(data, " >>>> data", BASE_URL + url);
+  // console.log(data, " >>>> data", BASE_URL + url);
   return axios({
     method: "POST",
     crossDomain: true,
@@ -19,7 +19,7 @@ const GetRecord = (url, data) => {
 };
 
 const GetRecord1 = (url, data) => {
-  console.log(data, " >>>> data", url);
+  // console.log(data, " >>>> data", url);
   return axios({
     method: "GET",
     crossDomain: true,
@@ -36,12 +36,10 @@ const GetRecord2 = (url, data, token) => {
       token: `Bearer ${token}`,
     },
   };
-  return axios
-    .post(`${BASE_URL + url}`, data, config)
-    .then((response) => {
-      console.log("axios data", response?.data);
-    })
-    .catch();
+  return axios.post(`${BASE_URL + url}`, data, config).then((response) => {
+    console.log("axios data", response?.data);
+  }).catch();
+
   // return axios({
   //   method: "POST",
   //   crossDomain: true,
@@ -67,14 +65,10 @@ function* SignUp({ payload }) {
 
   try {
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log(
-      "🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:",
-      response.data
-    );
+    // console.log("🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:", response.data);
 
     if (response?.data !== null && response.data.statusCode == 200) {
-      console.log("INSIDE IF");
-
+      // console.log("INSIDE IF");
       Toast.show({
         type: "success",
         text1: `${response?.data?.message}`,
@@ -118,7 +112,7 @@ function* SignUp({ payload }) {
   }
 }
 function* login({ payload }) {
-  console.log("WORKING SAGA LOGIN:::", payload);
+  // console.log("WORKING SAGA LOGIN:::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     role: payload?.role,
@@ -129,13 +123,10 @@ function* login({ payload }) {
 
   try {
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log(
-      "🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:",
-      response.data
-    );
+    // console.log("🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:", response.data);
 
     if (response?.data !== null && response.data.statusCode == 200) {
-      console.log("INSIDE IF");
+      // console.log("INSIDE IF");
 
       Toast.show({
         type: "success",
@@ -149,15 +140,13 @@ function* login({ payload }) {
       yield put({ type: "ISLOGGED", payload: true });
       let token = JSON.stringify(response?.data?.data?.token);
       let userData = JSON.stringify(response?.data?.data?._id);
-      console.log(
-        "🚀 ~ file: saga.js:126 ~ function*login ~ userData:",
-        userData
-      );
-      console.log("🚀 ~ file: saga.js:125 ~ function*login ~ token:", token);
+      // console.log("🚀 ~ file: saga.js:126 ~ function*login ~ userData:", userData);
+      // console.log("🚀 ~ file: saga.js:125 ~ function*login ~ token:", token);
       yield AsyncStorage.setItem("authToken", token);
       yield AsyncStorage.setItem("userId", userData);
       yield AsyncStorage.setItem("role", payload?.role);
-      yield NavigationService.navigate("Home");
+      // yield NavigationService.navigate("Home");
+      yield NavigationService.navigate("Profile");
     } else {
       Toast.show({
         type: "error",
@@ -172,7 +161,7 @@ function* login({ payload }) {
   }
 }
 function* verifyOtp({ payload }) {
-  console.log("Working OTP ", payload);
+  // console.log("Working OTP ", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     role: payload.role,
@@ -183,10 +172,7 @@ function* verifyOtp({ payload }) {
 
   try {
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log(
-      "🚀 ~ file: saga.js:108 ~ function*verifyOtp ~ response:",
-      response.data
-    );
+    // console.log( "🚀 ~ file: saga.js:108 ~ function*verifyOtp ~ response:", response.data);
     if (response?.data !== null && response?.data?.statusCode == 200) {
       yield put({ type: "SHOW_LOADING", payload: false });
       Toast.show({
@@ -210,7 +196,7 @@ function* verifyOtp({ payload }) {
   }
 }
 function* forgotPassword({ payload }) {
-  console.log("Forgot password Working ", payload);
+  // console.log("Forgot password Working ", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     OTP: payload.OTP,
@@ -222,11 +208,7 @@ function* forgotPassword({ payload }) {
 
   try {
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log(
-      "🚀 ~ file: saga.js:155 ~ function*forgotPassword ~ response:",
-      response.data
-    );
-
+    // console.log("🚀 ~ file: saga.js:155 ~ function*forgotPassword ~ response:", response.data);
     if (response?.data !== null && response?.data?.statusCode == 200) {
       yield put({ type: "SHOW_LOADING", payload: false });
       Toast.show({
@@ -251,7 +233,7 @@ function* forgotPassword({ payload }) {
 }
 
 function* getCategories({ payload }) {
-  console.log("Working categories", payload);
+  // console.log("Working categories", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     page: payload?.page,
@@ -260,15 +242,12 @@ function* getCategories({ payload }) {
   const requestUrl = "/home/category/list";
 
   try {
-    console.log("BEFORE FETCHING", BASE_URL + requestUrl, postData);
+    // console.log("BEFORE FETCHING", BASE_URL + requestUrl, postData);
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log(
-      "🚀 ~ file: saga.js:216 ~ function*getCategories ~ response:",
-      response.data
-    );
+    // console.log("🚀 ~ file: saga.js:216 ~ function*getCategories ~ response:", response.data);
 
     if (response?.data?.statusCode == 200 && response?.data !== null) {
-      console.log("WORKING:::::::");
+      // console.log("WORKING:::::::");
       yield put({ type: "SAVE_CATEGORIES", payload: response?.data });
     }
     yield put({ type: "SHOW_LOADING", payload: false });
@@ -319,7 +298,7 @@ function* getRelatedData({ payload }) {
   try {
     // console.log("BEFORE FETCHING RELATED DATA", BASE_URL + requestUrl,  postData  );
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log("🚀 ~ file: saga.js:243 ~ function*getRelatedData ~ response:", response.data);
+    // console.log("🚀 ~ file: saga.js:243 ~ function*getRelatedData ~ response:", response.data);
 
     if (response?.data?.statusCode == 200 && response?.data !== null) {
       yield put({ type: "SAVE_RELATEDDATA", payload: response?.data });
@@ -331,16 +310,13 @@ function* getRelatedData({ payload }) {
 }
 
 function* getDetails({ payload }) {
-  console.log("GET DETAILS::::::::", payload);
+  // console.log("GET DETAILS::::::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/home/view/${payload}`;
-  console.log("BEFORE FETHING URL", requestUrl);
+  // console.log("BEFORE FETHING URL", requestUrl);
   try {
     const response = yield call(GetRecord1, requestUrl);
-    console.log(
-      "🚀 ~ file: saga.js:267 ~ function*getDetails ~ response:",
-      response?.data
-    );
+    // console.log( "🚀 ~ file: saga.js:267 ~ function*getDetails ~ response:", response?.data);
     // if (response.statusCode == 200 && response.data !== null) {
     yield put({ type: "SAVE_DETAILS_DATA", payload: response?.data });
     // }
@@ -350,10 +326,10 @@ function* getDetails({ payload }) {
 }
 
 function* addProductToCart({ payload }) {
-  console.log("ADD TO CART PAYLOAD::::", payload);
+  // console.log("ADD TO CART PAYLOAD::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/cart/add`;
-  console.log("BEFORE FETHING URL CART", requestUrl);
+  // console.log("BEFORE FETHING URL CART", requestUrl);
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
@@ -367,20 +343,13 @@ function* addProductToCart({ payload }) {
   };
 
   try {
-    console.log(
-      "BEFORE FETCH ADD TO CART:::::::",
-      `${BASE_URL + requestUrl}`,
-      postData
-    );
+    // console.log("BEFORE FETCH ADD TO CART:::::::",  `${BASE_URL + requestUrl}`, postData);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
       config
     );
-    console.log(
-      "🚀 ~ file: saga.js:299 ~ function*addProductToCart ~ response:",
-      response?.data
-    );
+    // console.log("🚀 ~ file: saga.js:299 ~ function*addProductToCart ~ response:", response?.data );
 
     // if (response.statusCode == 200 && response.data !== null) {
     // yield put({ type: "SAVE_DETAILS_DATA", payload: response?.data });
@@ -406,7 +375,7 @@ function* addProductToCart({ payload }) {
   }
 }
 function* getProducts({ payload }) {
-  console.log("ADD TO GET CART PAYLOAD::::", payload);
+  // console.log("ADD TO GET CART PAYLOAD::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/cart/list`;
   let config = {
@@ -419,23 +388,13 @@ function* getProducts({ payload }) {
   };
 
   try {
-    console.log(
-      "Before fetch list::::",
-      `${BASE_URL + requestUrl}`,
-      payload?.userId,
-      payload?.token
-    );
+    // console.log("Before fetch list::::",`${BASE_URL + requestUrl}`, payload?.userId, payload?.token);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
       config
     );
-
-    console.log(
-      "🚀 ~ file: saga.js:386 ~ function*getProducts ~ response:",
-      response?.data
-    );
-
+    // console.log("🚀 ~ file: saga.js:386 ~ function*getProducts ~ response:", response?.data);
     if (response?.data !== null) {
       yield put({ type: "SAVE_CART", payload: response?.data?.data });
     }
@@ -467,7 +426,7 @@ function* getProducts({ payload }) {
 }
 
 function* removeProducts({ payload }) {
-  console.log("REMOVE PRODUCT::::", payload);
+  // console.log("REMOVE PRODUCT::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/cart/remove`;
   let config = {
@@ -485,10 +444,7 @@ function* removeProducts({ payload }) {
       postData,
       config
     );
-    console.log(
-      "🚀 ~ file: saga.js:449 ~ function*removeProducts ~ response:",
-      response?.data
-    );
+    // console.log("🚀 ~ file: saga.js:449 ~ function*removeProducts ~ response:",  response?.data);
     if (response?.data) {
       yield put({
         type: "GET_PRODUCTS",
@@ -526,7 +482,7 @@ function* removeProducts({ payload }) {
 }
 
 function* getAddress({ payload }) {
-  console.log("GET ADDRESS:::::::", payload);
+  // console.log("GET ADDRESS:::::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/address/list`;
   let config = {
@@ -541,20 +497,13 @@ function* getAddress({ payload }) {
   };
 
   try {
-    console.log(
-      "Before fetch ::::::::::::::1",
-      `${BASE_URL + requestUrl}`,
-      postData
-    );
+    // console.log("Before fetch ::::::::::::::1", `${BASE_URL + requestUrl}`,  postData);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
       config
     );
-    console.log(
-      "🚀 ~ file: saga.js:516 ~ function*getAddress ~ response:",
-      response?.data
-    );
+    // console.log("🚀 ~ file: saga.js:516 ~ function*getAddress ~ response:", response?.data);
 
     yield put({ type: "SAVE_ADDRESS", payload: response?.data?.data });
 
@@ -570,7 +519,7 @@ function* getAddress({ payload }) {
 }
 
 function* addAddressfun({ payload }) {
-  console.log("GET ADD ADDRESS:::::::", payload);
+  // console.log("GET ADD ADDRESS:::::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/address/add`;
   let config = {
@@ -598,21 +547,9 @@ function* addAddressfun({ payload }) {
     lng: "75.20524",
   };
   try {
-    console.log(
-      "Before fetch Data",
-      `${BASE_URL + requestUrl}`,
-      postData,
-      config
-    );
-    const response = yield axios.post(
-      `${BASE_URL + requestUrl}`,
-      postData,
-      config
-    );
-    console.log(
-      "🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response:",
-      response?.data
-    );
+    // console.log("Before fetch Data", `${BASE_URL + requestUrl}`, postData, config );
+    const response = yield axios.post(`${BASE_URL + requestUrl}`, postData, config);
+    // console.log("🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response:", response?.data);
 
     if (response?.data !== null) {
       Toast.show({
@@ -620,7 +557,6 @@ function* addAddressfun({ payload }) {
         text1: `${response?.data?.message}`,
         topOffset: 60,
       });
-
       NavigationService.navigationRef.navigate("Address");
     }
 
@@ -638,7 +574,7 @@ function* addAddressfun({ payload }) {
 }
 
 function* logout({ payload }) {
-  console.log("logout payload:::::::", payload);
+  // console.log("logout payload:::::::", payload);
   const postData = {
     id: payload,
   };
@@ -646,10 +582,7 @@ function* logout({ payload }) {
 
   try {
     const response = yield call(GetRecord, requestUrl, postData);
-    console.log(
-      "🚀 ~ file: saga.js:583 ~ function*logout ~ response:",
-      response?.data
-    );
+    // console.log("🚀 ~ file: saga.js:583 ~ function*logout ~ response:", response?.data );
     if (response?.data !== null) {
       Toast.show({
         type: "success",
@@ -667,34 +600,31 @@ function* logout({ payload }) {
 }
 
 function* addPreOrder({ payload }) {
-  // console.log("GET PRE ORDER:::::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
-
   let requestUrl = '';
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
-      "Content-Type": "multipart/form-data",
+      'Content-Type': "application/json; charset=utf-8"
     },
   };
-
-  // console.log('New Payload ---->', payload);
-
-  let dataVal = new FormData();
+  // let dataVal = new FormData();
   let secdJsonObj = {}
   if (payload && payload.role === "ARTIST") {
     requestUrl = '/art/add';
-    dataVal.append('role', payload.role);
-    dataVal.append('image', JSON.stringify(payload.imagePath));
-    dataVal.append('name', payload.name);
-    dataVal.append('size', payload.size);
-    dataVal.append('theme', payload.theme);
-    dataVal.append('medium', payload.medium);
-    dataVal.append('frame_quality', payload.quality);
-    dataVal.append('price', payload.price);
-    dataVal.append('creator_id', payload.userId);
-    dataVal.append('status', 'active');
-    dataVal.append('category', payload.category?._id);
+    secdJsonObj = {
+      role: payload.role,
+      image: payload.imagePath,
+      name: payload.name,
+      size: payload.size,
+      theme: payload.theme,
+      medium: payload.medium,
+      frame_quality: payload.quality,
+      price: payload.price,
+      creator_id: payload.userId,
+      status: 'active',
+      category: payload.category?._id
+    }
   } else {
     requestUrl = '/preorder/app/add';
     secdJsonObj = {
@@ -703,19 +633,14 @@ function* addPreOrder({ payload }) {
       description: payload.description,
       user_id: payload.userId
     }
-    // dataVal.append('role', payload.role);
-    // dataVal.append('image', payload.imagePath);
-    // dataVal.append('description', payload.description);
-    // dataVal.append('user_id', payload.userId);
   }
   try {
-    console.log('secdJsonObj =>', secdJsonObj);
+    // console.log('secdJsonObj =>', secdJsonObj);
+    // console.log('config =>', config);
     const response = yield axios.post(`${BASE_URL}${requestUrl}`, secdJsonObj, config);
-    console.log(`${BASE_URL + requestUrl} =>`, BASE_URL + requestUrl);
-    console.log("🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response: ------->>>>>>> ", response?.data);
-
+    // console.log(`${BASE_URL + requestUrl} =>`, BASE_URL + requestUrl);
+    // console.log("🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response: ------->>>>>>> ", response?.data);
     // yield put({ type: "SAVE_ADDRESS", payload: response?.data?.data });
-
     if (response?.data) {
       Toast.show({
         type: "success",
@@ -736,7 +661,7 @@ function* addPreOrder({ payload }) {
 
 function* changePassword({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
-  console.log("working changePassword>>>>>>", payload);
+  // console.log("working changePassword>>>>>>", payload);
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
@@ -751,22 +676,13 @@ function* changePassword({ payload }) {
   const requestUrl = "/user/change/password";
 
   try {
-    console.log(
-      "GET VORK>>>>>>>>",
-      `${BASE_URL + requestUrl}`,
-      postData,
-      config
-    );
+    // console.log("GET VORK>>>>>>>>",  `${BASE_URL + requestUrl}`,  postData,  config);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
       config
     );
-    console.log(
-      "🚀 ~ file: saga.js:676 ~ function*changePassword ~ response:",
-      response?.data
-    );
-
+    // console.log("🚀 ~ file: saga.js:676 ~ function*changePassword ~ response:", response?.data);
     if (response?.data !== null) {
       Toast.show({
         type: "success",
@@ -788,7 +704,7 @@ function* changePassword({ payload }) {
 
 function* removeAddress({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
-  console.log("working removeAddress>>>>>>", payload);
+  // console.log("working removeAddress>>>>>>", payload);
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
@@ -800,20 +716,12 @@ function* removeAddress({ payload }) {
   const requestUrl = "/address/remove";
 
   try {
-    console.log(
-      "GET REMOVE>>>>>>>>",
-      `${BASE_URL + requestUrl + `/${payload?.userId}`}`,
-      config
-    );
+    // console.log("GET REMOVE>>>>>>>>",  `${BASE_URL + requestUrl + `/${payload?.userId}`}`,  config);
     const response = yield axios.delete(
       `${BASE_URL + requestUrl + `/${payload?.tableId}`}`,
       config
     );
-    console.log(
-      "🚀 ~ file: saga.js:738 ~ function*removeAddress ~ response:",
-      response?.data
-    );
-
+    // console.log("🚀 ~ file: saga.js:738 ~ function*removeAddress ~ response:",  response?.data);
     if (response?.data !== null) {
       Toast.show({
         type: "success",
@@ -835,7 +743,7 @@ function* removeAddress({ payload }) {
 
 function* getUser({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
-  console.log("working getUser>>>>>>", payload);
+  // console.log("working getUser>>>>>>", payload);
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
@@ -847,19 +755,19 @@ function* getUser({ payload }) {
   const requestUrl = "/user/view/";
 
   try {
-    console.log(
-      "GET USER>>>>>>>>",
-      `${BASE_URL + requestUrl + `${payload?.userId}`}`,
-      config
-    );
+    // console.log(
+    //   "GET USER>>>>>>>>",
+    //   `${BASE_URL + requestUrl + `${payload?.userId}`}`,
+    //   config
+    // );
     const response = yield axios.get(
       `${BASE_URL + requestUrl + `${payload?.userId}`}`,
       config
     );
-    console.log(
-      "🚀 ~ file: saga.js:784 ~ function*getUser ~ response:",
-      response?.data
-    );
+    // console.log(
+    //   "🚀 ~ file: saga.js:784 ~ function*getUser ~ response:",
+    //   response?.data
+    // );
 
     if (response?.data !== null) {
       yield put({ type: "SET_USER", payload: response?.data?.data });
