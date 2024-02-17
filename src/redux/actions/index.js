@@ -73,6 +73,14 @@ export const getDetailsData = (payload) => {
   };
 };
 
+export const getStateData = (payload) => {
+  console.log('payload', payload);
+  return {
+    type: ActionTypes.SET_STATE_DATA,
+    payload: payload,
+  };
+};
+
 export const saveDetailsData = (payload) => {
   return {
     type: ActionTypes.SAVE_DETAILS_DATA,

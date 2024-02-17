@@ -15,8 +15,8 @@ export default function OtpScreen({ navigation, route }) {
   const otp = useSelector((state) => state.saveDataReducer.otp);
   const savedEmail = useSelector((state) => state.saveDataReducer.savedEmail);
   const isLoading = useSelector((state) => state.saveDataReducer.isLoading);
-  console.log("🚀 ~ file: index.js:15 ~ OtpScreen ~ savedEmail:", savedEmail);
-  console.log("🚀 ~ file: index.js:12 ~ OtpScreen ~ otp:", otp);
+  // console.log("🚀 ~ file: index.js:15 ~ OtpScreen ~ savedEmail:", savedEmail);
+  // console.log("🚀 ~ file: index.js:12 ~ OtpScreen ~ otp:", otp);
   const userEmail = savedEmail;
   const handleChange = (e) => {
     setinput(e);

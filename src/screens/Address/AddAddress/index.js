@@ -36,11 +36,7 @@ export default function AddAddress({ route, navigation }) {
   });
   const [userId, setuserId] = useState(null);
   const [authToken, setauthToken] = useState(null);
-  console.log(
-    "🚀 ~ file: index.js:37 ~ AddAddress ~ authToken:",
-    authToken,
-    userId
-  );
+  // console.log("🚀 ~ file: index.js:37 ~ AddAddress ~ authToken:", authToken, userId);
   const states = [
     {
       name: "Punjab",
@@ -72,7 +68,7 @@ export default function AddAddress({ route, navigation }) {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
-      console.log("🚀 ~ file: index.js:30 ~ getData ~ value:", value);
+      // console.log("🚀 ~ file: index.js:30 ~ getData ~ value:", value);
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
@@ -83,10 +79,7 @@ export default function AddAddress({ route, navigation }) {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log(
-        "🚀 ~ file: index.js:41 ~ getAuthToken ~ jsonValue:",
-        jsonValue
-      );
+      // console.log("🚀 ~ file: index.js:41 ~ getAuthToken ~ jsonValue:", jsonValue);
 
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
@@ -98,7 +91,7 @@ export default function AddAddress({ route, navigation }) {
   };
 
   const onHandleChnage = (e, name) => {
-    console.log("DATA IN HANDLER::::", e, name);
+    // console.log("DATA IN HANDLER::::", e, name);
     if (name == "name") {
       setInfo({ ...Info, name: e });
     } else if (name == "phone") {
@@ -120,7 +113,7 @@ export default function AddAddress({ route, navigation }) {
       setInfo({ ...Info, addressType: e });
     }
   };
-  console.log("AFTER CHNAGE IN STATE::::", Info);
+  // console.log("AFTER CHNAGE IN STATE::::", Info);
   const saveAddress = () => {
     if (authToken !== null && userId !== null) {
       const postData = {

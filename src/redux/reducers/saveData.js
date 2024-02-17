@@ -10,9 +10,10 @@ const intialState = {
   detailsData: [],
   userId: "",
   cartList: null,
-  reponseBackData:[],
+  reponseBackData: [],
   addressData: [],
   userData: [],
+  stateData: [],
   isLogged: false,
 };
 
@@ -55,13 +56,16 @@ const saveDataReducer = (state = intialState, action) => {
       };
 
     case "SAVE_DETAILS_DATA":
-      console.log(
-        "SAVE_DETAILS_DATASAVE_DETAILS_DATASAVE_DETAILS_DATA",
-        action.payload
-      );
+      // console.log("SAVE_DETAILS_DATASAVE_DETAILS_DATASAVE_DETAILS_DATA", action.payload);
       return {
         ...state,
         detailsData: action.payload,
+      };
+
+    case "SET_STATE_DATA":
+      return {
+        ...state,
+        stateData: action.payload,
       };
 
     case "SAVE_USERID":
@@ -88,7 +92,7 @@ const saveDataReducer = (state = intialState, action) => {
       };
 
     case "SAVE_ADDRESS":
-      console.log("ADRRES IN REDUCER::::::::", action.payload);
+      // console.log("ADRRES IN REDUCER::::::::", action.payload);
       return {
         ...state,
         addressData: action.payload,

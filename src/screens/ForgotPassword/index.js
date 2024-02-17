@@ -22,7 +22,7 @@ export default function ForgotPassword({navigation}) {
   const [errorMessage, seterrorMessage] = useState('');
 
   const validateEmail = text => {
-    console.log('Text::::::', text);
+    // console.log('Text::::::', text);
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     let matchingResult = text.slice(0, 1);
     if (
@@ -35,18 +35,18 @@ export default function ForgotPassword({navigation}) {
         matchingResult == '0' ||
         matchingResult == '1')
     ) {
-      console.log('INSIDE IF');
+      // console.log('INSIDE IF');
       setemail(text);
       seterrorMessage('');
     } else {
-      console.log('INSIDE ELSE');
+      // console.log('INSIDE ELSE');
       if (reg.test(text) === false) {
-        console.log('WORKING FAILED');
+        // console.log('WORKING FAILED');
         setemail(text);
         seterrorMessage('Not a valid email address. Should be your@email.com');
         return false;
       } else {
-        console.log('WORKING PASSED');
+        // console.log('WORKING PASSED');
         setemail(text);
         seterrorMessage('');
       }

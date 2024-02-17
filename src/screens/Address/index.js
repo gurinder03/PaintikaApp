@@ -24,10 +24,10 @@ export default function Address({ navigation, route }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const [authToken, setauthToken] = useState("");
-  console.log("🚀 ~ file: index.js:24 ~ Address ~ authToken:", authToken);
+  // console.log("🚀 ~ file: index.js:24 ~ Address ~ authToken:", authToken);
   const [userId, setuserId] = useState("");
   const addresses = useSelector((state) => state.saveDataReducer.addressData);
-  console.log("🚀 ~ file: index.js:11 ~ Address ~ addresses:", addresses);
+  // console.log("🚀 ~ file: index.js:11 ~ Address ~ addresses:", addresses);
   const [selctedValue, setselctedValue] = useState(false);
   const [selectedAddress, setselectedAddress] = useState(null);
   const { details } = route.params || {};
@@ -38,7 +38,7 @@ export default function Address({ navigation, route }) {
 
   useEffect(() => {
     if (userId !== "" && authToken !== "") {
-      console.log("INSIDE SUCCESS>>>>>>");
+      // console.log("INSIDE SUCCESS>>>>>>");
       dispatch({
         type: "GET_ADDRESS",
         payload: {
@@ -54,7 +54,7 @@ export default function Address({ navigation, route }) {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
-      console.log("🚀 ~ file: index.js:30 ~ getData ~ value:", value);
+      // console.log("🚀 ~ file: index.js:30 ~ getData ~ value:", value);
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
@@ -65,11 +65,7 @@ export default function Address({ navigation, route }) {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log(
-        "🚀 ~ file: index.js:41 ~ getAuthToken ~ jsonValue:",
-        jsonValue
-      );
-
+      // console.log("🚀 ~ file: index.js:41 ~ getAuthToken ~ jsonValue:",  jsonValue);
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }
@@ -141,7 +137,7 @@ export default function Address({ navigation, route }) {
   };
 
   const selectItem = (item) => {
-    console.log("Selected Item >>>>>>>>>", item);
+    // console.log("Selected Item >>>>>>>>>", item);
     setselectedAddress(item?._id);
   };
   return (

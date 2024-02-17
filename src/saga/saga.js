@@ -518,6 +518,30 @@ function* getAddress({ payload }) {
   }
 }
 
+function* getState({ payload }) {
+  yield put({ type: "SHOW_LOADING", payload: true });
+  const requestUrl = `/setting/states`;
+  let config = {
+    headers: {
+      token: `Bearer ${payload?.token}`,
+    },
+  };
+  try {
+    const response = yield axios.get(`${BASE_URL + requestUrl}`,  config);
+    console.log('Get State => ', response.data);
+    yield put({ type: "SET_STATE_DATA", payload: response?.data });
+    if (response?.data !== null) {
+      Toast.show({
+        type: "success",
+        text1: `${response?.data?.message}`,
+        topOffset: 60,
+      });
+    }
+  } catch (e) {
+    console.log("Error in getting CART List", e);
+  }
+}
+
 function* addAddressfun({ payload }) {
   // console.log("GET ADD ADDRESS:::::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
@@ -805,6 +829,7 @@ function* mySaga() {
   yield takeLatest("REMOVE_PRODUCT", removeProducts);
   yield takeLatest("GET_ADDRESS", getAddress);
   yield takeLatest("ADD_ADDRESS", addAddressfun);
+  yield takeLatest("SET_STATE_DATA", getState);
   yield takeLatest("LOGOUT", logout);
   yield takeLatest("ADD_PREORDER", addPreOrder);
   yield takeLatest("CHANGE_PASSWORD", changePassword);

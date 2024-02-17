@@ -63,7 +63,7 @@ export default function ProfileScreen({ navigation }) {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
-      console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      // console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
@@ -91,6 +91,10 @@ export default function ProfileScreen({ navigation }) {
       dispatch({ type: "GET_USER", payload: payload });
     }
   };
+
+  
+
+
   return (
     <View style={styles.container}>
       <View style={[styles.sectionOne, {paddingTop:15}]}>
@@ -100,13 +104,13 @@ export default function ProfileScreen({ navigation }) {
             style={styles.userProfilePic}
           />
           <Text style={styles.userName}>{userSavedData?.name}</Text>
-          <Text style={styles.userEmailText}>User Type: {userSavedData?.role}</Text>
+          <Text style={styles.usertype}>User Type: {userSavedData?.role}</Text>
           <Text style={styles.userEmailText}>
             {userSavedData?.email_or_mobile_number}
           </Text>
           <TouchableOpacity
             style={styles.editBtn}
-            onPress={() => navigation.navigate("Edit")}
+            onPress={() => navigation.navigate("Edit", { userData: userSavedData})}
           >
             <Text style={styles.editText}>Edit Profile</Text>
           </TouchableOpacity>
@@ -248,9 +252,10 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
   },
   sectionOne: {
-    height: hp(30),
+    height: hp(40),
     width: wp(100),
     justifyContent: "center",
     alignItems: "center",
@@ -275,10 +280,16 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 20,
     fontFamily: FontStyles.manRopeSemiBold,
+    textTransform: 'capitalize', 
   },
   userEmailText: {
     fontSize: 14,
     fontFamily: FontStyles.manRopeSemiBold,
+  },
+  usertype:{
+    fontSize: 14,
+    fontFamily: FontStyles.manRopeSemiBold,
+    textTransform: 'capitalize', 
   },
   editBtn: {
     width: wp(30),
@@ -288,10 +299,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     marginTop: hp(1),
+
   },
   editText: {
     fontSize: 12,
     color: Colors.white,
+    
   },
   itemText: {
     fontSize: 14,

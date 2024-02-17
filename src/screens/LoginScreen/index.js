@@ -13,7 +13,7 @@ import BackIcon from "react-native-vector-icons/Ionicons";
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.saveDataReducer.signUpData);
-  console.log('userData ', userData);
+  // console.log('userData ', userData);
   const [inputValue, setinputValue] = useState({
     email: "",
     password: "",

@@ -54,10 +54,7 @@ export default function CreatePassword() {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log(
-        "🚀 ~ file: index.js:38 ~ getAuthToken ~ jsonValue:",
-        jsonValue
-      );
+      // console.log("🚀 ~ file: index.js:38 ~ getAuthToken ~ jsonValue:",  jsonValue);
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }
@@ -70,7 +67,7 @@ export default function CreatePassword() {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
-      console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      // console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
@@ -85,6 +82,7 @@ export default function CreatePassword() {
           height: "35%",
           justifyContent: "center",
           alignItems: "center",
+          marginTop:10
         }}
       >
         <Text style={styles.otpTitle}>Change Password</Text>
@@ -108,7 +106,7 @@ export default function CreatePassword() {
           style={{
             paddingHorizontal: 20,
             width: "100%",
-            height: 40,
+            height: 20,
             justifyContent: "center",
           }}
         ></View>
@@ -154,6 +152,8 @@ const styles = StyleSheet.create({
     fontFamily: FontStyles.manRopeRegular,
     backgroundColor: Colors.white,
     elevation: 5,
+    borderColor: Colors.black,
+    borderWidth: 1,
   },
   otpTitle: {
     fontSize: 28,

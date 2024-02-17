@@ -67,7 +67,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
-          <View style={{marginTop:10, position:'absolute', bottom:0, left:0, right:0, zIndex:9999, marginBottom:15}}>
+          <View style={{ position:'absolute', bottom:0, left:0, right:0, zIndex:999, marginBottom:15}}>
             <View style={[styles.filterSearch, { backgroundColor: '#FFFFFF' }]}>
               <TextInput style={styles.inputSearch} onChangeText={onChangeSearchText} value={searchText} placeholder="Search" />
             </View>
@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     padding: 13,
     paddingHorizontal: 35,
-    borderRadius: 10
+    borderRadius: 10,
+    marginTop:10
   },
   joinText: {
     color: '#FFFFFF',

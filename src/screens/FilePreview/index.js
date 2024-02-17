@@ -55,7 +55,7 @@ export default function FilePreview({ navigation, route }) {
   const { path } = route?.params;
 
   const handleChange = (name, e) => {
-    console.log("selectedItem =>", name, e);
+    // console.log("selectedItem =>", name, e);
     if (name == "name") {
       setData({ ...data, name: e });
     } else if (name == "size") {
@@ -74,7 +74,7 @@ export default function FilePreview({ navigation, route }) {
   };
 
   const handleUpload = async () => {
-    console.log("ssssss", data);
+    // console.log("ssssss", data);
     AWSHelper.uploadFile(path[0]).then((res) => {
         if (res && data) {
           if (userSavedData && userSavedData.role == "ARTIST") {
@@ -130,7 +130,7 @@ export default function FilePreview({ navigation, route }) {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
-      console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      // console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
       if (value !== null) {
         setuserId(JSON.parse(value));
       }

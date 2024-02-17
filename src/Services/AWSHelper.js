@@ -29,7 +29,7 @@ export function uriToBlob(uri) {
 }
 
 const uploadFileToS3 = (bucketName, fileName, filePath, fileType) => {
-  console.log("aaaa ", fileName);
+  // console.log("aaaa ", fileName);
   const params = {
     ACL: "public-read",
     Bucket: bucketName,

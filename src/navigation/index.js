@@ -29,10 +29,7 @@ export default function Navigation() {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('authToken');
-      console.log(
-        '🚀 ~ file: index.js:38 ~ getAuthToken ~ jsonValue:',
-        jsonValue,
-      );
+      // console.log('🚀 ~ file: index.js:38 ~ getAuthToken ~ jsonValue:', jsonValue);
       if (jsonValue !== null) {
         setauthToken(jsonValue);
       }

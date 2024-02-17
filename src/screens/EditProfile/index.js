@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/HeaderScreen";
 import {
   heightPercentageToDP as hp,
@@ -27,43 +27,86 @@ import CustomButton from "../../helpers/CustomButton";
 import EditIcon from "react-native-vector-icons/Entypo";
 import { RadioButton } from "react-native-paper";
 import BackIcon from "react-native-vector-icons/Ionicons";
-export default function EditProfile({ navigation }) {
-  const [avatar, setAvatar] = useState("");
-  const [selectedValue, setSelectedValue] = useState("freelancer");
+import styles from "../HomeScreen/styles";
+import { Picker } from "@react-native-picker/picker";
+import { useDispatch, useSelector } from "react-redux";
+import { getStateData } from "../../redux/actions";
+
+
+export default function EditProfile({ navigation, route }) {
+  const dispatch = useDispatch();
+  const [authToken, setauthToken] = useState(null);
+  const { userData } = route.params || {};
+  const [avatar, setAvatar] = useState(userData?.profile_image);
+  const allStateData = useSelector((state) => state.saveDataReducer.stateData);
+
+  console.log("authToken cccccc => ", allStateData);
+
+  const stateOptions = [
+    { label: "Select City", value: null },
+    { label: "Mohali", value: "Mohali" },
+    { label: "Kharar", value: "Kharar" },
+    { label: "Patiala", value: "Patiala" },
+    { label: "Andaman and Nicobar Islands", value: "Andaman and Nicobar Islands" }
+  ];
+
+  useEffect(() => {
+    getAuthToken();
+    dispatch(getStateData({token: authToken}));
+  }, [authToken]);
+
+  const getAuthToken = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("authToken");
+      if (jsonValue !== null) {
+        setauthToken(JSON.parse(jsonValue));
+      }
+    } catch (e) {
+      console.log("Error While getting Token", e);
+    }
+  };
+
   const [Info, setInfo] = useState({
-    name: "",
-    surname: "",
-    qulification: "",
+    name: userData?.name,
+    surname: userData?.surname,
+    qulification: userData?.qualifications,
     age: "",
     occupation: "",
-    email: "",
-    gender: "",
+    email_or_mobile_number: userData?.email_or_mobile_number,
+    gender: userData?.gender,
+    job_type: userData?.job_type,
     address: "",
-    experience: "",
-    country: "",
-    state: "",
+    experience: userData?.experience,
+    additional_detail: userData?.additional_detail,
+    country: userData?.country,
+    state: userData?.state,
   });
 
   const onHandleChnage = (e, name) => {
     console.log("DATA IN HANDLER::::", e, name);
-    if (name == "name") {
+    if (name === "name") {
       setInfo({ ...Info, name: e });
-    } else if (name == "email") {
-      setInfo({ ...Info, email: e });
-    } else if (name == "age") {
+    } else if (name === "email_or_mobile_number") {
+      setInfo({ ...Info, email_or_mobile_number: e });
+    } else if (name === "age") {
       setInfo({ ...Info, age: e });
-    } else if ((name = "Gender")) {
+    } else if (name === "gender") {
       setInfo({ ...Info, gender: e });
-    } else if (name == "surname") {
+    } else if (name === "job_type") {
+      setInfo({ ...Info, job_type: e });
+    } else if (name === "surname") {
       setInfo({ ...Info, surname: e });
-    } else if (name == "address") {
+    } else if (name === "address") {
       setInfo({ ...Info, address: e });
-    } else if (name == "professionalExp") {
+    } else if (name === "experience") {
       setInfo({ ...Info, experience: e });
-    } else if (name == "qualification") {
+    } else if (name === "qualification") {
       setInfo({ ...Info, qualification: e });
+    } else if (name === "additional_detail") {
+      setInfo({ ...Info, additional_detail: e });
     }
   };
+
   var options = {
     title: "Select Image",
     customButtons: [
@@ -80,7 +123,6 @@ export default function EditProfile({ navigation }) {
   const selectImage = () => {
     launchImageLibrary(options, (response) => {
       // console.log("Response = ", response);
-
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.error) {
@@ -102,7 +144,7 @@ export default function EditProfile({ navigation }) {
       surname: "abc",
       dob: "2023-10-22",
       address: "Nagar,Batala",
-      gender: 1,
+      gender: "1",
       qualifications: "graduation",
       country: "india",
       state: "punjab",
@@ -113,63 +155,33 @@ export default function EditProfile({ navigation }) {
     };
   };
 
+  const onSelected = (ev) => {
+    console.log('ev => ', ev);
+    setInfo({ ...Info, state: ev });
+  };
+
+
+
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#FFFFFF",
-      }}
-    >
-      <View
-        style={{
-          height: hp(10),
-          backgroundColor: "#FFFFFF",
-          width: wp(100),
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        <View
-          style={{
-            width: "30%",
-          }}
-        >
+    <View style={styles.editMain}>
+      <View style={styles.edit2dInner}>
+        <View style={{ width: "30%" }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <BackIcon name="chevron-back" size={30} />
           </TouchableOpacity>
         </View>
         <View style={{ width: "70%" }}>
-          <Text
-            style={{
-              color: Colors.black,
-              fontFamily: FontStyles.manRopeSemiBold,
-              fontSize: 22,
-            }}
-          >
-            Edit Profile
-          </Text>
+          <Text style={styles.textEdit}>Edit Profile</Text>
         </View>
       </View>
-      <ScrollView
-        style={{
-          height: hp(85),
-          width: wp(100),
-        }}
-      >
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+      <ScrollView style={styles.editScrollMain}>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
           <View
             style={{
               width: Platform.OS == "ios" ? wp(37) : wp(33),
               height: hp(17),
-              borderRadius: 150,
+              borderRadius:100,
               borderWidth: 2.5,
               justifyContent: "center",
               alignItems: "center",
@@ -177,7 +189,7 @@ export default function EditProfile({ navigation }) {
           >
             <Image
               source={
-                avatar !== ""
+                avatar
                   ? { uri: avatar }
                   : require("../../../assets/download.jpeg")
               }
@@ -188,20 +200,7 @@ export default function EditProfile({ navigation }) {
               }}
             />
           </View>
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.black,
-              width: wp(9),
-              height: hp(4),
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 90,
-              position: "absolute",
-              left: wp(60),
-              top: hp(3),
-            }}
-            onPress={selectImage}
-          >
+          <TouchableOpacity style={styles.editIcon} onPress={selectImage}>
             <EditIcon name="edit" size={18} color={"#fff"} />
           </TouchableOpacity>
         </View>
@@ -209,7 +208,8 @@ export default function EditProfile({ navigation }) {
           title={"Name"}
           onChange={(e) => onHandleChnage(e, "name")}
           value={Info.name}
-          placeHolder={"Enter your Name"}
+          placeHolder={"Enter your Name "}
+         
         />
         <TextInputComponent
           title={"Surname"}
@@ -220,34 +220,33 @@ export default function EditProfile({ navigation }) {
         <TextInputComponent
           title={"Email or Phone"}
           placeHolder={"Enter your Email or Phone"}
-          onChange={(e) => onHandleChnage(e, "email")}
-          value={Info.email}
+          onChange={(e) => onHandleChnage(e, "email_or_mobile_number")}
+          value={Info.email_or_mobile_number}
         />
-        <TextInputComponent
-          title={"Qualification"}
-          value={Info.qulification}
-          placeHolder={"Enter your Qualifiaction"}
-          onChange={(e) => onHandleChnage(e, "qualification")}
-        />
-        <CustomPicker
-          title={"Gender"}
-          onChange={(e) => onHandleChnage(e, "gender")}
-          value={Info.gender}
-        />
-        <View
-          style={{
-            height: hp(10),
-            width: "100%",
-            padding: 6,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 18,
-              fontFamily: FontStyles.manRopeSemiBold,
-              color: Colors.black,
-            }}
-          >
+       
+        <Text style={styles.genderSection}> Gender</Text>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <RadioButton.Android
+              value="1"
+              status={Info.gender === "1" ? "checked" : "unchecked"}
+              onPress={() => onHandleChnage("1", "gender")}
+              color={Colors.black}
+            />
+            <Text style={styles.editPro}> Male </Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <RadioButton.Android
+              value="2"
+              status={Info?.gender === "2" ? "checked" : "unchecked"}
+              onPress={() => onHandleChnage("2", "gender")}
+              color={Colors.black}
+            />
+            <Text style={styles.genderInner}>Female</Text>
+          </View>
+        </View>
+        <View style={styles.editType}>
+          <Text style={styles.freeLancingType}>
             Are you professional or freelancer ?
           </Text>
           <View style={{ flexDirection: "row" }}>
@@ -255,69 +254,61 @@ export default function EditProfile({ navigation }) {
               <RadioButton.Android
                 value="professional"
                 status={
-                  selectedValue === "professional" ? "checked" : "unchecked"
+                  Info?.job_type === "professional" ? "checked" : "unchecked"
                 }
-                onPress={() => setSelectedValue("professional")}
+                onPress={() => onHandleChnage("professional", "job_type")}
                 color={Colors.black}
               />
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontFamily: FontStyles.manRopeSemiBold,
-                }}
-              >
-                Professional
-              </Text>
+              <Text style={styles.typeOfFreelancing}> Professional </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <RadioButton.Android
                 value="freelancer"
                 status={
-                  selectedValue === "freelancer" ? "checked" : "unchecked"
+                  Info?.job_type === "freelancer" ? "checked" : "unchecked"
                 }
-                onPress={() => setSelectedValue("freelancer")}
+                onPress={() => onHandleChnage("freelancer", "job_type")}
                 color={Colors.black}
               />
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontFamily: FontStyles.manRopeSemiBold,
-                }}
-              >
-                Freelancer
-              </Text>
+              <Text style={styles.typeOfFreelancing}> Freelancer </Text>
             </View>
           </View>
         </View>
-        {selectedValue == "professional" ? (
+        {Info?.job_type == "professional" ? (
           <>
             <TextInputComponent
               title={"Experience in Painting"}
+              value={Info?.experience}
               placeHolder={"Please enter your experience in Numbers"}
-              onChange={(e) => onHandleChnage(e, "professionalExp")}
+              onChange={(e) => onHandleChnage(e, "experience")}
             />
             <TextInputComponent
               title={"Additional Details"}
               placeHolder={"Additional Details"}
-              onChange={(e) => onHandleChnage(e, "additionalDetails")}
+              value={Info?.additional_detail}
+              onChange={(e) => onHandleChnage(e, "additional_detail")}
             />
           </>
         ) : null}
-        {/* <CustomPicker title={"Qualification"} /> */}
-        <TextInputComponent
+        {/* <TextInputComponent
           title={"Experience"}
           placeHolder={"Please enter your experience in Numbers"}
           onChange={(e) => onHandleChnage(e, "experience")}
-        />
+        /> */}
         <TextInputComponent
           title={"Country"}
-          value={Info.country}
+          value={Info?.country}
           placeHolder={"Enter your country"}
           onChange={(e) => onHandleChnage(e, "country")}
         />
-        <TextInputComponent title={"State"} placeHolder={"Enter your State"} />
+        <View style={{borderBottomWidth:1, marginHorizontal:5}}>
+          <Text style={styles.stateEdt}>State</Text>
+          <Picker selectedValue={Info?.state} onValueChange={onSelected}>
+            {stateOptions.map((option, index) => (
+              <Picker.Item key={index} label={option.label} value={option.value} />
+            ))}
+          </Picker>
+        </View>
         <TextInputComponent
           title={"Address"}
           value={Info.address}
@@ -333,4 +324,3 @@ export default function EditProfile({ navigation }) {
     </View>
   );
 }
-const styles = StyleSheet.create({});

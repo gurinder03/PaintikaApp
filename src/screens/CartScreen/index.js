@@ -30,15 +30,12 @@ export default function CartScreen({ navigation }) {
   const [itemIndex, setitemIndex] = useState(1);
   const detailsData = useSelector((state) => state.saveDataReducer.cartList);
   const isFocused = useIsFocused();
-  const imgURL =
-    "https://m.media-amazon.com/images/I/61L5QgPvgqL._AC_UF1000,1000_QL80_.jpg";
-
+  const imgURL = "https://m.media-amazon.com/images/I/61L5QgPvgqL._AC_UF1000,1000_QL80_.jpg";
   const deleteProduct = (id) => {
     dispatch({
       type: "REMOVE_PRODUCT",
       payload: { id: id, token: authToken, userId: userId },
     });
-
     dispatch({
       type: "GET_PRODUCTS",
       payload: { userId: userId, token: authToken },
@@ -56,9 +53,8 @@ export default function CartScreen({ navigation }) {
   };
 
   const updateProduct = (data, creatorId) => {
-    console.log("INSIDE UPDATE PRODUCT>>>>>>>>>>", data, creatorId);
+    // console.log("INSIDE UPDATE PRODUCT>>>>>>>>>>", data, creatorId);
     setitemIndex(itemIndex + 1);
-    // console.log(".........................................>>>>>>>>>>", itemIndex);
     dispatch(
       addProduct({
         user_id: userId,
@@ -82,12 +78,12 @@ export default function CartScreen({ navigation }) {
             style={{
               width: "40%",
               height: "100%",
-              // padding: 5,
+              padding: 5,
             }}
           >
             <Image
               source={{ uri: item?.image }}
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%", height: "100%"  }}
             />
           </View>
           <View
@@ -237,7 +233,7 @@ export default function CartScreen({ navigation }) {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
-      console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      // console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
@@ -248,11 +244,7 @@ export default function CartScreen({ navigation }) {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      console.log(
-        "🚀 ~ file: index.js:200 ~ getAuthToken ~ jsonValue:",
-        jsonValue
-      );
-
+      // console.log("🚀 ~ file: index.js:200 ~ getAuthToken ~ jsonValue:", jsonValue);
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }

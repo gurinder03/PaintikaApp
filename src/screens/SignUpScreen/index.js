@@ -31,7 +31,7 @@ export default function SignUpScreen({ navigation }) {
   const [isPainter, setisPainter] = useState(false);
   const [errorMessage, seterrorMessage] = useState("");
   const isLoading = false;
-  console.log("🚀 ~ file: index.js:33 ~ SignUpScreen ~ isLoading:", isLoading);
+  // console.log("🚀 ~ file: index.js:33 ~ SignUpScreen ~ isLoading:", isLoading);
   const saveData = () => {
     if (inputValue.name == "") {
       Alert.alert("Name is required.");
@@ -53,7 +53,7 @@ export default function SignUpScreen({ navigation }) {
   };
 
   const handleChange = (name, e) => {
-    console.log("NAME>>>>>>>", name, "EVNET>>>>>", e);
+    // console.log("NAME>>>>>>>", name, "EVNET>>>>>", e);
     if (name == "name") {
       setInputValue({ ...inputValue, name: e });
     } else if (name == "email") {
@@ -64,7 +64,7 @@ export default function SignUpScreen({ navigation }) {
   };
 
   const validateEmail = (text) => {
-    console.log(typeof text);
+    // console.log(typeof text);
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     let matchingResult = text.slice(0, 1);
     if (
@@ -81,12 +81,12 @@ export default function SignUpScreen({ navigation }) {
       seterrorMessage("");
     } else {
       if (reg.test(text) === false) {
-        console.log("WORKING FAILED");
+        // console.log("WORKING FAILED");
         handleChange("email", text);
         seterrorMessage("Not a valid email address. Should be your@email.com");
         return false;
       } else {
-        console.log("WORKING PASSED");
+        // console.log("WORKING PASSED");
         handleChange("email", text);
         seterrorMessage("");
       }

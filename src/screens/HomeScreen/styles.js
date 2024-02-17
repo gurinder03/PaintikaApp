@@ -135,6 +135,79 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingLeft: 15,
   },
+  editPro: {
+    fontSize: 14,
+    color: Colors.black,
+    fontFamily: FontStyles.manRopeSemiBold,
+  },
+  genderSection: {
+    fontSize: 18,
+    fontFamily: FontStyles.manRopeSemiBold,
+    color: Colors.black,
+    marginLeft: 10,
+  },
+  genderInner:{
+    fontSize: 14,
+    color: Colors.black,
+    fontFamily: FontStyles.manRopeSemiBold,
+  },
+  editIcon:{
+    backgroundColor: Colors.black,
+    width: wp(9),
+    height: hp(4),
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 90,
+    position: "absolute",
+    left: wp(60),
+    top: hp(3),
+  },
+  editMain:{
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+  },
+  edit2dInner:{
+    height: hp(10),
+    backgroundColor: "#FFFFFF",
+    width: wp(100),
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  textEdit:{
+    color: Colors.black,
+    fontFamily: FontStyles.manRopeSemiBold,
+    fontSize: 22,
+  },
+  editScrollMain:{
+    height: hp(85),
+    width: wp(100),
+  },
+  editType:{
+    height: hp(10),
+    width: "100%",
+    paddingLeft: 6,
+  },
+  freeLancingType:{
+    fontSize: 18,
+    fontFamily: FontStyles.manRopeSemiBold,
+    color: Colors.black,
+    paddingLeft: 6,
+  },
+  typeOfFreelancing:{
+    fontSize: 14,
+    color: Colors.black,
+    fontFamily: FontStyles.manRopeSemiBold,
+  },
+  stateEdt:{
+    fontSize: 18,
+    color: Colors.black,
+    fontFamily: FontStyles.manRopeSemiBold,
+    marginLeft: 5,
+    marginTop:10
+  },
 });
 
 export default styles;
