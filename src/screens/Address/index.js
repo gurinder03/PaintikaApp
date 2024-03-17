@@ -18,7 +18,9 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { useIsFocused } from "@react-navigation/native";
-// import { TouchableOpacity } from "react-native-gesture-handler";
+import { fetchRequest } from "../../Services/APICaller";
+import Toast from "react-native-toast-message";
+
 
 export default function Address({ navigation, route }) {
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ export default function Address({ navigation, route }) {
   const [selctedValue, setselctedValue] = useState(false);
   const [selectedAddress, setselectedAddress] = useState(null);
   const { details } = route.params || {};
+  const userSavedData = useSelector((state) => state.saveDataReducer.userData);
   useEffect(() => {
     getData();
     getAuthToken();
@@ -75,43 +78,127 @@ export default function Address({ navigation, route }) {
     }
   };
 
-  const onPressBuy = (total) => {
-    //Order Api: Call POST api with body like (username, id, price etc) to create an Order and use order_id in below options object
-    // const response = await .....
+  const addOrder = async (checkoutData, paymentId) => {
+    var myHeaders = new Headers()
+    myHeaders.append('token', `${'Bearer ' + authToken}`)
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      "address_id": selectedAddress,//address selected
+      "artistList": checkoutData?.artistList,// receive from checkout API 
+      "items": checkoutData?.carts.map(cart => cart._id),// receive from checkout API 
+      "payment_id": paymentId,
+      "timezone": "Asia/Kolkata",
+      "user_id": userSavedData?._id
+    })
+    var requestOptions = {
+      method: 'POST',
+      body: raw,
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    const apiResponse = await fetchRequest(
+      '/order/add',
+      requestOptions,
+    )
+    if (apiResponse.statusCode == '200') {
+      Toast.show({
+        type: "success",
+        text1: `${apiResponse?.message}`,
+        topOffset: 60,
+        onHide: () => {
+        },
+      });
+      navigation.navigate("Home");
+    } else {
+      Toast.show({
+        type: "error",
+        text1: `Error in placing order`,
+        topOffset: 60,
+        onHide: () => {
+        },
+      });
+    }
+  }
 
+  const onPressBuy = async (total) => {
     if (selectedAddress === null) {
       Alert.alert("Please Select Address First.");
     } else {
-      const RAZORPAY_KEY = "rzp_test_jJJrfOKqYAvjcP";
-      let options = {
-        description: "Credits towards consultation",
-        image: "", //require('../../images.png')
-        currency: "INR", //In USD - only card option will exist rest(like wallet, UPI, EMI etc) will hide
-        key: RAZORPAY_KEY,
-        amount: total * 100,
-        name: "Paintika",
-        order_id: "", //Replace this with an order_id(response.data.orderId) created using Orders API.
-        prefill: {
-          email: "",
-          contact: "",
-          name: "",
-        }, //if prefill is not provided then on razorpay screen it has to be manually entered.
-        notes: {
-          address: "",
-        },
-        theme: { color: "#53a20e" },
+      var myHeaders = new Headers()
+      myHeaders.append('token', `${'Bearer ' + authToken}`)
+      myHeaders.append("Content-Type", "application/json");
+      var raw = JSON.stringify({
+        "items": details?.carts.map(cart => cart._id),//_id from cart Array
+        "price": total,
+        "user_id": userSavedData?._id
+      });
+      var requestOptions = {
+        method: 'POST',
+        body: raw,
+        headers: myHeaders,
+        redirect: 'follow',
       };
-      RazorpayCheckout.open(options)
-        .then((data) => {
-          // handle success
-          // alert(`Success: ${data.razorpay_payment_id}`);
-        })
-        .catch((error) => {
-          // handle failure
-          // alert(`Error: ${error.code} | ${error.description}`);
+      const apiResponse = await fetchRequest(
+        '/order/checkout',
+        requestOptions,
+      )
+      console.log('checkout API', apiResponse)
+      if (apiResponse.statusCode == '200') {
+        const RAZORPAY_KEY = "rzp_test_jJJrfOKqYAvjcP";
+        let options = {
+          description: "Credits towards purchase",
+          image: "", // Add image URL if needed
+          currency: "INR",
+          key: RAZORPAY_KEY,
+          amount: total * 100,
+          name: "Paintika",
+          order_id: "", // auto generated unique alpha numric
+          prefill: {
+            email: userSavedData?.email_or_mobile_number, // Add user's email
+            contact: "", // Add user's contact number
+            name: "", // Add user's name
+          },
+          notes: {
+            address: "User's address", // Add user's address if needed
+          },
+          theme: { color: "#2F3D8F" },
+          display: {
+            hide: [
+              { method: 'paylater' },
+              { method: 'wallet' }
+            ]
+          }
+        };
+        RazorpayCheckout.open(options)
+          .then((data) => {
+            // handle success
+            console.log("Payment successful:", data);
+            addOrder(apiResponse?.data, data?.razorpay_payment_id)
+          })
+          .catch((error) => {
+            // handle failure
+            console.error("Payment error:", error);
+            Toast.show({
+              type: "error",
+              text1: `Payment failed`,
+              topOffset: 60,
+              onHide: () => {
+              },
+            });
+          });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: `${apiResponse?.message}`,
+          topOffset: 60,
+          onHide: () => {
+          },
         });
+      }
+
     }
   };
+
   const removeAddress = (id) => {
     if (userId !== "") {
       const payload = {
@@ -198,87 +285,87 @@ export default function Address({ navigation, route }) {
           padding: 20,
         }}
       >
-        <Text
-          style={{
-            fontSize: 18,
-            fontFamily: FontStyles.manRopeSemiBold,
-            color: Colors.black,
-          }}
-        >
-          Saved Address
-        </Text>
-        {addresses?.length > 0 ? (
-          addresses.map((Item, i) => {
-            return (
-              <View key={i}>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#D3D3D3",
-                    padding: 10,
-                    height: hp(9),
-                    justifyContent: "center",
-                    borderRadius: 10,
-                    marginTop: 5,
-                  }}
-                  onPress={() => selectItem(Item)}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    {/* <RadioButton.Android
-                      value="option3"
-                      status={selctedValue ? "checked" : "unchecked"}
-                      onPress={() => setselctedValue(true)}
-                      color="#007BFF"
-                    /> */}
-                    {Item?._id === selectedAddress ? (
-                      <RadioActive
-                        name={"radio-btn-active"}
-                        color={Colors.black}
-                        size={22}
-                      />
-                    ) : (
-                      <RadioButtonEmpty
-                        name="radio-btn-passive"
-                        color={Colors.black}
-                        size={22}
-                      />
-                    )}
 
-                    <Text
-                      style={{
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: FontStyles.manRopeSemiBold,
-                      }}
-                    >
-                      {Item?.name}
-                    </Text>
-                    <View>
+        <View>
+          {addresses?.length > 0 &&
+            <>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: FontStyles.manRopeSemiBold,
+                  color: Colors.black,
+                }}
+              >
+                Saved Address
+              </Text>
+              {
+                addresses.map((Item, i) => {
+                  return (
+                    <View key={i}>
                       <TouchableOpacity
-                        onPress={() => removeAddress(Item?._id)}
+                        style={{
+                          backgroundColor: "#D3D3D3",
+                          padding: 10,
+                          height: hp(9),
+                          justifyContent: "center",
+                          borderRadius: 10,
+                          marginVertical: 5,
+                        }}
+                        onPress={() => selectItem(Item)}
                       >
-                        <DeleteIcon name={"delete"} size={22} />
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          {Item?._id === selectedAddress ? (
+                            <RadioActive
+                              name={"radio-btn-active"}
+                              color={Colors.black}
+                              size={22}
+                            />
+                          ) : (
+                            <RadioButtonEmpty
+                              name="radio-btn-passive"
+                              color={Colors.black}
+                              size={22}
+                            />
+                          )}
+
+                          <Text
+                            style={{
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: FontStyles.manRopeSemiBold,
+                            }}
+                          >
+                            {Item?.name}
+                          </Text>
+                          <View>
+                            <TouchableOpacity
+                              onPress={() => removeAddress(Item?._id)}
+                            >
+                              <DeleteIcon name={"delete"} size={22} />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            );
-          })
-        ) : (
-          <View style={{ height: "100%" }}>
-            <View
-              style={{
-                height: "60%",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+                  );
+                })
+              }
+            </>
+          }
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: hp(3)
+            }}
+          >
+            {addresses?.length == 0 &&
               <Text
                 style={{
                   fontSize: 17,
@@ -287,43 +374,48 @@ export default function Address({ navigation, route }) {
               >
                 No Saved Address Found
               </Text>
-            </View>
-            <View
-              style={{
-                height: "20%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <TouchableOpacity
+            }
+            {
+              addresses?.length < 2 &&
+              <View
                 style={{
-                  height: heightPercentageToDP(5),
-                  width: widthPercentageToDP(45),
-                  backgroundColor: Colors.black,
-                  borderRadius: 10,
                   justifyContent: "center",
                   alignItems: "center",
+                  marginTop: hp(3)
                 }}
-                onPress={() =>
-                  navigation.navigate("AddAddress", {
-                    token: authToken,
-                    userId: userId,
-                  })
-                }
               >
-                <Text
+                <TouchableOpacity
                   style={{
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontFamily: FontStyles.manRopeSemiBold,
+                    height: heightPercentageToDP(5),
+                    width: widthPercentageToDP(45),
+                    backgroundColor: Colors.black,
+                    borderRadius: 10,
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
+                  onPress={() =>
+                    navigation.navigate("AddAddress", {
+                      token: authToken,
+                      userId: userId,
+                    })
+                  }
                 >
-                  Add New Address
-                </Text>
-              </TouchableOpacity>
-            </View>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontFamily: FontStyles.manRopeSemiBold,
+                    }}
+                  >
+                    Add New Address
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            }
+
           </View>
-        )}
+        </View>
+
       </View>
       <View style={{ height: "10%", width: "100%" }}>
         <View
@@ -340,7 +432,7 @@ export default function Address({ navigation, route }) {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => onPressBuy(details)}
+            onPress={() => onPressBuy(details?.order_total)}
           >
             <Text style={{ color: Colors.white }}>CONTINUE</Text>
           </TouchableOpacity>
@@ -354,7 +446,7 @@ export default function Address({ navigation, route }) {
             }}
           >
             <Text style={{ fontSize: 12, color: Colors.black }}>
-              {`TOTAL ₹ ${details}`}
+              {`TOTAL ₹ ${details?.order_total}`}
             </Text>
             <Text style={{ fontSize: 12, color: Colors.black }}>
               INCLUDING GST
@@ -362,6 +454,6 @@ export default function Address({ navigation, route }) {
           </View>
         </View>
       </View>
-    </View>
+    </View >
   );
 }

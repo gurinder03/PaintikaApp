@@ -1,1 +1,28 @@
+# Node Modules
 /node_modules
+
+# Android build
+/android/app/build
+/app/build
+.gradle
+.idea
+
+# iOS build
+/ios/Pods
+/ios/build
+/ios/Podfile.lock
+/ios/Podfile.podspec.lock
+
+# Debug files
+*.log
+*.debug
+
+# IDE files
+.vscode
+.idea
+
+# macOS system files
+.DS_Store
+
+# APK files
+*.apk

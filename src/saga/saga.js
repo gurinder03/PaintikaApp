@@ -3,6 +3,7 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import Toast from "react-native-toast-message";
 import * as NavigationService from "../navigation/NavigationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 
 //fetching functions
 const BASE_URL = `https://api.paintikaart.com/api/v1`;
@@ -29,46 +30,14 @@ const GetRecord1 = (url, data) => {
   });
 };
 
-const GetRecord2 = (url, data, token) => {
-  // console.log(data, " >>>> data", url, "token::::::::", token);
-  let config = {
-    headers: {
-      token: `Bearer ${token}`,
-    },
-  };
-  return axios.post(`${BASE_URL + url}`, data, config).then((response) => {
-    console.log("axios data", response?.data);
-  }).catch();
-
-  // return axios({
-  //   method: "POST",
-  //   crossDomain: true,
-  //   dataType: "json",
-  //   contentType: "application/json; charset=utf-8",
-  //   data,
-  //   url: BASE_URL + url,
-  //   token: `Bearer ${token}`
-  // });
-};
-
 //Saga functions
-
 function* SignUp({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
-  const postData = {
-    name: payload?.name,
-    role: payload?.role,
-    email_or_mobile_number: payload?.email,
-    password: payload?.password,
-  };
   const requestUrl = "/user/signup";
-
   try {
-    const response = yield call(GetRecord, requestUrl, postData);
+    const response = yield call(GetRecord, requestUrl, payload);
     // console.log("🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:", response.data);
-
     if (response?.data !== null && response.data.statusCode == 200) {
-      // console.log("INSIDE IF");
       Toast.show({
         type: "success",
         text1: `${response?.data?.message}`,
@@ -84,10 +53,8 @@ function* SignUp({ payload }) {
           });
         },
       });
-
       yield put({ type: "SAVE_OTP", payload: response?.data?.data?.OTP });
       yield put({ type: "SAVE_SIGNUPDATA", payload: payload?.email });
-
       yield NavigationService.navigate("Otp", { role: payload?.role });
     } else {
       Toast.show({
@@ -111,30 +78,40 @@ function* SignUp({ payload }) {
     yield put({ type: "SHOW_LOADING", payload: false });
   }
 }
+
 function* login({ payload }) {
   // console.log("WORKING SAGA LOGIN:::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
-  const postData = {
-    role: payload?.role,
-    email_or_mobile_number: payload?.email,
-    password: payload?.password,
-  };
-  const requestUrl = "/user/login";
-
+  let postData = {}
+  if (payload.isSocial) {
+    postData = {
+      role: payload?.role,
+      email_or_mobile_number: payload?.email_or_mobile_number,
+      authToken: payload?.authToken,
+      facebook_id: "",
+      google_id: payload?.google_id,
+      name: payload?.name,
+      profile_image: payload?.profile_image,
+    }
+  } else {
+    postData = {
+      role: payload?.role,
+      email_or_mobile_number: payload?.email,
+      password: payload?.password,
+    }
+  }
+  const requestUrl = payload.isSocial ? "/user/social/login" : "/user/login";
   try {
     const response = yield call(GetRecord, requestUrl, postData);
     // console.log("🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:", response.data);
-
     if (response?.data !== null && response.data.statusCode == 200) {
       // console.log("INSIDE IF");
-
       Toast.show({
         type: "success",
         text1: `${response?.data?.message}`,
         text2: "Welcome to Paintika",
         topOffset: 60,
       });
-
       yield put({ type: "SAVE_TOKEN", payload: response?.data?.data?.token });
       yield put({ type: "SAVE_USERID", payload: response?.data?.data?._id });
       yield put({ type: "ISLOGGED", payload: true });
@@ -160,6 +137,7 @@ function* login({ payload }) {
     yield put({ type: "SHOW_LOADING", payload: false });
   }
 }
+
 function* verifyOtp({ payload }) {
   // console.log("Working OTP ", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
@@ -326,7 +304,7 @@ function* getDetails({ payload }) {
 }
 
 function* addProductToCart({ payload }) {
-  // console.log("ADD TO CART PAYLOAD::::", payload);
+  console.log("ADD TO CART PAYLOAD::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/cart/add`;
   // console.log("BEFORE FETHING URL CART", requestUrl);
@@ -351,18 +329,17 @@ function* addProductToCart({ payload }) {
     );
     // console.log("🚀 ~ file: saga.js:299 ~ function*addProductToCart ~ response:", response?.data );
 
-    // if (response.statusCode == 200 && response.data !== null) {
-    // yield put({ type: "SAVE_DETAILS_DATA", payload: response?.data });
-    // }
-
     if (response?.data?.message.includes("Add successfully")) {
+      yield put({
+        type: "GET_PRODUCTS",
+        payload: { userId: payload?.user_id, token: payload?.token },
+      });
       Toast.show({
         type: "success",
         text1: `${response?.data?.message}`,
         topOffset: 60,
       });
 
-      NavigationService.navigate("Cart");
     } else {
       Toast.show({
         type: "success",
@@ -371,9 +348,10 @@ function* addProductToCart({ payload }) {
       });
     }
   } catch (e) {
-    console.log("Error in getting CART", e);
+    console.log("Error in getting CART", e?.response);
   }
 }
+
 function* getProducts({ payload }) {
   // console.log("ADD TO GET CART PAYLOAD::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
@@ -386,40 +364,59 @@ function* getProducts({ payload }) {
   const postData = {
     user_id: payload?.userId,
   };
-
   try {
-    // console.log("Before fetch list::::",`${BASE_URL + requestUrl}`, payload?.userId, payload?.token);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
       config
     );
-    // console.log("🚀 ~ file: saga.js:386 ~ function*getProducts ~ response:", response?.data);
     if (response?.data !== null) {
       yield put({ type: "SAVE_CART", payload: response?.data?.data });
+      console.log("🚀 ~ file: saga.js:386 ~ function*getProducts ~ response:", response?.data?.data);
     }
 
-    // if (response.statusCode == 200 && response.data !== null) {
-    // yield put({ type: "SAVE_DETAILS_DATA", payload: response?.data });
-    // }
+  } catch (e) {
+    console.log("Error in getting order List", e);
+  }
+}
 
-    // if (response?.data?.message.includes('Add successfully')) {
+function* getOrders({ payload }) {
+  // console.log("ADD TO GET CART PAYLOAD::::", payload);
+  yield put({ type: "SHOW_LOADING", payload: true });
+  let postData = {}
+  let requestUrl = ""
+  let config = {
+    headers: {
+      token: `Bearer ${payload?.token}`,
+    },
+  };
+  if (payload.role != "ARTIST") {
+    requestUrl = `/order/user/list`;
+    postData = {
+      user_id: payload?.userId,
+      limit: payload.limit,
+      page: payload.page
+    };
+  } else {
+    requestUrl = `/order/artist/list`;
+    postData = {
+      artist_id: payload?.userId,
+      limit: payload.limit,
+      page: payload.page
+    };
+  }
+  try {
+    const response = yield axios.post(
+      `${BASE_URL + requestUrl}`,
+      postData,
+      config
+    );
+    if (response?.data !== null) {
+      yield put({ type: "SAVE_ORDERS", payload: response?.data?.data });
+      console.log("🚀 ~ file: saga.js:386 ~ function*getProducts ~ response:", response?.data?.data);
 
-    //   Toast.show({
-    //     type: "success",
-    //     text1: `${response?.data?.message}`,
-    //     topOffset: 60,
-    //   });
+    }
 
-    //   NavigationService.navigate('Cart')
-
-    // } else {
-    //   Toast.show({
-    //     type: "success",
-    //     text1: `${response?.data?.message}`,
-    //     topOffset: 60,
-    //   });
-    // }
   } catch (e) {
     console.log("Error in getting CART List", e);
   }
@@ -451,31 +448,7 @@ function* removeProducts({ payload }) {
         payload: { userId: payload?.userId, token: payload?.token },
       });
     }
-    // if (response?.data !== null) {
-    //   yield put({ type: "SAVE_CART", payload: response?.data?.data });
-    // }
 
-    // if (response.statusCode == 200 && response.data !== null) {
-    // yield put({ type: "SAVE_DETAILS_DATA", payload: response?.data });
-    // }
-
-    // if (response?.data?.message.includes('Add successfully')) {
-
-    //   Toast.show({
-    //     type: "success",
-    //     text1: `${response?.data?.message}`,
-    //     topOffset: 60,
-    //   });
-
-    //   NavigationService.navigate('Cart')
-
-    // } else {
-    //   Toast.show({
-    //     type: "success",
-    //     text1: `${response?.data?.message}`,
-    //     topOffset: 60,
-    //   });
-    // }
   } catch (e) {
     console.log("Error in getting CART List", e);
   }
@@ -504,39 +477,29 @@ function* getAddress({ payload }) {
       config
     );
     // console.log("🚀 ~ file: saga.js:516 ~ function*getAddress ~ response:", response?.data);
-
     yield put({ type: "SAVE_ADDRESS", payload: response?.data?.data });
 
-    // if (response?.data) {
-    //   yield put({
-    //     type: "GET_PRODUCTS",
-    //     payload: { userId: payload?.userId, token: payload?.token },
-    //   });
-    // }
   } catch (e) {
     console.log("Error in getting CART List", e);
   }
 }
 
-function* getState({ payload }) {
+function* getState({ }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/setting/states`;
   let config = {
-    headers: {
-      token: `Bearer ${payload?.token}`,
-    },
+    headers: null
   };
   try {
-    const response = yield axios.get(`${BASE_URL + requestUrl}`,  config);
+    const response = yield axios.get(`${BASE_URL + requestUrl}`, config);
     console.log('Get State => ', response.data);
-    yield put({ type: "SET_STATE_DATA", payload: response?.data });
-    if (response?.data !== null) {
-      Toast.show({
-        type: "success",
-        text1: `${response?.data?.message}`,
-        topOffset: 60,
-      });
-    }
+    yield put({
+      type: "SET_STATE_DATA", payload: response?.data?.data.map((item, index) => {
+        item.title = item
+        item.id = index
+        return item
+      }),
+    });
   } catch (e) {
     console.log("Error in getting CART List", e);
   }
@@ -573,7 +536,7 @@ function* addAddressfun({ payload }) {
   try {
     // console.log("Before fetch Data", `${BASE_URL + requestUrl}`, postData, config );
     const response = yield axios.post(`${BASE_URL + requestUrl}`, postData, config);
-    // console.log("🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response:", response?.data);
+    console.log("🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response:", response?.data);
 
     if (response?.data !== null) {
       Toast.show({
@@ -583,15 +546,6 @@ function* addAddressfun({ payload }) {
       });
       NavigationService.navigationRef.navigate("Address");
     }
-
-    // yield put({ type: "SAVE_ADDRESS", payload: response?.data?.data });
-
-    // if (response?.data) {
-    //   yield put({
-    //     type: "GET_PRODUCTS",
-    //     payload: { userId: payload?.userId, token: payload?.token },
-    //   });
-    // }
   } catch (e) {
     console.log("Error in getting CART List", e);
   }
@@ -626,56 +580,74 @@ function* logout({ payload }) {
 function* addPreOrder({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   let requestUrl = '';
-  let config = {
-    headers: {
-      token: `Bearer ${payload?.token}`,
-      'Content-Type': "application/json; charset=utf-8"
-    },
-  };
-  // let dataVal = new FormData();
-  let secdJsonObj = {}
-  if (payload && payload.role === "ARTIST") {
+  let selectedPayload = new FormData();
+  if (payload?.role === "ARTIST") {
     requestUrl = '/art/add';
-    secdJsonObj = {
-      role: payload.role,
-      image: payload.imagePath,
-      name: payload.name,
-      size: payload.size,
-      theme: payload.theme,
-      medium: payload.medium,
-      frame_quality: payload.quality,
-      price: payload.price,
-      creator_id: payload.userId,
-      status: 'active',
-      category: payload.category?._id
-    }
+    selectedPayload.append('role', payload.role)
+    selectedPayload.append('image', {
+      name: payload.imagePath?.fileName,
+      type: payload.imagePath.type,
+      uri: Platform.select({
+        ios: payload.imagePath.uri.replace('file://', ''),
+        android: payload.imagePath.uri
+      }),
+    })
+    selectedPayload.append('name', payload.name)
+    selectedPayload.append('size', Number(payload.size))
+    selectedPayload.append('theme', payload.theme)
+    selectedPayload.append('medium', payload.medium)
+    selectedPayload.append('frame_quality', payload.frame_quality)
+    selectedPayload.append('price', payload.price)
+    selectedPayload.append('creator_id', payload.userId)
+    selectedPayload.append('status', 'active')
+    selectedPayload.append('category', payload.category?._id)
+    selectedPayload.append('is_copy_sale', 'yes')
+    selectedPayload.append('desc', payload.description)
+    selectedPayload.append("color", JSON.stringify([payload.color]));
   } else {
-    requestUrl = '/preorder/app/add';
-    secdJsonObj = {
-      role: payload.role,
-      image: payload.imagePath,
-      description: payload.description,
-      user_id: payload.userId
-    }
+    requestUrl = '/preorder/add';
+    selectedPayload = new FormData();
+    selectedPayload.append('description', payload.description)
+    selectedPayload.append('user_id', payload.userId)
+    selectedPayload.append('image', {
+      name: payload.imagePath?.fileName,
+      type: payload.imagePath.type,
+      uri: Platform.select({
+        ios: payload.imagePath.uri.replace('file://', ''),
+        android: payload.imagePath.uri
+      }),
+    })
   }
   try {
-    // console.log('secdJsonObj =>', secdJsonObj);
-    // console.log('config =>', config);
-    const response = yield axios.post(`${BASE_URL}${requestUrl}`, secdJsonObj, config);
-    // console.log(`${BASE_URL + requestUrl} =>`, BASE_URL + requestUrl);
-    // console.log("🚀 ~ file: saga.js:555 ~ function*addAddressfun ~ response: ------->>>>>>> ", response?.data);
-    // yield put({ type: "SAVE_ADDRESS", payload: response?.data?.data });
-    if (response?.data) {
-      Toast.show({
-        type: "success",
-        text1: `${response?.data?.message}`,
-        topOffset: 60,
-      });
-    //   yield put({
-    //     type: "GET_PRODUCTS",
-    //     payload: { userId: payload?.userId, token: payload?.token },
-    //   });
-    }
+    var myHeaders = new Headers()
+    myHeaders.append('token', `${'Bearer ' + payload?.token}`)
+    myHeaders.append('Content-Type', 'multipart/form-data')
+    myHeaders.append('Accept', 'application/json')
+    var requestOptions = {
+      method: 'POST',
+      body: selectedPayload,
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    yield fetch(`${BASE_URL}${requestUrl}`, requestOptions).then(response => response.text())
+      .then(result => {
+        let response = JSON.parse(result)
+        console.log("response", response)
+        if (response?.statusCode == '200') {
+          NavigationService.navigate("Home");
+          Toast.show({
+            type: "success",
+            text1: `${response.message}`,
+            topOffset: 60,
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: `${"Failed to submit pre order"}`,
+            topOffset: 60,
+          });
+        }
+      })
   } catch (error) {
     console.error("Error in addPreOrder:", error);
   } finally {
@@ -685,7 +657,7 @@ function* addPreOrder({ payload }) {
 
 function* changePassword({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
-  // console.log("working changePassword>>>>>>", payload);
+  console.log("working changePassword>>>>>>", payload);
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
@@ -700,7 +672,7 @@ function* changePassword({ payload }) {
   const requestUrl = "/user/change/password";
 
   try {
-    // console.log("GET VORK>>>>>>>>",  `${BASE_URL + requestUrl}`,  postData,  config);
+    console.log("GET VORK>>>>>>>>", `${BASE_URL + requestUrl}`, postData, config);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
@@ -715,8 +687,11 @@ function* changePassword({ payload }) {
       });
 
       if (response?.data?.message.includes("Password changed successfully")) {
-        NavigationService.navigate("Home");
+        yield put({ type: "ISLOGGED", payload: false });
+        yield NavigationService.goBack();
         yield AsyncStorage.removeItem("authToken");
+        yield AsyncStorage.removeItem("userId");
+        yield AsyncStorage.removeItem("role");
       }
     }
     yield put({ type: "SHOW_LOADING", payload: false });
@@ -767,54 +742,91 @@ function* removeAddress({ payload }) {
 
 function* getUser({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
-  // console.log("working getUser>>>>>>", payload);
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
     },
   };
-  const postData = {
-    id: payload?.userId,
-  };
   const requestUrl = "/user/view/";
-
   try {
-    // console.log(
-    //   "GET USER>>>>>>>>",
-    //   `${BASE_URL + requestUrl + `${payload?.userId}`}`,
-    //   config
-    // );
     const response = yield axios.get(
       `${BASE_URL + requestUrl + `${payload?.userId}`}`,
       config
     );
-    // console.log(
-    //   "🚀 ~ file: saga.js:784 ~ function*getUser ~ response:",
-    //   response?.data
-    // );
-
     if (response?.data !== null) {
       yield put({ type: "SET_USER", payload: response?.data?.data });
     }
-
-    // if (response?.data !== null) {
-    //   Toast.show({
-    //     type: "success",
-    //     text1: `${response?.data?.message}`,
-    //     topOffset: 60,
-    //   });
-    //   yield put({ type: "SAVE_ADDRESS", payload: [] });
-    //   // if (response?.data?.message.includes("Password changed successfully")) {
-    //   //   NavigationService.navigate("Home");
-    //   //   yield AsyncStorage.removeItem("authToken");
-    //   // }
-    // }
     yield put({ type: "SHOW_LOADING", payload: false });
   } catch (e) {
     yield put({ type: "SHOW_LOADING", payload: false });
     console.log("ERROR IN Getting User", e);
   }
 }
+
+function* updateProfile({ payload }) {
+  yield put({ type: "SHOW_LOADING", payload: true });
+  const requestUrl = `/user/update`;
+  let selectedPayload = new FormData();
+  if (payload.imagePath?.fileName) {
+    selectedPayload.append('image', {
+      name: payload.imagePath?.fileName,
+      type: payload.imagePath?.type,
+      uri: Platform.select({
+        ios: payload.imagePath?.uri?.replace('file://', ''),
+        android: payload.imagePath?.uri
+      }),
+    })
+  }
+  selectedPayload.append('email_or_mobile_number', payload.email_or_mobile_number)
+  selectedPayload.append('name', payload.name)
+  selectedPayload.append('surname', payload.surname)
+  selectedPayload.append('dob', payload.dob)
+  selectedPayload.append('address', payload.address)
+  selectedPayload.append('gender', payload.gender)
+  selectedPayload.append('qualifications', payload.qualifications)
+  selectedPayload.append('job_type', payload.job_type)
+  selectedPayload.append('additional_detail', payload.additional_detail)
+  selectedPayload.append('country', payload.country)
+  selectedPayload.append("state", payload.state);
+  selectedPayload.append("id", payload.id);
+  selectedPayload.append("experience", payload.experience);
+  try {
+    var myHeaders = new Headers()
+    myHeaders.append('token', `${'Bearer ' + payload?.token}`)
+    myHeaders.append('Content-Type', 'multipart/form-data')
+    myHeaders.append('Accept', 'application/json')
+    var requestOptions = {
+      method: 'POST',
+      body: selectedPayload,
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    yield fetch(`${BASE_URL}${requestUrl}`, requestOptions).then(response => response.text())
+      .then(result => {
+        let response = JSON.parse(result)
+        console.log("response", response)
+        if (response?.statusCode == '200') {
+          Toast.show({
+            type: "success",
+            text1: `${response?.message}`,
+            topOffset: 60,
+          });
+          NavigationService.goBack();
+        } else {
+          Toast.show({
+            type: "error",
+            text1: `${"Failed to update your profile."}`,
+            topOffset: 60,
+          });
+        }
+      })
+  } catch (error) {
+    console.error("Error in update profile:", error);
+  } finally {
+    yield put({ type: "SHOW_LOADING", payload: false });
+  }
+}
+
 function* mySaga() {
   yield takeLatest("SIGN_UP_REQUESTED", SignUp);
   yield takeLatest("LOGIN", login);
@@ -826,6 +838,7 @@ function* mySaga() {
   yield takeLatest("GET_DETAILS_DATA", getDetails);
   yield takeLatest("ADD_PRODUCT", addProductToCart);
   yield takeLatest("GET_PRODUCTS", getProducts);
+  yield takeLatest("GET_ORDERS", getOrders);
   yield takeLatest("REMOVE_PRODUCT", removeProducts);
   yield takeLatest("GET_ADDRESS", getAddress);
   yield takeLatest("ADD_ADDRESS", addAddressfun);
@@ -835,6 +848,8 @@ function* mySaga() {
   yield takeLatest("CHANGE_PASSWORD", changePassword);
   yield takeLatest("REMOVE_ADDRESS", removeAddress);
   yield takeLatest("GET_USER", getUser);
+  yield takeLatest("UPDATE_ADDRESS", updateProfile);
+
 }
 
 export default mySaga;

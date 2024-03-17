@@ -74,7 +74,7 @@ export const getDetailsData = (payload) => {
 };
 
 export const getStateData = (payload) => {
-  console.log('payload', payload);
+  console.log('get state payload', payload);
   return {
     type: ActionTypes.SET_STATE_DATA,
     payload: payload,

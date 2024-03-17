@@ -15,6 +15,7 @@ const intialState = {
   userData: [],
   stateData: [],
   isLogged: false,
+  ordersData: [],
 };
 
 const saveDataReducer = (state = intialState, action) => {
@@ -102,6 +103,11 @@ const saveDataReducer = (state = intialState, action) => {
       return {
         ...state,
         userData: action.payload,
+      };
+    case "SAVE_ORDERS":
+      return {
+        ...state,
+        ordersData: action.payload,
       };
 
     default:

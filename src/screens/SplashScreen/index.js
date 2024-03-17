@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, Animated } from "react-native";
+import { View, Text, StyleSheet, Image, Animated, ImageBackground } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import React, { useRef, useEffect, useState } from "react";
 import {
@@ -39,9 +39,10 @@ export default function SplashScreen() {
           alignItems: "center",
         }}
       >
-        <Animated.Image
+        {/* <Animated.Image
           source={require("../../../assets/Paintika.png")}
           style={{
+            resizeMode:'contain',
             width: wp(45),
             height: hp(20),
             transform: [
@@ -74,7 +75,15 @@ export default function SplashScreen() {
           >
             P A I N T I K A
           </Animated.Text>
-        ) : null}
+        ) : null} */}
+        <ImageBackground
+          source={require("../../../assets/splash.gif")}
+          style={{
+            resizeMode: 'contain',
+            width: wp(100),
+            height: hp(40),
+          }}
+        />
       </View>
     </View>
   );
@@ -84,6 +93,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#180D40",
   },
 });

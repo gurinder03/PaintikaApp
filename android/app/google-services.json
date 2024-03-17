@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "556612457106",
+    "project_id": "paintika",
+    "storage_bucket": "paintika.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556612457106:android:8eac055226074d844a8c4b",
+        "android_client_info": {
+          "package_name": "com.paintapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556612457106-57ivr14kgaknvisk63evfee0mnpm1mkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB54V_9c-YqyPOLBvgs2r8KKTyyWvsEan8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556612457106-57ivr14kgaknvisk63evfee0mnpm1mkf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

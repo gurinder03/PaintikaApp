@@ -20,10 +20,13 @@ import Icon2 from "react-native-vector-icons/SimpleLineIcons";
 import Icon3 from "react-native-vector-icons/FontAwesome5";
 import Icon4 from "react-native-vector-icons/MaterialIcons";
 import Logout from "react-native-vector-icons/MaterialIcons";
-import { navigationRef } from "../../navigation/NavigationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
+
 export default function ProfileScreen({ navigation }) {
+  const isFocused = useIsFocused();
+
   const dispatch = useDispatch();
   const options = [
     { icon: "user", name: "Age", value: 24 },
@@ -40,8 +43,9 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
     getData();
     getAuthToken();
-    getUserData();
-  }, [userId, authToken]);
+    if (isFocused)
+      getUserData();
+  }, [userId, authToken,isFocused]);
 
   const logout = () => {
     Alert.alert("Log Out", "Are you really want to logout?", [
@@ -92,15 +96,12 @@ export default function ProfileScreen({ navigation }) {
     }
   };
 
-  
-
-
   return (
     <View style={styles.container}>
-      <View style={[styles.sectionOne, {paddingTop:15}]}>
+      <View style={[styles.sectionOne, { paddingTop: 15 }]}>
         <View style={styles.profileSection}>
           <Image
-            source={require("../../../assets/download.jpeg")}
+            source={userSavedData.profile_image ? { uri: userSavedData.profile_image } : require("../../../assets/download.jpeg")}
             style={styles.userProfilePic}
           />
           <Text style={styles.userName}>{userSavedData?.name}</Text>
@@ -110,7 +111,7 @@ export default function ProfileScreen({ navigation }) {
           </Text>
           <TouchableOpacity
             style={styles.editBtn}
-            onPress={() => navigation.navigate("Edit", { userData: userSavedData})}
+            onPress={() => navigation.navigate("Edit", { userData: userSavedData })}
           >
             <Text style={styles.editText}>Edit Profile</Text>
           </TouchableOpacity>
@@ -280,16 +281,16 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 20,
     fontFamily: FontStyles.manRopeSemiBold,
-    textTransform: 'capitalize', 
+    textTransform: 'capitalize',
   },
   userEmailText: {
     fontSize: 14,
     fontFamily: FontStyles.manRopeSemiBold,
   },
-  usertype:{
+  usertype: {
     fontSize: 14,
     fontFamily: FontStyles.manRopeSemiBold,
-    textTransform: 'capitalize', 
+    textTransform: 'capitalize',
   },
   editBtn: {
     width: wp(30),
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
   editText: {
     fontSize: 12,
     color: Colors.white,
-    
+
   },
   itemText: {
     fontSize: 14,

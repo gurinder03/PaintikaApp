@@ -19,7 +19,6 @@ import AddIcon from "react-native-vector-icons/MaterialIcons";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
-import RazorpayCheckout from "react-native-razorpay";
 import Remove from "react-native-vector-icons/FontAwesome";
 import { addProduct } from "../../redux/actions";
 export default function CartScreen({ navigation }) {
@@ -27,10 +26,27 @@ export default function CartScreen({ navigation }) {
   const [userId, setuserId] = useState("");
   const [authToken, setauthToken] = useState("");
   const [cart, setcart] = useState([]);
-  const [itemIndex, setitemIndex] = useState(1);
   const detailsData = useSelector((state) => state.saveDataReducer.cartList);
   const isFocused = useIsFocused();
-  const imgURL = "https://m.media-amazon.com/images/I/61L5QgPvgqL._AC_UF1000,1000_QL80_.jpg";
+
+  useEffect(() => {
+    getData();
+    getAuthToken();
+
+    if (userId !== "" && authToken !== "") {
+      dispatch({
+        type: "GET_PRODUCTS",
+        payload: { userId: userId, token: authToken },
+      });
+    }
+  }, [userId, authToken, isFocused]);
+
+  useEffect(() => {
+    if (detailsData) {
+      setcart(detailsData?.carts);
+    }
+  }, [isFocused, detailsData]);
+
   const deleteProduct = (id) => {
     dispatch({
       type: "REMOVE_PRODUCT",
@@ -41,6 +57,7 @@ export default function CartScreen({ navigation }) {
       payload: { userId: userId, token: authToken },
     });
   };
+
   const removeItem = (id) => {
     Alert.alert("Alert", "Are you really want to remove this product?", [
       {
@@ -52,22 +69,40 @@ export default function CartScreen({ navigation }) {
     ]);
   };
 
-  const updateProduct = (data, creatorId) => {
-    // console.log("INSIDE UPDATE PRODUCT>>>>>>>>>>", data, creatorId);
-    setitemIndex(itemIndex + 1);
+  const updateProduct = (data, type) => {
     dispatch(
       addProduct({
-        user_id: userId,
-        art_id: data._id,
-        creator_id: creatorId,
-        quantity: 1,
+        user_id: data.user_id,
+        art_id: data.art_id,
+        creator_id: data.creator_id,
+        quantity: type == 'Incremented' ? 1 : - 1,
         token: authToken,
       })
     );
-    // dispatch({
-    //   type: "GET_PRODUCTS",
-    //   payload: { userId: userId, token: authToken },
-    // });
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("userId");
+      // console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      if (value !== null) {
+        setuserId(JSON.parse(value));
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+  const getAuthToken = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("authToken");
+      // console.log("🚀 ~ file: index.js:200 ~ getAuthToken ~ jsonValue:", jsonValue);
+      if (jsonValue !== null) {
+        setauthToken(JSON.parse(jsonValue));
+      }
+    } catch (e) {
+      // error reading value
+      console.log("Error While getting Token", e);
+    }
   };
 
   const RenderItem = ({ item }) => {
@@ -83,7 +118,7 @@ export default function CartScreen({ navigation }) {
           >
             <Image
               source={{ uri: item?.image }}
-              style={{ width: "100%", height: "100%"  }}
+              style={{ width: "100%", height: "100%" }}
             />
           </View>
           <View
@@ -118,7 +153,7 @@ export default function CartScreen({ navigation }) {
               >
                 {item.name}
               </Text>
-              <Text
+              {/* <Text
                 style={{
                   fontSize: 14,
                   fontFamily: FontStyles.manRopeRegular,
@@ -127,7 +162,7 @@ export default function CartScreen({ navigation }) {
                 }}
               >
                 this is the description
-              </Text>
+              </Text> */}
             </View>
             <View
               style={{
@@ -158,6 +193,14 @@ export default function CartScreen({ navigation }) {
                 }}
               >
                 <TouchableOpacity
+                  onPress={() => {
+                    if (item.quantity == 1) {
+                      removeItem(item?._id)
+                    } else {
+                      updateProduct(item, "Decremented")
+                    }
+                  }
+                  }
                   style={{
                     width: "30%",
                     height: hp(5),
@@ -168,7 +211,8 @@ export default function CartScreen({ navigation }) {
                   }}
                 >
                   <Text>
-                    <AddIcon name="remove" size={25} />
+                    <AddIcon
+                      name="remove" size={25} />
                   </Text>
                 </TouchableOpacity>
                 <View
@@ -198,7 +242,7 @@ export default function CartScreen({ navigation }) {
                     justifyContent: "center",
                     alignItems: "center",
                   }}
-                  onPress={() => updateProduct(item, item?.creator_id)}
+                  onPress={() => updateProduct(item, "Incremented")}
                 >
                   <Text>
                     <AddIcon size={25} name="add" />
@@ -210,81 +254,6 @@ export default function CartScreen({ navigation }) {
         </View>
       </>
     );
-  };
-
-  useEffect(() => {
-    getData();
-    getAuthToken();
-
-    if (userId !== "" && authToken !== "") {
-      dispatch({
-        type: "GET_PRODUCTS",
-        payload: { userId: userId, token: authToken },
-      });
-    }
-  }, [userId, authToken, isFocused]);
-
-  useEffect(() => {
-    if (detailsData) {
-      setcart(detailsData?.carts);
-    }
-  }, [isFocused, detailsData]);
-
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem("userId");
-      // console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
-      if (value !== null) {
-        setuserId(JSON.parse(value));
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-  const getAuthToken = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("authToken");
-      // console.log("🚀 ~ file: index.js:200 ~ getAuthToken ~ jsonValue:", jsonValue);
-      if (jsonValue !== null) {
-        setauthToken(JSON.parse(jsonValue));
-      }
-    } catch (e) {
-      // error reading value
-      console.log("Error While getting Token", e);
-    }
-  };
-
-  const onPressBuy = (total) => {
-    //Order Api: Call POST api with body like (username, id, price etc) to create an Order and use order_id in below options object
-    // const response = await .....
-    const RAZORPAY_KEY = "rzp_test_jJJrfOKqYAvjcP";
-    let options = {
-      description: "Credits towards consultation",
-      image: cart?.item?.image, //require('../../images.png')
-      currency: "INR", //In USD - only card option will exist rest(like wallet, UPI, EMI etc) will hide
-      key: RAZORPAY_KEY,
-      amount: total.toFixed(2),
-      name: "Acme Corp",
-      order_id: "", //Replace this with an order_id(response.data.orderId) created using Orders API.
-      prefill: {
-        email: "",
-        contact: "",
-        name: "",
-      }, //if prefill is not provided then on razorpay screen it has to be manually entered.
-      notes: {
-        address: "",
-      },
-      theme: { color: "#53a20e" },
-    };
-    RazorpayCheckout.open(options)
-      .then((data) => {
-        // handle success
-        alert(`Success: ${data.razorpay_payment_id}`);
-      })
-      .catch((error) => {
-        // handle failure
-        alert(`Error: ${error.code} | ${error.description}`);
-      });
   };
 
   return (
@@ -323,7 +292,7 @@ export default function CartScreen({ navigation }) {
             }}
             onPress={() =>
               navigation.navigate("Address", {
-                details: detailsData?.order_total,
+                details: detailsData,
               })
             }
           >

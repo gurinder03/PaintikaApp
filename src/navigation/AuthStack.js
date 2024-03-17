@@ -15,6 +15,8 @@ import CategoryList from "../screens/CategoryList/CategoryList";
 import ProductDetail from "../screens/ProductDetail";
 import Address from "../screens/Address";
 import AddAddress from "../screens/Address/AddAddress";
+import OrderDetails from "../screens/OrderDetails";
+import ArtistOrderDetails from "../screens/artistOrderDetail";
 
 export default function AuthStack() {
   const Stack = createStackNavigator();
@@ -23,9 +25,9 @@ export default function AuthStack() {
   useEffect(() => {
     setTimeout(() => {
       setsplash(false);
-    }, 4000);
+    }, 3000);
 
-    return () => {};
+    return () => { };
   }, []);
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -40,9 +42,6 @@ export default function AuthStack() {
           }}
         />
       ) : null}
-
-      {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
-      {/* <Stack.Screen name="Category" component={CategoryList} /> */}
       <Stack.Screen name="Tabs" component={Tabs} />
       <Stack.Screen
         name="SignUp"
@@ -71,6 +70,8 @@ export default function AuthStack() {
       <Stack.Screen name="Detail" component={ProductDetail} />
       <Stack.Screen name="Address" component={Address} />
       <Stack.Screen name="AddAddress" component={AddAddress} />
+      <Stack.Screen name="OrderDetails" component={OrderDetails} />
+      <Stack.Screen name="ArtistOrderDetails" component={ArtistOrderDetails} />
       {/* <Stack.Screen
         name="Create"
         component={CreatePassword}

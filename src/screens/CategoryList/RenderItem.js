@@ -13,7 +13,7 @@ import Rupee from "react-native-vector-icons/FontAwesome";
 import BookMark from "react-native-vector-icons/Feather";
 
 
-const RenderItem = ({ data, nav }) => {
+const RenderItem = ({ data, nav, userType }) => {
     const handleDetail = (data) => {
         nav.navigate("Detail", {
             id: data?._id,
@@ -24,7 +24,7 @@ const RenderItem = ({ data, nav }) => {
     return (
         <View>
             <View style={styles.containerSlide}>
-                <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => handleDetail(data)} >
+                <TouchableOpacity disabled={userType == "ARTIST"} style={{ alignItems: 'center' }} onPress={() => handleDetail(data)} >
                     <Image source={{ uri: data?.image }} style={styles.imgMain} />
                 </TouchableOpacity>
                 <View style={styles.mailCate}>
@@ -43,11 +43,11 @@ const RenderItem = ({ data, nav }) => {
                             </View>
                         </View>
                     </View>
-                    <View style={styles.bookmarkSection}>
+                    {/* <View style={styles.bookmarkSection}>
                         <TouchableOpacity>
                             <BookMark name="bookmark" size={18} />
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>
             </View>
         </View>
@@ -94,9 +94,9 @@ const styles = StyleSheet.create({
     mailCate: {
         marginHorizontal: 15,
         paddingBottom: 10,
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'center'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     priceMain: {
         fontFamily: FontStyles.manRopeRegular,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 5
     },
-    bookmarkSection:{
+    bookmarkSection: {
 
     }
 })

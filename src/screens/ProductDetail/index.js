@@ -95,11 +95,6 @@ const ProductDetail = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
-        {/* <View>
-          <Text style={styles.mssgeSection}>
-            {detailsData?.message}
-          </Text>
-        </View> */}
         <View style={styles.addsBtn}>
           <TouchableOpacity style={styles.btnMain} onPress={() => addToCart()}>
             <Text> ADD To Cart </Text>

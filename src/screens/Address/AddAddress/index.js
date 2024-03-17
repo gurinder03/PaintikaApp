@@ -15,8 +15,19 @@ import CustomButton from "../../../helpers/CustomButton";
 import BackIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { heightPercentageToDP } from "react-native-responsive-screen";
+import { fetchRequest } from "../../../Services/APICaller";
 
 export default function AddAddress({ route, navigation }) {
+
+  const addressType = [
+    {
+      name: "Home",
+    },
+    {
+      name: "Work",
+    },
+  ];
   const dispatch = useDispatch();
   const [Info, setInfo] = useState({
     name: "",
@@ -32,35 +43,36 @@ export default function AddAddress({ route, navigation }) {
     city: "",
     landmark: "",
     alternate: "",
-    addressType: "",
+    addressType: addressType[0].name,
   });
   const [userId, setuserId] = useState(null);
   const [authToken, setauthToken] = useState(null);
-  // console.log("🚀 ~ file: index.js:37 ~ AddAddress ~ authToken:", authToken, userId);
-  const states = [
-    {
-      name: "Punjab",
-    },
-    {
-      name: "Uttar Pradesh (Up)",
-    },
-    {
-      name: "Haryana",
-    },
-    {
-      name: "Himachal",
-    },
-  ];
-  const addressType = [
-    {
-      name: "Home",
-    },
-    {
-      name: "Work",
-    },
-  ];
+  const [states, setStates] = useState([])
 
   useEffect(() => {
+    async function getState() {
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      try {
+        const apiResponse = await fetchRequest(
+          "/setting/states",
+          requestOptions,
+        )
+        setStates(apiResponse?.data?.map((item, index) => {
+          let item1 = {
+            name: item,
+            id: index
+          }
+          return item1
+        }))
+
+      } catch (e) {
+        console.log("Error in getting CART List", e);
+      }
+    }
+    getState()
     getData();
     getAuthToken();
   }, []);
@@ -76,6 +88,7 @@ export default function AddAddress({ route, navigation }) {
       // error reading value
     }
   };
+  
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
@@ -138,11 +151,11 @@ export default function AddAddress({ route, navigation }) {
       dispatch({ type: "ADD_ADDRESS", payload: postData });
     }
   };
+
   return (
     <View style={{ width: "100%", height: "100%" }}>
       <View
         style={{
-          backgroundColor: "grey",
           justifyContent: "center",
           alignItems: "center",
           height: "10%",
@@ -261,7 +274,9 @@ export default function AddAddress({ route, navigation }) {
           customValues={addressType}
           value={Info?.addressType}
         />
+        <View style={{ height: heightPercentageToDP(2) }} />
         <CustomButton title={"Save Address"} onPress={() => saveAddress()} />
+        <View style={{ height: heightPercentageToDP(2) }} />
       </ScrollView>
     </View>
   );

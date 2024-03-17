@@ -116,18 +116,21 @@ export default function CreatePassword() {
             onChangeText={(e) => setintialPassword(e)}
             value={intialPassword}
             placeholder="Current Password"
+            secureTextEntry
           />
           <TextInput
             style={styles.input}
             onChangeText={(e) => setnewPassword(e)}
             value={newPassword}
             placeholder="New password"
+            secureTextEntry
           />
           <TextInput
             style={styles.input}
             onChangeText={(e) => setconfirmPassword(e)}
             value={confirmPassword}
             placeholder="Confirm password"
+            secureTextEntry
           />
           <ActivityIndicator size={"large"} animating={isLoading} />
           <CustomButton

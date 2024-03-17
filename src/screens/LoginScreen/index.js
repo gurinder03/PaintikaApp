@@ -1,5 +1,5 @@
 import { View, Text, Image, Alert, StyleSheet, TextInput } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextInputComponent from "../../helpers/TextInput";
 import CustomButton from "../../helpers/CustomButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -10,17 +10,53 @@ import FontStyles from "../../constants/FontStyles";
 import ToggleSwitch from "toggle-switch-react-native";
 import { login } from "../../redux/actions";
 import BackIcon from "react-native-vector-icons/Ionicons";
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
+
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.saveDataReducer.signUpData);
-  // console.log('userData ', userData);
   const [inputValue, setinputValue] = useState({
     email: "",
     password: "",
   });
   const [isPainter, setisPainter] = useState(false);
-  const gotToSignUp = () => {
-    navigation.navigate("SignUp");
+
+  useEffect(() => {
+    GoogleSignin.configure();
+  }, []);
+
+
+  const handleFacebookLogin = async () => {
+    try {
+      // Attempt to login with Facebook
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      // If login is successful, get the user's access token
+      if (result.isCancelled) {
+        console.log('Login cancelled');
+      } else {
+        const data = await AccessToken.getCurrentAccessToken();
+        if (!data) {
+          console.error('Something went wrong obtaining the access token');
+        } else {
+          console.log('Access Token:', data.accessToken);
+          // You can use the access token to authenticate with your server or perform other actions
+          // dispatch(
+          //   login({
+          //     isSocial: true,
+          //     authToken: resp.accessToken,
+          //     email_or_mobile_number: userInfo?.user?.email,
+          //     facebook_id: "",
+          //     google_id: userInfo?.user?.id,
+          //     name: userInfo?.user?.name,
+          //     profile_image: userInfo?.user?.photo,
+          //     role: "USER"
+          //   })
+          // );
+        }
+      }
+    } catch (error) {
+      console.error('Error during Facebook login:', error);
+    }
   };
 
   const handleChange = (name, e) => {
@@ -36,10 +72,9 @@ export default function LoginScreen({ navigation }) {
     } else if (inputValue.password == "") {
       Alert.alert("Password is required.");
     } else {
-      // dispatch(saveSignInData(inputValue));
-      // navigation.navigate('Home');
       dispatch(
         login({
+          isSocial: false,
           email: inputValue.email,
           password: inputValue.password,
           role: isPainter ? "ARTIST" : "USER",
@@ -47,7 +82,36 @@ export default function LoginScreen({ navigation }) {
       );
     }
   };
-
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      const resp = await GoogleSignin.getTokens()
+      dispatch(
+        login({
+          isSocial: true,
+          authToken: resp.accessToken,
+          email_or_mobile_number: userInfo?.user?.email,
+          facebook_id: "",
+          google_id: userInfo?.user?.id,
+          name: userInfo?.user?.name,
+          profile_image: userInfo?.user?.photo,
+          role: "USER"
+        })
+      );
+    } catch (error) {
+      console.log('error', error)
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -77,7 +141,7 @@ export default function LoginScreen({ navigation }) {
             labelStyle={{
               color: `${Colors.black}`,
               fontSize: 18,
-              fontStyle: FontStyles.manRopeMedium,
+              // fontStyle: FontStyles.manRopeMedium,
             }}
             size="medium"
             onToggle={(isOn) => setisPainter(isOn)}
@@ -161,17 +225,40 @@ export default function LoginScreen({ navigation }) {
           </View>
         </View>
       </View>
-      <View style={styles.socialLogin}>
-        <Text style={styles.socialTitle}>Or login with social account</Text>
-        <View style={styles.socialLinks}>
-          <View style={styles.iconContainer}>
-            <Image source={require("../../../assets/facebook.png")}  style={styles.icon} />
-          </View>
-          <View style={styles.iconContainer}>
-            <Image source={require("../../../assets/Google.png")}  style={styles.googleIcon} />
+      {
+        !isPainter && <View style={styles.socialLogin}>
+          <Text style={styles.socialTitle}>Or login with social account</Text>
+          <View style={styles.socialLinks}>
+            <TouchableOpacity onPress={handleFacebookLogin} style={styles.iconContainer}>
+              <Image
+                source={require("../../../assets/facebook.png")}
+                style={styles.icon}
+              />
+              {/* <LoginButton
+              onLoginFinished={
+                (error, result) => {
+                  if (error) {
+                    console.log("login has error: " + result.error);
+                  } else if (result.isCancelled) {
+                    console.log("login is cancelled.");
+                  } else {
+                    AccessToken.getCurrentAccessToken().then(
+                      (data) => {
+                        console.log(data.accessToken.toString())
+                      }
+                    )
+                  }
+                }
+              }
+              onLogoutFinished={() => console.log("logout.")} /> */}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={signIn} style={styles.iconContainer}>
+              <Image source={require("../../../assets/Google.png")} style={styles.googleIcon} />
+            </TouchableOpacity>
           </View>
         </View>
-      </View>
+      }
+
     </View>
   );
 }
@@ -209,9 +296,9 @@ const styles = StyleSheet.create({
     height: 50,
     marginHorizontal: 10,
     marginVertical: 10,
-    borderRadius:8,
+    borderRadius: 8,
     padding: 10,
-    paddingLeft:15,
+    paddingLeft: 15,
     backgroundColor: Colors.white,
     elevation: 5,
     fontFamily: FontStyles.manRopeRegular,

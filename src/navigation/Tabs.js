@@ -45,11 +45,11 @@ export default function Tabs() {
           } else if (route.name == "Cart") {
             iconName = "shoppingcart";
           } else if (route.name == "Profile") {
-            iconName = "profile";
-          } else if (route.name == "Visual") {
+            iconName = "user";
+          } else if (route.name == "Upload Paint"||route.name =="Pre-Upload") {
             iconName = "camerao";
-          } else if (route.name == "My Orders") {
-            iconName = "shoppingcart";
+          } else if (route.name == "My Orders"|| route.name=="Orders") {
+            iconName = "profile";
           } else if (route.name == "Login") {
             iconName = "user";
           }
@@ -81,25 +81,24 @@ export default function Tabs() {
 
       {isUserLogged ? (
         <>
-          <Tab.Screen
-            name="Cart"
-            options={{ headerShown: false }}
-            component={CartScreen}
-          />
-
+          {
+            (userSavedData && userSavedData.role !== "ARTIST") &&
+            <Tab.Screen
+              name="Cart"
+              options={{ headerShown: false }}
+              component={CartScreen}
+            />
+          }
           <Tab.Screen
             name={userSavedData && userSavedData.role == "ARTIST" ? "Upload Paint" : "Pre-Upload"}
             options={{
-                headerShown: false,
-                tabBarIcon: () => (
-                  <Icon name='camerao' size={22} color={'gray'} />
-                )
+              headerShown: false,
             }}
             component={VisualSearch}
           />
 
           <Tab.Screen
-            name="My Orders"
+            name={userSavedData && userSavedData.role == "ARTIST" ? "Orders" : "My Orders"}
             options={{ headerShown: false }}
             component={OrderList}
           />
@@ -111,6 +110,7 @@ export default function Tabs() {
           />
         </>
       ) : null}
+
     </Tab.Navigator>
   );
 }

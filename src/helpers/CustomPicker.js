@@ -1,12 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import React, { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/Colors";
 import FontStyles from "../constants/FontStyles";
-import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
-export default function CustomPicker({ onChange, value, title, customValues }) {
-  const [selectedValue, setSelectedValue] = useState("male");
 
+export default function CustomPicker({ onChange, value, title, customValues }) {
   return (
     <View style={styles.container}>
       <Text
@@ -22,8 +20,6 @@ export default function CustomPicker({ onChange, value, title, customValues }) {
         style={{
           height: 65,
           width: "100%",
-          borderBottomWidth: 1,
-          borderBottomColor: "green",
           borderBottomColor: Colors.black,
           borderBottomWidth: 1,
         }}
@@ -35,10 +31,9 @@ export default function CustomPicker({ onChange, value, title, customValues }) {
             height: 45,
             width: "100%",
             borderBottomWidth: 1,
-            borderBottomColor: "green",
             borderBottomColor: Colors.black,
-            borderBottomWidth: 1,
           }}
+          mode={Platform.OS === 'ios' ? 'modal' : 'dialog'}
         >
           {customValues ? (
             customValues.map((Item) => {
@@ -57,11 +52,9 @@ export default function CustomPicker({ onChange, value, title, customValues }) {
 }
 const styles = StyleSheet.create({
   container: {
-    // alignItems: 'center',
     height: 100,
     justifyContent: "center",
     padding: 5,
-
     paddingHorizontal: 10,
   },
 });
