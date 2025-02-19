@@ -1,8 +1,6 @@
 import {
   View,
   Text,
-  Image,
-  Animated,
   Alert,
   StyleSheet,
   TouchableOpacity,
@@ -10,26 +8,22 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard
+  PermissionsAndroid
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import CustomButton from "../../helpers/CustomButton";
 import ToggleSwitch from "toggle-switch-react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { TextInput } from "react-native-gesture-handler";
 import BackIcon from "react-native-vector-icons/Ionicons";
 import Colors from "../../constants/Colors";
 import FontStyles from "../../constants/FontStyles";
-import { getStateData, signUp } from "../../redux/actions";
-import SelectDropdown from "react-native-select-dropdown";
+import { signUp } from "../../redux/actions";
 import Icon from "react-native-vector-icons/AntDesign";
 import { AutocompleteDropdown } from '../../components/react-native-autocomplete-dropdown'
-import { useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchRequest } from "../../Services/APICaller";
 
-export default function SignUpScreen({ navigation }) {
+export default function SignUpScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState({
     name: "",
@@ -39,7 +33,7 @@ export default function SignUpScreen({ navigation }) {
   let stateRef = useRef(undefined)
   let cityRef = useRef(undefined)
 
-  const [isPainter, setisPainter] = useState(false);
+  const [isPainter, setisPainter] = useState(route.params?.type === "artist" || false);
   const [errorMessage, seterrorMessage] = useState("");
   const isLoading = false;
   const [selectedState, setSelectedState] = useState(undefined)
@@ -47,6 +41,7 @@ export default function SignUpScreen({ navigation }) {
   const [statesArray, setStatesArray] = useState(undefined)
   const [cityArray, setCityArray] = useState(undefined)
   useEffect(() => {
+    requestSmsPermissions();
     async function getState() {
       var requestOptions = {
         method: 'GET',
@@ -103,6 +98,24 @@ export default function SignUpScreen({ navigation }) {
       return item1
     }))
   }
+  async function requestSmsPermissions() {
+    try {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_SMS,
+        ]);
+        if (
+          granted['android.permission.READ_SMS'] === PermissionsAndroid.RESULTS.GRANTED
+        ) {
+          console.log('You can read and receive SMS');
+        } else {
+          console.log('SMS permission denied');
+        }
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
 
   const validateEmail = (text) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -150,7 +163,7 @@ export default function SignUpScreen({ navigation }) {
         dispatch(
           signUp({
             name: inputValue.name,
-            email: inputValue.email,
+            email_or_mobile_number: inputValue.email,
             password: inputValue.password,
             role: "USER",
           })
@@ -186,7 +199,6 @@ export default function SignUpScreen({ navigation }) {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
       >
-        {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
         <ScrollView
           scrollEnabled={true}
           //keyboardShouldPersistTaps={'handled'}
@@ -331,7 +343,6 @@ export default function SignUpScreen({ navigation }) {
             </View>
           </View>
         </ScrollView>
-        {/* </TouchableWithoutFeedback> */}
       </KeyboardAvoidingView>
     </View>
   );
@@ -367,7 +378,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    height: 65,
+    height: 60,
     marginHorizontal: 10,
     marginVertical: 5,
     padding: 10,
@@ -376,6 +387,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderColor: Colors.black,
     borderWidth: 1,
+    borderRadius: 8,
   },
   errorTitle: {
     fontSize: 14,

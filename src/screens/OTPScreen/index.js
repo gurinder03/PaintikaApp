@@ -8,45 +8,58 @@ import FontStyles from "../../constants/FontStyles";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { verifyOTP } from "../../redux/actions";
+import {
+  startOtpListener,
+  removeListener
+} from 'react-native-otp-verify';
+
 export default function OtpScreen({ navigation, route }) {
   const dispatch = useDispatch();
-  const { role } = route?.params || {};
-  const [input, setinput] = useState("");
-  const otp = useSelector((state) => state.saveDataReducer.otp);
+  const { role, isForgot } = route?.params || {};
+  const [input, setInput] = useState('');
   const savedEmail = useSelector((state) => state.saveDataReducer.savedEmail);
   const isLoading = useSelector((state) => state.saveDataReducer.isLoading);
-  // console.log("🚀 ~ file: index.js:15 ~ OtpScreen ~ savedEmail:", savedEmail);
-  // console.log("🚀 ~ file: index.js:12 ~ OtpScreen ~ otp:", otp);
   const userEmail = savedEmail;
+
   const handleChange = (e) => {
-    setinput(e);
+    setInput(e);
   };
 
-  const goverifyOtp = () => {
-    if (otp !== undefined && input !== otp) {
+  useEffect(() => {
+    startOtpListener(message => {
+      try {
+        const otpMatch = message.match(/(\d{6})/);
+          if (otpMatch && otpMatch[1]) {
+            const otp = otpMatch[1];
+            setInput(otp);
+            goverifyOtp(otp);
+          }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    return () => removeListener();
+  }, []);
+
+  const goverifyOtp = (otp) => {
+    if (!otp) {
       Toast.show({
         type: "error",
-        text1: `Please Enter Correct OTP ❌`,
+        text1: "OTP is not found ❌",
         topOffset: 60,
       });
-
-      console.log("INSIDE IF");
+      return;
     } else {
       dispatch(
         verifyOTP({
           role: role,
-          otp: input,
+          otp: otp,
           email: userEmail,
+          isForgot: isForgot,
         })
       );
     }
   };
-
-  useEffect(() => {
-    if (otp !== undefined) {
-      setinput(otp);
-    }
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -82,7 +95,7 @@ export default function OtpScreen({ navigation, route }) {
           }}
         >
           <Text style={styles.otpTitle}>
-            Enter Otp 4 Digit Code for verification.
+            Enter Otp 6 Digit Code for verification.
           </Text>
         </View>
         <View>
@@ -94,7 +107,7 @@ export default function OtpScreen({ navigation, route }) {
             placeholder="Enter OTP"
           />
           <ActivityIndicator size={"large"} animating={isLoading} />
-          <CustomButton title={"VERIFY"} onPress={() => goverifyOtp()} />
+          <CustomButton title={"VERIFY"} onPress={() => goverifyOtp(input)} />
         </View>
       </View>
     </View>
@@ -107,13 +120,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   input: {
-    height: 65,
+    height: 50,
     marginHorizontal: 10,
-    marginVertical: 5,
+    marginVertical: 10,
+    borderRadius: 8,
     padding: 10,
-    fontFamily: FontStyles.manRopeRegular,
+    paddingLeft: 15,
     backgroundColor: Colors.white,
     elevation: 5,
+    fontFamily: FontStyles.manRopeRegular,
+    borderWidth: 1,
   },
   otpTitle: {
     fontSize: 15,

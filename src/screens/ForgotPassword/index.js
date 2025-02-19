@@ -4,69 +4,47 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Image,
   Alert,
 } from 'react-native';
+import ToggleSwitch from "toggle-switch-react-native";
 import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import BackIcon from 'react-native-vector-icons/Ionicons';
-import RightIcon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../helpers/CustomButton';
-import Colors from '../../constants/Colors';
+import Colors from "../../constants/Colors";
 import FontStyles from '../../constants/FontStyles';
 import {forgotPassword} from '../../redux/actions';
 export default function ForgotPassword({navigation}) {
-  const userData = useSelector(state => state.saveDataReducer.signUpData);
   const dispatch = useDispatch();
   const [email, setemail] = useState('');
-  const [errorMessage, seterrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isPainter, setisPainter] = useState(false);
 
-  const validateEmail = text => {
-    // console.log('Text::::::', text);
+  const validateEmail = (text) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    let matchingResult = text.slice(0, 1);
-    if (
-      (matchingResult == '2' || matchingResult == '3' || matchingResult == '4',
-      matchingResult == '5' ||
-        matchingResult == '6' ||
-        matchingResult == '7' ||
-        matchingResult == '8' ||
-        matchingResult == '9' ||
-        matchingResult == '0' ||
-        matchingResult == '1')
-    ) {
-      // console.log('INSIDE IF');
-      setemail(text);
-      seterrorMessage('');
+    if (!isNaN(text) && text.length === 10) {
+      setErrorMessage('');
+      return true;
+    } else if (reg.test(text) === false) {
+      setErrorMessage('Not a valid email address or mobile number. Should be your@email.com or 1234567890');
+      return false;
     } else {
-      // console.log('INSIDE ELSE');
-      if (reg.test(text) === false) {
-        // console.log('WORKING FAILED');
-        setemail(text);
-        seterrorMessage('Not a valid email address. Should be your@email.com');
-        return false;
-      } else {
-        // console.log('WORKING PASSED');
-        setemail(text);
-        seterrorMessage('');
-      }
+      setErrorMessage('');
+      return true;
     }
   };
 
   const handleChange = () => {
-    // if (email !== '') {
-    //   dispatch(
-    //     forgotPassword({
-    //       OTP: '1234',
-    //       role: 'USER',
-    //       email_or_mobile_number: email,
-    //     }),
-    //   );
-    // } else {
-    //   Alert.alert('Must enter email.');
-    // }
-
-    navigation.navigate('Create');
+    if (validateEmail(email)) {
+      dispatch(
+        forgotPassword({
+          role: isPainter ? "ARTIST" : "USER",
+          email_or_mobile_number: email,
+        })
+      );
+    } else {
+      Alert.alert('Must enter a valid email or mobile number');
+    }
   };
   return (
     <View style={styles.container}>
@@ -82,7 +60,7 @@ export default function ForgotPassword({navigation}) {
             </Text>
           </TouchableOpacity>
         </TouchableOpacity>
-        <Text style={styles.headingTitle}>Forgot password</Text>
+        <Text style={styles.headingTitle}>Forgot Password</Text>
       </View>
       <View style={styles.inputContainer}>
         <Text
@@ -96,35 +74,39 @@ export default function ForgotPassword({navigation}) {
           Please, enter your email address or Phone. You will receive an OTP to
           create a new password.
         </Text>
+        <View
+          style={{
+            height: 45,
+            justifyContent: "center",
+            alignItems: "flex-end",
+            paddingHorizontal: 10,
+          }}
+        >
+          <ToggleSwitch
+            isOn={isPainter}
+            onColor={Colors.black}
+            offColor="#C8C8C8"
+            label="Are you Artist?"
+            labelStyle={{
+              color: `${Colors.black}`,
+              fontSize: 18,
+            }}
+            size="medium"
+            onToggle={(isOn) => setisPainter(isOn)}
+          />
+        </View>
         <TextInput
           style={[
-            styles.input,
-            {borderColor: errorMessage !== '' ? 'red' : 'transparent'},
+            styles.input
           ]}
-          onChangeText={e => validateEmail(e)}
+          onChangeText={setemail}
           value={email}
           placeholder="Email or Phone Number"
         />
-        <View
-          style={{
-            height: 30,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              fontSize: 13,
-              fontFamily: FontStyles.manRopeRegular,
-              color: `${Colors.alertRed}`,
-            }}>
-            {errorMessage}
-          </Text>
-        </View>
       </View>
       <View style={styles.buttonContainer}>
         <CustomButton title={'SEND'} onPress={handleChange} />
       </View>
-      <View style={styles.socialLogin}></View>
     </View>
   );
 }
@@ -146,55 +128,24 @@ const styles = StyleSheet.create({
     marginTop: 9,
   },
   inputContainer: {
-    height: '30%',
+    height: '40%',
     justifyContent: 'center',
   },
   buttonContainer: {
     height: '20%',
   },
-  socialLogin: {
-    height: '20%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   input: {
-    height: 65,
+    height: 50,
     marginHorizontal: 10,
-    marginVertical: 5,
+    marginVertical: 10,
+    borderRadius: 8,
     padding: 10,
+    paddingLeft: 15,
     backgroundColor: Colors.white,
-    elevation: 3,
-    borderRadius: 5,
-    borderWidth: 1,
+    elevation: 5,
     fontFamily: FontStyles.manRopeRegular,
-  },
-  socialLinks: {
-    height: '70%',
-    width: '60%',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  socialTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  iconContainer: {
-    height: 60,
-    width: 80,
-    backgroundColor: Colors.white,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  icon: {
-    width: 25,
-    height: 25,
-  },
-  googleIcon: {
-    width: 85,
-    height: 75,
+    borderWidth: 1,
+    borderColor: Colors.black,
   },
   backIcon: {
     height: 55,
@@ -206,11 +157,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingHorizontal: 15,
-    // flexDirection: 'row',
-  },
-  forgotPasswrdTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: Colors.black,
-  },
+
+  }
 });

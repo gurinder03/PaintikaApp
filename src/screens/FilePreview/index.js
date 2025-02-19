@@ -3,10 +3,11 @@ import {
   Text,
   Image,
   ScrollView,
-  Alert,
+  ActivityIndicator,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Modal
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import SelectDropdown from "react-native-select-dropdown";
@@ -52,9 +53,11 @@ export default function FilePreview({ navigation, route }) {
   });
   const [descriptionData, setDescriptionData] = useState("");
   const savedList = useSelector((state) => state.saveDataReducer.allCategories);
+  console.log("savedList", savedList);
   const [category, setCategory] = useState([]);
   const [role, setrole] = useState("");
   const userSavedData = useSelector((state) => state.saveDataReducer.userData);
+  const isLoading = useSelector((state) => state.saveDataReducer.isLoading);
 
   const [userId, setuserId] = useState("");
   const [authToken, setauthToken] = useState("");
@@ -204,6 +207,19 @@ export default function FilePreview({ navigation, route }) {
 
   return (
     <ScrollView>
+      <Modal
+        transparent={true}
+        animationType={'none'}
+        visible={isLoading}
+        onRequestClose={() => { }}>
+        <View style={styles.modalBackground}>
+          <View style={styles.activityIndicatorWrapper}>
+            <ActivityIndicator
+              size={"large"}
+              animating={isLoading} />
+          </View>
+        </View>
+      </Modal>
       <View style={styles.container}>
         <View style={{ alignItems: "center" }}>
           <Image
@@ -214,13 +230,6 @@ export default function FilePreview({ navigation, route }) {
         <View style={styles.inputSection}>
           {userSavedData && userSavedData.role == "ARTIST" ? (
             <View>
-              {/* <View>
-                <TextInput
-                  onChange={(e) => handleChange("name", e.nativeEvent.text)}
-                  placeholder="Name"
-                  style={styles.inputArea}
-                />
-              </View> */}
               <View style={{ marginTop: 15 }}>
                 <TextInput
                   onChange={(e) => handleChange("price", e.nativeEvent.text)}
@@ -255,6 +264,7 @@ export default function FilePreview({ navigation, route }) {
                   rowTextForSelection={(item, index) => {
                     return item.name;
                   }}
+                  selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
                 />
               </View>
 
@@ -276,6 +286,7 @@ export default function FilePreview({ navigation, route }) {
                   rowTextForSelection={(item, index) => {
                     return item.name;
                   }}
+                  selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
                 />
               </View>
 
@@ -289,6 +300,7 @@ export default function FilePreview({ navigation, route }) {
                   buttonStyle={whiteBackground}
                   renderDropdownIcon={_renderIconButton}
                   dropdownIconPosition="right"
+                  selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
                   // @ts-expect-error
                   buttonTextStyle={filterDrodwn}
                   buttonTextAfterSelection={(selectedItem, index) => {
@@ -309,6 +321,7 @@ export default function FilePreview({ navigation, route }) {
                   renderDropdownIcon={_renderIconButton}
                   dropdownIconPosition="right"
                   buttonTextStyle={filterDrodwn}
+                  selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name;
                   }}
@@ -336,6 +349,7 @@ export default function FilePreview({ navigation, route }) {
                   rowTextForSelection={(item, index) => {
                     return item.name;
                   }}
+                  selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
                 />
               </View>
               <View style={[styles.selected, { borderWidth: 0 }]}>
@@ -471,4 +485,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  modalBackground: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  activityIndicatorWrapper: {
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });

@@ -17,9 +17,17 @@ import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import { fetchRequest } from "../../../Services/APICaller";
+import SelectDropdown from "react-native-select-dropdown";
+import Icon from "react-native-vector-icons/AntDesign";
 
 export default function AddAddress({ route, navigation }) {
-
+  const whiteBackground = {
+    //backgroundColor: "#FFFFFF",
+    color: "#676767",
+    height: 40,
+    width: "100%",
+    borderRadius: 8,
+  };
   const addressType = [
     {
       name: "Home",
@@ -88,7 +96,7 @@ export default function AddAddress({ route, navigation }) {
       // error reading value
     }
   };
-  
+
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
@@ -150,6 +158,26 @@ export default function AddAddress({ route, navigation }) {
       };
       dispatch({ type: "ADD_ADDRESS", payload: postData });
     }
+  };
+
+  const onSelectedState = (ev) => {
+    setInfo({ ...Info, state: ev?.name });
+  };
+
+  const onSelectedAddress = (ev) => {
+    setInfo({ ...Info, addressType: ev?.name });
+  }
+
+  const _renderIconButton = () => {
+    return (
+      <TouchableOpacity activeOpacity={0.5}>
+        <Icon name="caretdown" color="#181C2E" size={12} />
+      </TouchableOpacity>
+    );
+  };
+  const filterDrodwn = {
+    fontSize: 14,
+    textAlign: "left",
   };
 
   return (
@@ -247,12 +275,30 @@ export default function AddAddress({ route, navigation }) {
             placeholder={"Enter your landmark"}
           />
         </View>
-        <CustomPicker
+        {/* <CustomPicker
           title={"State"}
           onChange={(e) => setInfo({ ...Info, state: e })}
           customValues={states}
           value={Info?.state}
-        />
+        /> */}
+        <View style={{ borderBottomWidth: 1, marginHorizontal: 5 }}>
+          <SelectDropdown
+            data={states}
+            onSelect={onSelectedState}
+            defaultButtonText={"Select State"}
+            buttonStyle={whiteBackground}
+            renderDropdownIcon={_renderIconButton}
+            dropdownIconPosition="right"
+            buttonTextStyle={filterDrodwn}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem.name;
+            }}
+            selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+            rowTextForSelection={(item, index) => {
+              return item.name;
+            }}
+          />
+        </View>
         <View style={styles.container}>
           <Text style={styles.placeHolder}>Alternate Mobile</Text>
           <TextInput
@@ -268,12 +314,30 @@ export default function AddAddress({ route, navigation }) {
             placeholder={"Alternate Phone (optional)"}
           />
         </View>
-        <CustomPicker
+        {/* <CustomPicker
           title={"Address Type"}
           onChange={(e) => setInfo({ ...Info, addressType: e })}
           customValues={addressType}
           value={Info?.addressType}
-        />
+        /> */}
+        <View style={{ borderBottomWidth: 1, marginHorizontal: 5 }}>
+          <SelectDropdown
+            data={addressType}
+            onSelect={onSelectedAddress}
+            defaultButtonText={"Address Type"}
+            buttonStyle={whiteBackground}
+            renderDropdownIcon={_renderIconButton}
+            dropdownIconPosition="right"
+            buttonTextStyle={filterDrodwn}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem.name;
+            }}
+            selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+            rowTextForSelection={(item, index) => {
+              return item.name;
+            }}
+          />
+        </View>
         <View style={{ height: heightPercentageToDP(2) }} />
         <CustomButton title={"Save Address"} onPress={() => saveAddress()} />
         <View style={{ height: heightPercentageToDP(2) }} />

@@ -38,7 +38,7 @@ export default function CustomDatePicker({ value, onChange, dateTime }) {
         open={open}
         date={date}
         mode={'date'}
-        maximumDate={new Date()}
+        maximumDate={new Date(new Date().setFullYear(new Date().getFullYear() - 10))}
         onConfirm={date1 => {
           setOpen(false);
           onChange(date1);

@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Paintika</string>
-    <string name="facebook_app_id">320674645067714</string>
-    <string name="facebook_client_token">56789</string> 
+    <!-- <string name="facebook_app_id">320674645067714</string>
+    <string name="facebook_client_token">56789</string>  -->
+    <string name="facebook_app_id">782086424038858</string>
+    <string name="fb_login_protocol_scheme">fb782086424038858</string>
+    <string name="facebook_client_token">dac25fec12b707c96746c686d9bc216d</string>
 </resources>

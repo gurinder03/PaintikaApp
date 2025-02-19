@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>556612457106-gobq9tfk53unq261vpos45quqc5prvia.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.556612457106-gobq9tfk53unq261vpos45quqc5prvia</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>556612457106-30vor28ggtipisum6cds2467t4vk3tqf.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCQFQpb6InrvUXj5NWj6HkzB4PQ3-068vU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>556612457106</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.techengineer.paintika</string>
+	<key>PROJECT_ID</key>
+	<string>paintika</string>
+	<key>STORAGE_BUCKET</key>
+	<string>paintika.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:556612457106:ios:8e821ca0a2201d2f4a8c4b</string>
+</dict>
+</plist>

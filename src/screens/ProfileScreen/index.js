@@ -39,13 +39,14 @@ export default function ProfileScreen({ navigation }) {
   const [userId, setuserId] = useState("");
   const [authToken, setauthToken] = useState(null);
   const userSavedData = useSelector((state) => state.saveDataReducer.userData);
-  // console.log('Profile Data', userSavedData);
+  const [isSocialLogin, setisSocialLogin] = useState(false);
+
   useEffect(() => {
     getData();
     getAuthToken();
     if (isFocused)
       getUserData();
-  }, [userId, authToken,isFocused]);
+  }, [userId, authToken, isFocused]);
 
   const logout = () => {
     Alert.alert("Log Out", "Are you really want to logout?", [
@@ -67,7 +68,10 @@ export default function ProfileScreen({ navigation }) {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
-      // console.log("🚀 ~ file: index.js:189 ~ getData ~ value:", value);
+      const isSocial = await AsyncStorage.getItem("isSocial")
+      if (isSocial === "true") {
+        setisSocialLogin(true)
+      }
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
@@ -118,46 +122,49 @@ export default function ProfileScreen({ navigation }) {
         </View>
       </View>
       <ScrollView style={styles.sectionTwo}>
-        <TouchableOpacity
-          style={{
-            width: wp(100),
-            height: hp(8),
-            justifyContent: "center",
-            backgroundColor: "#FFFFFF",
-            marginTop: hp(1),
-          }}
-          onPress={() => navigation.navigate("Create")}
-        >
-          <View
+        {
+          !isSocialLogin &&
+          <TouchableOpacity
             style={{
-              flexDirection: "row",
               width: wp(100),
-              height: hp(7),
-              alignItems: "center",
-              marginLeft: wp(3),
+              height: hp(8),
+              justifyContent: "center",
+              backgroundColor: "#FFFFFF",
+              marginTop: hp(1),
             }}
+            onPress={() => navigation.navigate("Create")}
           >
             <View
               style={{
-                width: wp(80),
                 flexDirection: "row",
-                justifyContent: "space-between",
+                width: wp(100),
+                height: hp(7),
+                alignItems: "center",
+                marginLeft: wp(3),
               }}
             >
               <View
                 style={{
+                  width: wp(80),
                   flexDirection: "row",
-                  justifyContent: "center",
-                  height: hp(4),
-                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <Icon1 name="lock" size={22} />
-                <Text style={styles.itemText}>Change Password</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    height: hp(4),
+                    alignItems: "center",
+                  }}
+                >
+                  <Icon1 name="lock" size={22} />
+                  <Text style={styles.itemText}>Change Password</Text>
+                </View>
               </View>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        }
         {userSavedData.length > 0 && (
           <>
             {options.map((item) => (
@@ -274,9 +281,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   userProfilePic: {
-    width: Platform.OS == "ios" ? wp(33) : wp(30),
-    height: hp(15),
-    borderRadius: 90,
+    width:  hp(16),
+    height: hp(16),
+    borderRadius: hp(8),
   },
   userName: {
     fontSize: 20,

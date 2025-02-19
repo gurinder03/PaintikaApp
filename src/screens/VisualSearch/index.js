@@ -141,15 +141,12 @@ export default function VisualSearch({ navigation }) {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        // setAvatar({ uri: response.uri });
         navigation.navigate("Preview", { path: response?.assets });
-        // here we can call a API to upload image on server
       }
     });
   };
   const selectImage = () => {
     ImagePicker.launchImageLibrary(options, (response) => {
-      // console.log("Response = ", response);
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.error) {
@@ -159,7 +156,6 @@ export default function VisualSearch({ navigation }) {
       } else {
         setAvatar({ uri: response.uri });
         navigation.navigate("Preview", { path: response?.assets });
-        // here we can call a API to upload image on server
       }
     });
   };

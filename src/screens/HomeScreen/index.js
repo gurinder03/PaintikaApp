@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }) {
         <View>
           <View>
             <View style={styles.homeMain}>
-              <TouchableOpacity style={styles.joinMain} onPress={() => { navigation.navigate("SignUp"); }}>
+              <TouchableOpacity style={styles.joinMain} onPress={() => { navigation.navigate("SignUp", { type: "artist" }); }}>
                 <Text style={styles.joinText}> Join as a Artist</Text>
               </TouchableOpacity>
             </View>
@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   inputSearch: {
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
+    height: 50
   },
   mainContainer: {
     marginTop: 25

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../../components/HeaderScreen";
 import {
   heightPercentageToDP as hp,
@@ -29,9 +29,11 @@ import { RadioButton } from "react-native-paper";
 import BackIcon from "react-native-vector-icons/Ionicons";
 import styles from "../HomeScreen/styles";
 import { Picker } from "@react-native-picker/picker";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchRequest } from "../../Services/APICaller";
+import SelectDropdown from "react-native-select-dropdown";
+import Icon from "react-native-vector-icons/AntDesign";
 
 
 export default function EditProfile({ navigation, route }) {
@@ -40,13 +42,20 @@ export default function EditProfile({ navigation, route }) {
   const { userData } = route.params || {};
   const [avatar, setAvatar] = useState(userData?.profile_image);
   const [stateOptions, setStateOptions] = useState([])
-
+  const dropdownRef = useRef(null);
   const dateObject = new Date(userData?.dob);
   const day = String(dateObject.getDate()).padStart(2, '0'); // Get the day and pad with leading zero if necessary
   const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Get the month (zero-based) and pad with leading zero if necessary
   const year = dateObject.getFullYear(); // Get the full year
   const formattedDate = `${month}-${day}-${year}`;
-
+  console.log('userData?.state', userData?.state)
+  const whiteBackground = {
+    backgroundColor: "#FFFFFF",
+    color: "#676767",
+    height: 40,
+    width: "100%",
+    borderRadius: 8,
+  };
 
   useEffect(() => {
     async function getState() {
@@ -74,6 +83,19 @@ export default function EditProfile({ navigation, route }) {
     getAuthToken();
 
   }, []);
+
+  useEffect(() => {
+    if (stateOptions.length > 0) {
+      const trimmedUserState = userData?.state?.trim().toLowerCase();
+      const index = stateOptions.findIndex(option => option?.name?.trim().toLowerCase() === trimmedUserState);
+      if (index !== -1) {
+        if (dropdownRef.current) {
+          dropdownRef.current.selectIndex(index);
+        }
+      }
+    }
+  }, [stateOptions]);
+  
 
   const getAuthToken = async () => {
     try {
@@ -169,10 +191,10 @@ export default function EditProfile({ navigation, route }) {
       name: Info.name,
       surname: Info.surname,
       dob: Info.dob,
-      address: Info.address,
+      address: Info.address ? Info.address : '',
       gender: Info.gender,
       qualifications: Info.qulification,
-      country: Info.country,
+      country: Info.country ? Info.country : '',
       state: Info.state,
       experience: Info.experience,
       additional_detail: Info?.additional_detail,
@@ -186,7 +208,19 @@ export default function EditProfile({ navigation, route }) {
   };
 
   const onSelected = (ev) => {
-    setInfo({ ...Info, state: ev });
+    setInfo({ ...Info, state: ev?.name });
+  };
+
+  const _renderIconButton = () => {
+    return (
+      <TouchableOpacity activeOpacity={0.5}>
+        <Icon name="caretdown" color="#181C2E" size={12} />
+      </TouchableOpacity>
+    );
+  };
+  const filterDrodwn = {
+    fontSize: 14,
+    textAlign: "left",
   };
 
   return (
@@ -205,7 +239,7 @@ export default function EditProfile({ navigation, route }) {
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <View
             style={{
-              width: wp(34),
+              width: hp(17),
               height: hp(17),
               borderRadius: hp(8.5),
               borderWidth: 2.5,
@@ -220,7 +254,7 @@ export default function EditProfile({ navigation, route }) {
                   : require("../../../assets/download.jpeg")
               }
               style={{
-                width: wp(30),
+                width: hp(15),
                 height: hp(15),
                 borderRadius: hp(7.5),
               }}
@@ -323,12 +357,28 @@ export default function EditProfile({ navigation, route }) {
           onChange={(e) => onHandleChnage(e, "country")}
         />
         <View style={{ borderBottomWidth: 1, marginHorizontal: 5 }}>
-          <Text style={styles.stateEdt}>State</Text>
-          <Picker selectedValue={Info?.state} onValueChange={onSelected}>
-            {stateOptions.map((option, index) => (
-              <Picker.Item key={index} label={option.name} value={option.name} />
-            ))}
-          </Picker>
+          <SelectDropdown
+            ref={dropdownRef}
+            data={stateOptions}
+            onSelect={onSelected}
+            defaultButtonText={"Select State"}
+            buttonStyle={whiteBackground}
+            renderDropdownIcon={_renderIconButton}
+            dropdownIconPosition="right"
+            buttonTextStyle={filterDrodwn}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem.name;
+            }}
+            selectedRowStyle={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+            dropdownStyle={{
+              backgroundColor: '#ffffff', // Background color of the dropdown
+              borderRadius: 5,
+              padding: 15,
+            }}
+            rowTextForSelection={(item, index) => {
+              return item.name;
+            }}
+          />
         </View>
         <TextInputComponent
           title={"Address"}
@@ -338,7 +388,7 @@ export default function EditProfile({ navigation, route }) {
         />
         <CustomDatePicker
           value={Info.dob}
-          dateTime={userData?.dob ? userData?.dob : new Date()}
+          dateTime={userData?.dob ? userData?.dob : new Date(new Date().setFullYear(new Date().getFullYear() - 10))}
           onChange={(e) => onHandleChnage(e, "dob")}
         />
         <CustomButton title={"SAVE"} onPress={saveData} />

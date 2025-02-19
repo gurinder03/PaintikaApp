@@ -153,16 +153,6 @@ export default function CartScreen({ navigation }) {
               >
                 {item.name}
               </Text>
-              {/* <Text
-                style={{
-                  fontSize: 14,
-                  fontFamily: FontStyles.manRopeRegular,
-                  color: Colors.black,
-                  marginLeft: 9,
-                }}
-              >
-                this is the description
-              </Text> */}
             </View>
             <View
               style={{

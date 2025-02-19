@@ -1,4 +1,4 @@
-import { View, Text, Image, Alert, StyleSheet, TextInput } from "react-native";
+import { View, Text, Image, Alert, StyleSheet, TextInput, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import TextInputComponent from "../../helpers/TextInput";
 import CustomButton from "../../helpers/CustomButton";
@@ -22,10 +22,17 @@ export default function LoginScreen({ navigation }) {
   const [isPainter, setisPainter] = useState(false);
 
   useEffect(() => {
-    GoogleSignin.configure();
+    //GoogleSignin.configure();
+    if (Platform.OS === 'android') {
+      GoogleSignin.configure();
+    }
   }, []);
 
-
+  const fetchProfile = async (accessToken) => {
+    const profileResponse = await fetch(`https://graph.facebook.com/me?fields=id,name,picture,email&access_token=${accessToken}`);
+    const profileData = await profileResponse.json();
+    return profileData;
+  };
   const handleFacebookLogin = async () => {
     try {
       // Attempt to login with Facebook
@@ -38,20 +45,19 @@ export default function LoginScreen({ navigation }) {
         if (!data) {
           console.error('Something went wrong obtaining the access token');
         } else {
-          console.log('Access Token:', data.accessToken);
-          // You can use the access token to authenticate with your server or perform other actions
-          // dispatch(
-          //   login({
-          //     isSocial: true,
-          //     authToken: resp.accessToken,
-          //     email_or_mobile_number: userInfo?.user?.email,
-          //     facebook_id: "",
-          //     google_id: userInfo?.user?.id,
-          //     name: userInfo?.user?.name,
-          //     profile_image: userInfo?.user?.photo,
-          //     role: "USER"
-          //   })
-          // );
+          let profile = await fetchProfile(data?.accessToken)
+          dispatch(
+            login({
+              isSocial: true,
+              authToken: data?.accessToken,
+              email_or_mobile_number: profile?.email,
+              facebook_id: profile?.id,
+              google_id: "",
+              name: profile?.name,
+              profile_image: profile?.picture?.data?.url,
+              role: "USER"
+            })
+          );
         }
       }
     } catch (error) {
@@ -234,23 +240,6 @@ export default function LoginScreen({ navigation }) {
                 source={require("../../../assets/facebook.png")}
                 style={styles.icon}
               />
-              {/* <LoginButton
-              onLoginFinished={
-                (error, result) => {
-                  if (error) {
-                    console.log("login has error: " + result.error);
-                  } else if (result.isCancelled) {
-                    console.log("login is cancelled.");
-                  } else {
-                    AccessToken.getCurrentAccessToken().then(
-                      (data) => {
-                        console.log(data.accessToken.toString())
-                      }
-                    )
-                  }
-                }
-              }
-              onLogoutFinished={() => console.log("logout.")} /> */}
             </TouchableOpacity>
             <TouchableOpacity onPress={signIn} style={styles.iconContainer}>
               <Image source={require("../../../assets/Google.png")} style={styles.googleIcon} />

@@ -17,6 +17,7 @@ import Address from "../screens/Address";
 import AddAddress from "../screens/Address/AddAddress";
 import OrderDetails from "../screens/OrderDetails";
 import ArtistOrderDetails from "../screens/artistOrderDetail";
+import ResetPassword from "../screens/ResetPassword";
 
 export default function AuthStack() {
   const Stack = createStackNavigator();
@@ -72,11 +73,11 @@ export default function AuthStack() {
       <Stack.Screen name="AddAddress" component={AddAddress} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
       <Stack.Screen name="ArtistOrderDetails" component={ArtistOrderDetails} />
-      {/* <Stack.Screen
-        name="Create"
-        component={CreatePassword}
+      <Stack.Screen
+        name="ResetPassword"
+        component={ResetPassword}
         options={{headerShown: false}}
-      /> */}
+      />
       <Stack.Screen
         name="Edit"
         component={EditProfile}

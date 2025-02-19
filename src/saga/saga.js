@@ -36,40 +36,22 @@ function* SignUp({ payload }) {
   const requestUrl = "/user/signup";
   try {
     const response = yield call(GetRecord, requestUrl, payload);
-    // console.log("🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:", response.data);
+    console.log("🚀 ~ file: saga.js:39 ~ function*signup ~ response:", response.data);
     if (response?.data !== null && response.data.statusCode == 200) {
       Toast.show({
         type: "success",
         text1: `${response?.data?.message}`,
         text2: "Please wait for OTP ✅",
-        topOffset: 60,
-        onHide: () => {
-          Toast.show({
-            type: "success",
-            text1: `${response?.data?.data?.OTP}`,
-            text2: `Enter otp to proceed Further 💬`,
-            visibilityTime: 9000,
-            topOffset: 60,
-          });
-        },
+        topOffset: 60
       });
       yield put({ type: "SAVE_OTP", payload: response?.data?.data?.OTP });
-      yield put({ type: "SAVE_SIGNUPDATA", payload: payload?.email });
-      yield NavigationService.navigate("Otp", { role: payload?.role });
+      yield put({ type: "SAVE_SIGNUPDATA", payload: payload?.email_or_mobile_number });
+      yield NavigationService.navigate("Otp", { isForgot: false, role: payload?.role });
     } else {
       Toast.show({
         type: "error",
         text1: `${response?.data?.message}`,
-        topOffset: 60,
-        onHide: () => {
-          Toast.show({
-            type: "success",
-            text1: `${response?.data?.data?.OTP}`,
-            text2: `Enter otp to proceed Further 💬`,
-            visibilityTime: 9000,
-            topOffset: 60,
-          });
-        },
+        topOffset: 60
       });
     }
   } catch (e) {
@@ -105,7 +87,6 @@ function* login({ payload }) {
     const response = yield call(GetRecord, requestUrl, postData);
     // console.log("🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:", response.data);
     if (response?.data !== null && response.data.statusCode == 200) {
-      // console.log("INSIDE IF");
       Toast.show({
         type: "success",
         text1: `${response?.data?.message}`,
@@ -117,13 +98,12 @@ function* login({ payload }) {
       yield put({ type: "ISLOGGED", payload: true });
       let token = JSON.stringify(response?.data?.data?.token);
       let userData = JSON.stringify(response?.data?.data?._id);
-      // console.log("🚀 ~ file: saga.js:126 ~ function*login ~ userData:", userData);
-      // console.log("🚀 ~ file: saga.js:125 ~ function*login ~ token:", token);
       yield AsyncStorage.setItem("authToken", token);
       yield AsyncStorage.setItem("userId", userData);
       yield AsyncStorage.setItem("role", payload?.role);
+      yield AsyncStorage.setItem("isSocial", payload?.isSocial?.toString());
       // yield NavigationService.navigate("Home");
-      yield NavigationService.navigate("Profile");
+      yield NavigationService.navigate("Home");
     } else {
       Toast.show({
         type: "error",
@@ -139,7 +119,7 @@ function* login({ payload }) {
 }
 
 function* verifyOtp({ payload }) {
-  // console.log("Working OTP ", payload);
+  console.log("Working OTP ", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     role: payload.role,
@@ -150,7 +130,7 @@ function* verifyOtp({ payload }) {
 
   try {
     const response = yield call(GetRecord, requestUrl, postData);
-    // console.log( "🚀 ~ file: saga.js:108 ~ function*verifyOtp ~ response:", response.data);
+    console.log("🚀 ~ file: saga.js:108 ~ function*verifyOtp ~ response:", response.data);
     if (response?.data !== null && response?.data?.statusCode == 200) {
       yield put({ type: "SHOW_LOADING", payload: false });
       Toast.show({
@@ -158,7 +138,11 @@ function* verifyOtp({ payload }) {
         text1: `${response?.data?.message}`,
         topOffset: 60,
       });
-      yield NavigationService.navigate("Login");
+      if(payload?.isForgot){
+        yield NavigationService.navigate("ResetPassword",{ OTP: payload.otp, role: payload?.role });
+      }else{
+        yield NavigationService.navigate("Login");
+      }
     } else {
       Toast.show({
         type: "error",
@@ -177,16 +161,14 @@ function* forgotPassword({ payload }) {
   // console.log("Forgot password Working ", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
-    OTP: payload.OTP,
     role: payload.role,
-    password: "1234567",
     email_or_mobile_number: payload.email_or_mobile_number,
   };
   const requestUrl = "/user/forgot/password";
 
   try {
     const response = yield call(GetRecord, requestUrl, postData);
-    // console.log("🚀 ~ file: saga.js:155 ~ function*forgotPassword ~ response:", response.data);
+    console.log("🚀 ~ file: saga.js:170 ~ function*forgotPassword ~ response:", response.data);
     if (response?.data !== null && response?.data?.statusCode == 200) {
       yield put({ type: "SHOW_LOADING", payload: false });
       Toast.show({
@@ -194,11 +176,15 @@ function* forgotPassword({ payload }) {
         text1: `${response?.data?.message}`,
         topOffset: 60,
       });
-      yield NavigationService.navigate("Otp");
+      yield put({ type: "SAVE_SIGNUPDATA", payload: payload?.email_or_mobile_number });
+      yield NavigationService.navigate("Otp", {
+        isForgot: true,
+        role: payload.role,
+      });
     } else {
       Toast.show({
         type: "error",
-        text1: `${response?.data?.message}`,
+        text1: `Account not found ❌ `,
         topOffset: 60,
       });
       yield put({ type: "SHOW_LOADING", payload: false });
@@ -230,7 +216,7 @@ function* getCategories({ payload }) {
     }
     yield put({ type: "SHOW_LOADING", payload: false });
   } catch (e) {
-    console.log("Error in get category OTP::::", e);
+    console.log("Error in get category ::::", e);
     yield put({ type: "SHOW_LOADING", payload: false });
   }
 }
@@ -304,7 +290,6 @@ function* getDetails({ payload }) {
 }
 
 function* addProductToCart({ payload }) {
-  console.log("ADD TO CART PAYLOAD::::", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/cart/add`;
   // console.log("BEFORE FETHING URL CART", requestUrl);
@@ -321,14 +306,11 @@ function* addProductToCart({ payload }) {
   };
 
   try {
-    // console.log("BEFORE FETCH ADD TO CART:::::::",  `${BASE_URL + requestUrl}`, postData);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
       config
     );
-    // console.log("🚀 ~ file: saga.js:299 ~ function*addProductToCart ~ response:", response?.data );
-
     if (response?.data?.message.includes("Add successfully")) {
       yield put({
         type: "GET_PRODUCTS",
@@ -336,7 +318,7 @@ function* addProductToCart({ payload }) {
       });
       Toast.show({
         type: "success",
-        text1: `${response?.data?.message}`,
+        text1: payload?.quantity == 1 ? `${response?.data?.message}` : `Removed succussfully`,
         topOffset: 60,
       });
 
@@ -571,6 +553,7 @@ function* logout({ payload }) {
       yield AsyncStorage.removeItem("authToken");
       yield AsyncStorage.removeItem("userId");
       yield AsyncStorage.removeItem("role");
+      yield AsyncStorage.removeItem("isSocial");
     }
   } catch (e) {
     console.log("ERROR IN LOGOUT", e);
@@ -629,6 +612,7 @@ function* addPreOrder({ payload }) {
       headers: myHeaders,
       redirect: 'follow',
     };
+    console.log("requestOptions", selectedPayload);
     yield fetch(`${BASE_URL}${requestUrl}`, requestOptions).then(response => response.text())
       .then(result => {
         let response = JSON.parse(result)
@@ -657,7 +641,6 @@ function* addPreOrder({ payload }) {
 
 function* changePassword({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
-  console.log("working changePassword>>>>>>", payload);
   let config = {
     headers: {
       token: `Bearer ${payload?.token}`,
@@ -670,15 +653,12 @@ function* changePassword({ payload }) {
     confirm_password: payload?.confirm_password,
   };
   const requestUrl = "/user/change/password";
-
   try {
-    console.log("GET VORK>>>>>>>>", `${BASE_URL + requestUrl}`, postData, config);
     const response = yield axios.post(
       `${BASE_URL + requestUrl}`,
       postData,
       config
     );
-    // console.log("🚀 ~ file: saga.js:676 ~ function*changePassword ~ response:", response?.data);
     if (response?.data !== null) {
       Toast.show({
         type: "success",
@@ -827,6 +807,43 @@ function* updateProfile({ payload }) {
   }
 }
 
+function* resetPassword({ payload }) {
+  console.log("resetPassword check payload ", payload);
+  yield put({ type: "SHOW_LOADING", payload: true });
+  const postData = {
+    role: payload.role,
+    email_or_mobile_number: payload.email_or_mobile_number,
+    password: payload.password, 
+    confirmPassword: payload.confirmPassword,
+    OTP: payload.OTP,
+  };
+  const requestUrl = "/user/reset/password";
+  try {
+    const response = yield call(GetRecord, requestUrl, postData);
+    console.log("🚀 ~ file: saga.js:170 ~ function*resetPassword ~ response:", response.data);
+    if (response?.data !== null && response?.data?.statusCode == 200) {
+      yield put({ type: "SHOW_LOADING", payload: false });
+      Toast.show({
+        type: "success",
+        text1: `Pasword reset successfully ✅ `,
+        topOffset: 60,
+      });
+      yield NavigationService.navigate("Login");
+    } else {
+      Toast.show({
+        type: "error",
+        text1: `Pasword reset failed ❌ `,
+        topOffset: 60,
+      });
+      yield put({ type: "SHOW_LOADING", payload: false });
+    }
+    yield put({ type: "SHOW_LOADING", payload: false });
+  } catch (e) {
+    console.log("Error in forgot password", e);
+    yield put({ type: "SHOW_LOADING", payload: false });
+  }
+}
+
 function* mySaga() {
   yield takeLatest("SIGN_UP_REQUESTED", SignUp);
   yield takeLatest("LOGIN", login);
@@ -849,6 +866,7 @@ function* mySaga() {
   yield takeLatest("REMOVE_ADDRESS", removeAddress);
   yield takeLatest("GET_USER", getUser);
   yield takeLatest("UPDATE_ADDRESS", updateProfile);
+  yield takeLatest("RESET_PASSWORD", resetPassword);
 
 }
 

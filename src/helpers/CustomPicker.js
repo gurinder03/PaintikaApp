@@ -16,28 +16,16 @@ export default function CustomPicker({ onChange, value, title, customValues }) {
       >
         {title}
       </Text>
-      <View
-        style={{
-          height: 65,
-          width: "100%",
-          borderBottomColor: Colors.black,
-          borderBottomWidth: 1,
-        }}
-      >
+      <View style={styles.pickerContainer}>
         <Picker
           selectedValue={value}
           onValueChange={(e) => onChange(e, title)}
-          style={{
-            height: 45,
-            width: "100%",
-            borderBottomWidth: 1,
-            borderBottomColor: Colors.black,
-          }}
+          style={styles.picker}
           mode={Platform.OS === 'ios' ? 'modal' : 'dialog'}
         >
           {customValues ? (
             customValues.map((Item) => {
-              return <Picker.Item label={Item.name} value={Item.name} />;
+              return <Picker.Item label={Item.name} value={Item.name} key={Item.name} />;
             })
           ) : (
             <>
@@ -52,9 +40,15 @@ export default function CustomPicker({ onChange, value, title, customValues }) {
 }
 const styles = StyleSheet.create({
   container: {
-    height: 100,
     justifyContent: "center",
     padding: 5,
     paddingHorizontal: 10,
   },
+  pickerContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.black,
+  },
+  picker: {
+    width: "100%",
+  }
 });

@@ -75,7 +75,7 @@ const ProductDetail = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ padding: 10 }}>
+      <View style={{ marginVertical: 10 }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <BackIcon name={"chevron-back"} size={32} color={Colors.black} />
         </TouchableOpacity>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
-    marginHorizontal: 15
+    paddingHorizontal: 15
   },
   containerSlide: {
     backgroundColor: "#ffffff",

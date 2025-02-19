@@ -1,42 +1,64 @@
+import React, { useEffect, useRef } from "react";
 import {
     View,
     Text,
     StyleSheet,
     Image,
     TouchableOpacity,
-    Platform,
+    Animated,
+    Platform
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
 
 const Slide = ({ data, nav }) => {
+    const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
-    const handlePress = (data) => {
-        nav.navigate("Category", { item: data })
+    useEffect(() => {
+        const animation = Animated.loop(
+            Animated.sequence([
+                Animated.timing(fadeAnim, {
+                    toValue: 1,
+                    duration: 1000,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(fadeAnim, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: true,
+                }),
+            ])
+        );
+        animation.start();
+
+        return () => animation.stop(); // Clean up animation on unmount
+    }, [fadeAnim]);
+
+    const handlePress = () => {
+        nav.navigate("Category", { item: data });
     };
 
     return (
         <View style={styles.containerSlide}>
-            <TouchableOpacity style={styles.touchImg} onPress={() => handlePress(data)}>
+            <TouchableOpacity style={styles.touchImg} onPress={handlePress}>
                 <Image style={styles.mainImg} source={{ uri: data?.image }} />
+                <Animated.View style={[styles.nameText, { opacity: fadeAnim }]}>
+                    <Text style={styles.slideMain}>{data?.name}</Text>
+                </Animated.View>
             </TouchableOpacity>
-            <View style={styles.nameText}>
-                <Text style={styles.slideMain}>{data?.name}</Text>
-            </View>
         </View>
     );
 }
 
-export default Slide
+export default Slide;
 
 const styles = StyleSheet.create({
     containerSlide: {
         flex: 1,
         backgroundColor: "#ffffff",
-        borderWidth:1,
-        borderColor:'#E1E1E1',
-        marginHorizontal:10,
-        borderRadius:15,
-        marginBottom:15,
+        borderWidth: 1,
+        borderColor: '#E1E1E1',
+        marginHorizontal: 10,
+        borderRadius: 15,
+        marginBottom: 15,
         overflow: Platform.OS === "android" ? "hidden" : "visible",
         ...Platform.select({
             ios: {
@@ -50,15 +72,15 @@ const styles = StyleSheet.create({
             },
         }),
     },
-    nameText:{
-        position:'absolute',
-        top:120,
-        bottom:0,
-        right:0,
-        left:0,
-        alignItems:'center',
-        justifyContent:'flex-start'
-
+    nameText: {
+        position: 'absolute',
+        top: '50%',
+        left: '37%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        borderRadius: 10,
+        padding: 5,
     },
     mainImg: {
         width: "93%",
@@ -67,14 +89,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 10,
     },
-    touchImg:{
-        alignItems:'center'
+    touchImg: {
+        alignItems: 'center'
     },
-    slideMain:{ 
-        fontSize: 18, 
-        color: '#FFFFFF', 
-        marginHorizontal:18, 
-        // textAlign:'center',
-        marginBottom:10
+    slideMain: {
+        fontSize: 18,
+        color: '#FFFFFF',
+        textAlign: 'center',
     }
-})
+});
