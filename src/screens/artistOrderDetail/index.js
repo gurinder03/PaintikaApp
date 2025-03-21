@@ -42,7 +42,7 @@ export default function ArtistOrderDetails({ navigation, route }) {
                     <View style={{ width: "100%", top: 20, paddingHorizontal: 15 }}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Order Number :</Text>
-                            <Text style={{ fontWeight: "500", color: "grey" }}> {details.order_number} </Text>
+                            {/* <Text style={{ fontWeight: "500", color: "grey" }}> {details.order_number} </Text> */}
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>CreatedAt :</Text>

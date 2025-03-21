@@ -5,6 +5,7 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
+  TouchableOpacity
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import LottieView from "lottie-react-native";
@@ -13,8 +14,9 @@ import FontStyles from "../../constants/FontStyles";
 import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../../helpers/CustomButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BackIcon from 'react-native-vector-icons/Ionicons';
 
-export default function CreatePassword() {
+export default function CreatePassword({navigation}) {
   const dispatch = useDispatch();
   const [intialPassword, setintialPassword] = useState("");
   const [newPassword, setnewPassword] = useState("");
@@ -77,6 +79,15 @@ export default function CreatePassword() {
   };
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text>
+              <BackIcon
+                name="chevron-back-outline"
+                size={30}
+                color={Colors.black}
+              />
+            </Text>
+          </TouchableOpacity>
       <View
         style={{
           height: "35%",

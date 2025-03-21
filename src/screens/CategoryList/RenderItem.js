@@ -24,7 +24,7 @@ const RenderItem = ({ data, nav, userType }) => {
     return (
         <View>
             <View style={styles.containerSlide}>
-                <TouchableOpacity disabled={userType !== "ARTIST"} style={{ alignItems: 'center' }} onPress={() => handleDetail(data)} >
+                <TouchableOpacity disabled={userType !== "USER"} style={{ alignItems: 'center' }} onPress={() => handleDetail(data)} >
                     <Image source={{ uri: data?.image?.[0] }} resizeMode="contain" style={styles.imgMain} />
                 </TouchableOpacity>
                 <View style={styles.mailCate}>

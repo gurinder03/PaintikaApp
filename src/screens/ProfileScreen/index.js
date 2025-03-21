@@ -95,6 +95,7 @@ export default function ProfileScreen({ navigation }) {
       const payload = {
         token: authToken,
         userId: userId,
+        role: userSavedData?.role
       };
       dispatch({ type: "GET_USER", payload: payload });
     }

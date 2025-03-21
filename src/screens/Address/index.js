@@ -48,7 +48,7 @@ export default function Address({ navigation, route }) {
           user_id: userId,
           page: 1,
           limit: 10,
-          token: authToken,
+          Authorization: authToken,
         },
       });
     }
@@ -80,7 +80,7 @@ export default function Address({ navigation, route }) {
 
   const addOrder = async (checkoutData, paymentId) => {
     var myHeaders = new Headers()
-    myHeaders.append('token', `${'Bearer ' + authToken}`)
+    myHeaders.append('Authorization', `${'Bearer ' + authToken}`)
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
       "address_id": selectedAddress,//address selected
@@ -125,7 +125,7 @@ export default function Address({ navigation, route }) {
       Alert.alert("Please Select Address First.");
     } else {
       var myHeaders = new Headers()
-      myHeaders.append('token', `${'Bearer ' + authToken}`)
+      myHeaders.append('Authorization', `${'Bearer ' + authToken}`)
       myHeaders.append("Content-Type", "application/json");
       var raw = JSON.stringify({
         "items": details?.carts.map(cart => cart._id),//_id from cart Array
@@ -202,7 +202,7 @@ export default function Address({ navigation, route }) {
   const removeAddress = (id) => {
     if (userId !== "") {
       const payload = {
-        token: authToken,
+        Authorization: authToken,
         userId: userId,
         tableId: id,
       };
@@ -216,7 +216,7 @@ export default function Address({ navigation, route }) {
             user_id: userId,
             page: 1,
             limit: 10,
-            token: authToken,
+            Authorization: authToken,
           },
         });
       }, 1000);
@@ -395,7 +395,7 @@ export default function Address({ navigation, route }) {
                   }}
                   onPress={() =>
                     navigation.navigate("AddAddress", {
-                      token: authToken,
+                      Authorization: authToken,
                       userId: userId,
                     })
                   }

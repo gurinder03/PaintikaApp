@@ -208,9 +208,9 @@ export default function CategoryList({ navigation, route }) {
         <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={() => navigation.goBack()}>
           <BackIcon name={"chevron-back"} size={30} />
         </TouchableOpacity>
-        <TouchableOpacity style={{ marginRight: 15 }} onPress={() => setIsFilter(prev => !prev)}>
+        {/* <TouchableOpacity style={{ marginRight: 15 }} onPress={() => setIsFilter(prev => !prev)}>
           <BackIcon name={"filter"} size={30} color={isFilter ? 'black' : 'lightgrey'} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <FlatList
         style={{ flexGrow: 1 }}

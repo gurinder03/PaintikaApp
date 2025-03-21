@@ -44,7 +44,7 @@ const Item = ({ item, onPress }) => (
           >
             <Image
               resizeMode="contain"
-              source={{ uri: item.items[0].image }}
+              source={{ uri: item.items[0].image[0] }}
               style={{ width: "100%", height: "100%", borderRadius: 5, resizeMode: 'contain' }}
             />
           </View>
@@ -120,12 +120,12 @@ export default function OrderList({ navigation }) {
         if (userSavedData && userSavedData.role !== "ARTIST") {
           dispatch({
             type: "GET_ORDERS",
-            payload: { userId: userId, token: authToken, limit: 100, page: 1, role: userSavedData.role },
+            payload: { userId: userId, Authorization: authToken, limit: 100, page: 1, role: userSavedData.role },
           });
         } else {
           dispatch({
             type: "GET_ORDERS",
-            payload: { userId: userId, token: authToken, limit: 100, page: 1, role: userSavedData.role },
+            payload: { userId: userId, Authorization: authToken, limit: 100, page: 1, role: userSavedData.role },
           });
         }
       }

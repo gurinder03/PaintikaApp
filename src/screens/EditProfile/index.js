@@ -40,6 +40,7 @@ export default function EditProfile({ navigation, route }) {
   const dispatch = useDispatch();
   const [authToken, setauthToken] = useState(null);
   const { userData } = route.params || {};
+  console.log('test',userData);
   const [avatar, setAvatar] = useState(userData?.profile_image);
   const [stateOptions, setStateOptions] = useState([])
   const dropdownRef = useRef(null);

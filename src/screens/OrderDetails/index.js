@@ -41,7 +41,7 @@ export default function OrderDetails({ navigation, route }) {
                     </View>
                     <View style={{ width: "100%", top: 20, paddingHorizontal: 15 }}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
-                            <Text style={{ fontWeight: "bold", color: "grey" }}>Order Number :</Text>
+                            {/* <Text style={{ fontWeight: "bold", color: "grey" }}>Order Number :</Text> */}
                             <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].order_number} </Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>

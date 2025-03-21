@@ -16,6 +16,7 @@ const ProductDetail = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { id, creatorId } = route.params || {};
   const detailsData = useSelector((state) => state.saveDataReducer.detailsData);
+ console.log(detailsData);
   const [userId, setuserId] = useState("");
   const [data, setData] = useState("");
   const [authToken, setauthToken] = useState(null);
@@ -32,6 +33,8 @@ const ProductDetail = ({ navigation, route }) => {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("userId");
+      console.log(value);
+      console.log("value");
       if (value !== null) {
         setuserId(JSON.parse(value));
       }
@@ -64,6 +67,8 @@ const ProductDetail = ({ navigation, route }) => {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
+      console.log(JSON.parse(jsonValue));
+      console.log("Json auth");
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }
@@ -72,6 +77,7 @@ const ProductDetail = ({ navigation, route }) => {
     }
   };
 
+ 
 
   return (
     <View style={styles.container}>
@@ -82,7 +88,7 @@ const ProductDetail = ({ navigation, route }) => {
       </View>
       <View style={styles.containerSlide}>
         <View style={{ alignItems: 'center' }}>
-          <Image source={{ uri: detailsData?.data?.image }} style={styles.mainImg} />
+          <Image source={{ uri: detailsData?.data?.image[0] }} style={styles.mainImg} />
         </View>
         <View style={styles.priceMain}>
           <Text style={styles.nameText}>

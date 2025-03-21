@@ -43,13 +43,13 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         <View>
-          <View>
+          {/* <View>
             <View style={styles.homeMain}>
               <TouchableOpacity style={styles.joinMain} onPress={() => { navigation.navigate("SignUp", { type: "artist" }); }}>
                 <Text style={styles.joinText}> Join as a Artist</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
           <View style={styles.mainContainer}>
             {filteredData && filteredData.length ? (
               <FlatList

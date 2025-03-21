@@ -4,21 +4,40 @@ import Toast from "react-native-toast-message";
 import * as NavigationService from "../navigation/NavigationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
+import { fetchRequest } from "../Services/APICaller";
 
 //fetching functions
 const BASE_URL = `https://api.paintikaart.com/api/v1`;
 const GetRecord = (url, data) => {
-  // console.log(data, " >>>> data", BASE_URL + url);
+   console.log(data, " >>>> data", BASE_URL + url);
   return axios({
     method: "POST",
     crossDomain: true,
     dataType: "json",
     contentType: "application/json; charset=utf-8",
     data,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json; charset=utf-8',
+    },
     url: BASE_URL + url,
+  
   });
 };
 
+const GetRecordNoAuth = (url, data) => {
+  console.log(data, " >>>> data", BASE_URL + url);
+ return axios({
+   method: "POST",
+   crossDomain: true,
+   dataType: "json",
+   contentType: "application/json; charset=utf-8",
+   data,
+ 
+   url: BASE_URL + url,
+ 
+ });
+};
 const GetRecord1 = (url, data) => {
   // console.log(data, " >>>> data", url);
   return axios({
@@ -35,7 +54,7 @@ function* SignUp({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = "/user/signup";
   try {
-    const response = yield call(GetRecord, requestUrl, payload);
+    const response = yield call(GetRecordNoAuth, requestUrl, payload);
     console.log("🚀 ~ file: saga.js:39 ~ function*signup ~ response:", response.data);
     if (response?.data !== null && response.data.statusCode == 200) {
       Toast.show({
@@ -84,7 +103,7 @@ function* login({ payload }) {
   }
   const requestUrl = payload.isSocial ? "/user/social/login" : "/user/login";
   try {
-    const response = yield call(GetRecord, requestUrl, postData);
+    const response = yield call(GetRecordNoAuth, requestUrl, postData);
     // console.log("🚀 ~ file: saga.js:30 ~ function*SignUp ~ response:", response.data);
     if (response?.data !== null && response.data.statusCode == 200) {
       Toast.show({
@@ -96,6 +115,7 @@ function* login({ payload }) {
       yield put({ type: "SAVE_TOKEN", payload: response?.data?.data?.token });
       yield put({ type: "SAVE_USERID", payload: response?.data?.data?._id });
       yield put({ type: "ISLOGGED", payload: true });
+      yield put({ type: "SET_USER", payload: response?.data?.data });
       let token = JSON.stringify(response?.data?.data?.token);
       let userData = JSON.stringify(response?.data?.data?._id);
       yield AsyncStorage.setItem("authToken", token);
@@ -197,7 +217,7 @@ function* forgotPassword({ payload }) {
 }
 
 function* getCategories({ payload }) {
-  // console.log("Working categories", payload);
+   console.log("Working categories", payload);
   yield put({ type: "SHOW_LOADING", payload: true });
   const postData = {
     page: payload?.page,
@@ -230,11 +250,12 @@ function* getAllCategories({ payload }) {
   };
   const requestUrl = "/category/list";
 
+  console.log(payload?.token);
 
   try {
     let config = {
       headers: {
-        token: `Bearer ${payload?.token}`,
+        Authorization: `Bearer ${payload?.token}`,
       },
     };
     const response = yield axios.post(`${BASE_URL + requestUrl}`, postData, config);
@@ -289,13 +310,14 @@ function* getDetails({ payload }) {
   }
 }
 
+
 function* addProductToCart({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   const requestUrl = `/cart/add`;
   // console.log("BEFORE FETHING URL CART", requestUrl);
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   const postData = {
@@ -314,7 +336,7 @@ function* addProductToCart({ payload }) {
     if (response?.data?.message.includes("Add successfully")) {
       yield put({
         type: "GET_PRODUCTS",
-        payload: { userId: payload?.user_id, token: payload?.token },
+        payload: { userId: payload?.user_id, Authorization: payload?.token },
       });
       Toast.show({
         type: "success",
@@ -340,7 +362,7 @@ function* getProducts({ payload }) {
   const requestUrl = `/cart/list`;
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   const postData = {
@@ -369,7 +391,7 @@ function* getOrders({ payload }) {
   let requestUrl = ""
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   if (payload.role != "ARTIST") {
@@ -410,7 +432,7 @@ function* removeProducts({ payload }) {
   const requestUrl = `/cart/remove`;
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   const postData = {
@@ -427,7 +449,7 @@ function* removeProducts({ payload }) {
     if (response?.data) {
       yield put({
         type: "GET_PRODUCTS",
-        payload: { userId: payload?.userId, token: payload?.token },
+        payload: { userId: payload?.userId, Authorization: payload?.token },
       });
     }
 
@@ -442,7 +464,7 @@ function* getAddress({ payload }) {
   const requestUrl = `/address/list`;
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   const postData = {
@@ -493,7 +515,7 @@ function* addAddressfun({ payload }) {
   const requestUrl = `/address/add`;
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
 
@@ -541,7 +563,7 @@ function* logout({ payload }) {
   const requestUrl = "/user/logout";
 
   try {
-    const response = yield call(GetRecord, requestUrl, postData);
+    const response = yield call(GetRecordNoAuth, requestUrl, postData);
     // console.log("🚀 ~ file: saga.js:583 ~ function*logout ~ response:", response?.data );
     if (response?.data !== null) {
       Toast.show({
@@ -603,7 +625,7 @@ function* addPreOrder({ payload }) {
   }
   try {
     var myHeaders = new Headers()
-    myHeaders.append('token', `${'Bearer ' + payload?.token}`)
+    myHeaders.append('Authorization', `${'Bearer ' + payload?.token}`)
     myHeaders.append('Content-Type', 'multipart/form-data')
     myHeaders.append('Accept', 'application/json')
     var requestOptions = {
@@ -643,7 +665,7 @@ function* changePassword({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   const postData = {
@@ -686,7 +708,7 @@ function* removeAddress({ payload }) {
   // console.log("working removeAddress>>>>>>", payload);
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   const postData = {
@@ -724,10 +746,11 @@ function* getUser({ payload }) {
   yield put({ type: "SHOW_LOADING", payload: true });
   let config = {
     headers: {
-      token: `Bearer ${payload?.token}`,
+      Authorization: `Bearer ${payload?.token}`,
     },
   };
   const requestUrl = "/user/view/";
+  console.log('user is here', `${BASE_URL + requestUrl + `${payload?.userId}`}`)
   try {
     const response = yield axios.get(
       `${BASE_URL + requestUrl + `${payload?.userId}`}`,
@@ -772,7 +795,7 @@ function* updateProfile({ payload }) {
   selectedPayload.append("experience", payload.experience);
   try {
     var myHeaders = new Headers()
-    myHeaders.append('token', `${'Bearer ' + payload?.token}`)
+    myHeaders.append('Authorization', `${'Bearer ' + payload?.token}`)
     myHeaders.append('Content-Type', 'multipart/form-data')
     myHeaders.append('Accept', 'application/json')
     var requestOptions = {

@@ -117,7 +117,7 @@ export default function CartScreen({ navigation }) {
             }}
           >
             <Image
-              source={{ uri: item?.image }}
+              source={{ uri: item?.image[0] }}
               style={{ width: "100%", height: "100%" }}
             />
           </View>
