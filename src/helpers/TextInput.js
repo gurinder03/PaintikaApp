@@ -9,6 +9,7 @@ export default function TextInputComponent({
   placeHolder,
   title,
   type,
+  maxlength
 }) {
   return (
     <View style={styles.container}>
@@ -19,6 +20,7 @@ export default function TextInputComponent({
         value={value}
         placeholder={placeHolder}
         keyboardType={type == "number" ? "numeric" : "default"}
+        maxLength={maxlength}
       />
     </View>
   );

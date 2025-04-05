@@ -16,6 +16,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import * as ImagePicker from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker'
 
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions'
 import appConfig from '../../../app.json'
@@ -103,7 +104,8 @@ export default function VisualSearch({ navigation }) {
       case RESULTS.GRANTED:
         console.log('GRANTED', 'The permission is granted')
         if (type == 'Gallery') {
-          selectImage()
+         // selectImage()
+         pickMultipleImages()
         } else {
           captureImage()
         }
@@ -145,20 +147,47 @@ export default function VisualSearch({ navigation }) {
       }
     });
   };
-  const selectImage = () => {
-    ImagePicker.launchImageLibrary(options, (response) => {
+
+  const pickMultipleImages = () => {
+    const options = {
+      mediaType: 'photo', // Only allow photos
+      quality: 1,         // Max quality for images
+      selectionLimit: 3,  // 0 means unlimited selection (you can set a specific number here)
+      includeBase64: false,  // Optional: Include base64 encoded images
+    };
+  
+    launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
+      } else if (response.errorCode) {
+        console.log("ImagePicker Error: ", response.errorMessage);
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        setAvatar({ uri: response.uri });
-        navigation.navigate("Preview", { path: response?.assets });
+        const selectedImages = response?.assets;
+        if (selectedImages && selectedImages.length > 0) {
+          console.log("Selected images: ", selectedImages);
+          navigation.navigate("Preview", { path: selectedImages });
+        } else {
+          console.log("No images selected");
+        }
       }
     });
   };
+  // const selectImage = () => {
+  //   ImagePicker.launchImageLibrary(options, (response) => {
+  //     if (response.didCancel) {
+  //       console.log("User cancelled image picker");
+  //     } else if (response.error) {
+  //       console.log("ImagePicker Error: ", response.error);
+  //     } else if (response.customButton) {
+  //       console.log("User tapped custom button: ", response.customButton);
+  //     } else {
+  //       setAvatar({ uri: response.uri });
+  //       navigation.navigate("Preview", { path: response?.assets });
+  //     }
+  //   });
+  // };
   return (
     <View style={styles.container}>
       <LottieView

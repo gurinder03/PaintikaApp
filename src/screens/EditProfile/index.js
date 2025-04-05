@@ -202,7 +202,7 @@ export default function EditProfile({ navigation, route }) {
       id: userData._id,
       job_type: Info.job_type,
       image: avatar,
-      token: authToken,
+      Authorization: authToken,
       imagePath: avatar
     };
     dispatch({ type: "UPDATE_ADDRESS", payload: payloadData });

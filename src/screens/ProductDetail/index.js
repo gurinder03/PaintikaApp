@@ -51,7 +51,7 @@ const ProductDetail = ({ navigation, route }) => {
           art_id: id,
           creator_id: creatorId,
           quantity: 1,
-          token: authToken,
+          Authorization: authToken,
         })
       );
     } else {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     }),
   },
   mainImg: {
-    resizeMode: "contain",
+    resizeMode: "cover",
     width: "93%",
     height: 350,
     borderRadius: 10,

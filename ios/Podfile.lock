@@ -550,7 +550,7 @@ PODS:
     - React-jsi (= 0.72.3)
     - React-logger (= 0.72.3)
     - React-perflogger (= 0.72.3)
-  - RNCAsyncStorage (1.23.1):
+  - RNCAsyncStorage (1.24.0):
     - React-Core
   - RNCCheckbox (0.5.17):
     - BEMCheckBox (~> 1.4)
@@ -568,6 +568,10 @@ PODS:
     - React-Core
   - RNPermissions (4.1.5):
     - React-Core
+  - RNReanimated (3.6.0):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
   - RNScreens (3.32.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -660,6 +664,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -806,6 +811,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNVectorIcons:
@@ -886,7 +893,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 689e7a7a59be73d4b41ce0bdbfca6d5de99ebec2
   React-utils: 7fd3d931a5487f66d185e9bf78d71b55b5a5e47d
   ReactCommon: f1e92b2cd9fbcf42969c002948bd88747fd751ad
-  RNCAsyncStorage: aa75595c1aefa18f868452091fa0c411a516ce11
+  RNCAsyncStorage: b6410dead2732b5c72a7fdb1ecb5651bbcf4674b
   RNCCheckbox: 450ce156f3e29e25efa0315c96cfbabe5a39ded1
   RNCMaskedView: 4c5ee1c8667d56077246cc6d1977f77393923560
   RNCPicker: ba7ceb25a6e7c1d98aec9fa5a0d842934c7b316e
@@ -894,6 +901,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 5fe9e4f847b51d8cc9006cec6c7dc6718dd82809
   RNGoogleSignin: b8f09e3ec56e09497e1e53b0ff66d5a45916c6b1
   RNPermissions: 6a02e3cb2c65fbcdceb5111131e7725cda40efd2
+  RNReanimated: 1af9a7dcf56d61c3d6cdb23d3196b341269b5a19
   RNScreens: 67dd26e0c1e6df63f4ccaaf281c1ecdd88c995c3
   RNVectorIcons: 2d86acb67d3b496b55ec50893f751ce5ce74783e
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

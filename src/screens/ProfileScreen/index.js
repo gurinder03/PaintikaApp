@@ -93,7 +93,7 @@ export default function ProfileScreen({ navigation }) {
   const getUserData = () => {
     if (userId !== "" && authToken !== null) {
       const payload = {
-        token: authToken,
+        Authorization: authToken,
         userId: userId,
         role: userSavedData?.role
       };

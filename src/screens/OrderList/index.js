@@ -156,11 +156,13 @@ export default function OrderList({ navigation }) {
   };
 
   const renderItem = ({ item }) => {
+   
     const color = item.id === selectedId ? 'white' : 'black';
     return (
       <Item
         item={item}
-        onPress={() => navigation.navigate((userSavedData && userSavedData.role !== "ARTIST") ? "OrderDetails" : "ArtistOrderDetails", {
+        onPress={() => 
+          navigation.navigate((userSavedData && userSavedData.role !== "ARTIST") ? "OrderDetails" : "ArtistOrderDetails", {
           details: item,
         })}
       />

@@ -76,7 +76,7 @@ export default function CartScreen({ navigation }) {
         art_id: data.art_id,
         creator_id: data.creator_id,
         quantity: type == 'Incremented' ? 1 : - 1,
-        token: authToken,
+        Authorization: authToken,
       })
     );
   };

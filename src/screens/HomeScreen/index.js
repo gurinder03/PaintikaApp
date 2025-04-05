@@ -61,7 +61,7 @@ export default function HomeScreen({ navigation }) {
               />
             ) : (
               <View>
-                <Text style={styles.noRocord}>No Records Found!</Text>
+                <Text style={styles.noRocord}></Text>
               </View>
             )}
           </View>

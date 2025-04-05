@@ -102,7 +102,7 @@ export default function ArtistOrderDetails({ navigation, route }) {
                         <Text style={{ fontWeight: "bold", marginVertical: 5, fontSize: 15 }}>{"Item " + (index + 1)}</Text>
                         <Image
                             resizeMode="contain"
-                            source={{ uri: item.image }}
+                            source={{ uri: item.image[0] }}
                             style={{
                                 width: "100%",
                                 height: 150,

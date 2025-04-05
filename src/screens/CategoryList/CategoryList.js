@@ -233,7 +233,7 @@ export default function CategoryList({ navigation, route }) {
         }}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 10 }}>
-            <Text style={{ color: '#000000', fontWeight: '600', fontSize: 17 }}>Records Not Found!</Text>
+            <Text style={{ color: '#000000', fontWeight: '600', fontSize: 17 }}></Text>
             <LottieView source={require("../../../assets/animations/notfound.json")} autoPlay />
           </View>
         }

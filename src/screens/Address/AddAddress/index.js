@@ -142,7 +142,7 @@ export default function AddAddress({ route, navigation }) {
         lng: "75.20524",
         name: Info?.name,
         type: Info?.addressType,
-        token: authToken,
+        Authorization: authToken,
         user_id: userId,
         address: {
           address: Info.address,
@@ -233,6 +233,7 @@ export default function AddAddress({ route, navigation }) {
           onChange={(e) => onHandleChnage(e, "phone")}
           value={Info?.email}
           type={"number"}
+          maxlength={12}
         />
         <TextInputComponent
           title={"Pincode"}
@@ -240,6 +241,7 @@ export default function AddAddress({ route, navigation }) {
           value={Info?.pincode}
           placeHolder={"Enter your Pincode"}
           type={"number"}
+          maxlength={7}
         />
         <View style={styles.container}>
           <Text style={styles.placeHolder}>Address</Text>
@@ -312,6 +314,7 @@ export default function AddAddress({ route, navigation }) {
             value={Info?.alternate}
             keyboardType="numeric"
             placeholder={"Alternate Phone (optional)"}
+            maxlength={12}
           />
         </View>
         {/* <CustomPicker

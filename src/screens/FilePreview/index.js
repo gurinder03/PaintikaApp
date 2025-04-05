@@ -19,6 +19,7 @@ import { getAllCategories } from "../../redux/actions";
 import CheckBox from "@react-native-community/checkbox";
 import Toast from "react-native-toast-message";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import Carousel from 'react-native-reanimated-carousel';
 
 const whiteBackground = {
   backgroundColor: "#FFFFFF",
@@ -62,6 +63,7 @@ export default function FilePreview({ navigation, route }) {
   const [userId, setuserId] = useState("");
   const [authToken, setauthToken] = useState("");
   const { path } = route?.params;
+  console.log('path>>>>>>',path);
 
   useEffect(() => {
     getRole();
@@ -76,9 +78,9 @@ export default function FilePreview({ navigation, route }) {
   function areAllValuesFilled(object) {
     for (const key in object) {
       if (object.hasOwnProperty(key)) {
-        if (key === 'is_copy' && object[key] !== true) {
-          return false;
-        }
+        // if (key === 'is_copy' && object[key] !== true) {
+        //   return false;
+        // }
         if (object[key] === "" || object[key] === null || object[key] === undefined) {
           return false;
         }
@@ -130,7 +132,7 @@ export default function FilePreview({ navigation, route }) {
           postData.description = data.desc,
           postData.color = data.colors.name,
           postData.token = authToken;
-        postData.imagePath = path[0];
+        postData.imagePath = path;
         postData.role = "ARTIST";
         dispatch({ type: "ADD_PREORDER", payload: postData });
       } else {
@@ -153,9 +155,9 @@ export default function FilePreview({ navigation, route }) {
       }
       let dataPre = {
         description: descriptionData,
-        imagePath: path[0],
+        imagePath: path,
         role: "USER",
-        token: authToken,
+        Authorization: authToken,
         userId: userId,
       };
       dispatch({ type: "ADD_PREORDER", payload: dataPre });
@@ -221,12 +223,29 @@ export default function FilePreview({ navigation, route }) {
         </View>
       </Modal>
       <View style={styles.container}>
-        <View style={{ alignItems: "center" }}>
-          <Image
-            source={{ uri: path && path[0].uri }}
+      <View style={{ flex: 1, justifyContent: 'center',alignItems:'center' }}>
+      <Carousel
+        width={350}
+        height={200}
+        data={path} // sample data
+        scrollAnimationDuration={1000}
+        renderItem={({ index }) => (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              backgroundColor: 'lightblue',
+        alignItems:'center'
+            }}
+          >
+           <Image
+            source={{ uri:  path[index].uri }}
             resizeMode="contain"
             style={styles.imgMain} />
-        </View>
+          </View>
+        )}
+      />
+    </View>
         <View style={styles.inputSection}>
           {userSavedData && userSavedData.role == "ARTIST" ? (
             <View>
@@ -363,8 +382,8 @@ export default function FilePreview({ navigation, route }) {
                 />
               </View>
               <View style={{
-                flexDirection: 'row', padding: 5, alignItems: 'center', width: '100%',
-                margin: 5, justifyContent: 'space-between', marginTop: 15
+                flexDirection: 'row', padding: 5, alignItems: 'center', width: '90%',
+                margin: 5, marginTop: 15,justifyContent:'space-around'
               }}>
                 <CheckBox
                   tintColors={{
@@ -382,7 +401,7 @@ export default function FilePreview({ navigation, route }) {
                     handleChange("checkbox")
                   }
                 />
-                <Text numberOfLines={2} onPress={() => handleChange("checkbox")}>{"I am uploading a copy of the origional painting."}</Text>
+                <Text numberOfLines={2} onPress={() => handleChange("checkbox")}>{"Uploading copy of origional painting."}</Text>
 
               </View>
             </View>
@@ -475,7 +494,7 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 15,
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
   },
   buttonText: {
     backgroundColor: "#000",

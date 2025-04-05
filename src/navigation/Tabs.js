@@ -89,6 +89,8 @@ export default function Tabs() {
               component={CartScreen}
             />
           }
+          {
+            (userSavedData && userSavedData.role == "ARTIST") &&
           <Tab.Screen
             name={userSavedData && userSavedData.role == "ARTIST" ? "Upload Paint" : "Pre-Upload"}
             options={{
@@ -96,6 +98,7 @@ export default function Tabs() {
             }}
             component={VisualSearch}
           />
+}
 
           <Tab.Screen
             name={userSavedData && userSavedData.role == "ARTIST" ? "Orders" : "My Orders"}

@@ -42,27 +42,27 @@ export default function OrderDetails({ navigation, route }) {
                     <View style={{ width: "100%", top: 20, paddingHorizontal: 15 }}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             {/* <Text style={{ fontWeight: "bold", color: "grey" }}>Order Number :</Text> */}
-                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].order_number} </Text>
+                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.order_number} </Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>CreatedAt :</Text>
-                            <Text style={{ fontWeight: "500", color: "grey" }}>{new Date(details?.artist_orders[0].created_at).toISOString().split('T')[0].split('-').reverse().join('-')}</Text>
+                            <Text style={{ fontWeight: "500", color: "grey" }}>{new Date(details?.created_at).toISOString().split('T')[0].split('-').reverse().join('-')}</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Payment Id :</Text>
-                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].payment_id} </Text>
+                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.payment_id} </Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Payment Method :</Text>
-                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].payment_method} </Text>
+                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.payment_method} </Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Payment Status :</Text>
-                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].payment_status} </Text>
+                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.payment_status} </Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Order Status :</Text>
-                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].status} </Text>
+                            <Text style={{ fontWeight: "500", color: "grey" }}> {details?.status} </Text>
                         </View>
                     </View>
                 </View>
@@ -82,36 +82,36 @@ export default function OrderDetails({ navigation, route }) {
                 <View style={{ width: "100%", top: 20, paddingHorizontal: 15, }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                         <Text style={{ fontWeight: "bold", color: "grey" }}>Name :</Text>
-                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].user_detail.name} </Text>
+                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.user_detail.name} </Text>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                         <Text style={{ fontWeight: "bold", color: "grey" }}>Email/Phone :</Text>
-                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].user_detail.email_or_mobile_number} </Text>
+                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.user_detail.email_or_mobile_number} </Text>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                         <Text style={{ fontWeight: "bold", color: "grey" }}>Role :</Text>
-                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].user_detail.role}  </Text>
+                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.user_detail.role}  </Text>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 40 }}>
                         <Text style={{ fontWeight: "bold", color: "grey" }}>Timezone :</Text>
-                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].timezone}</Text>
+                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.timezone}</Text>
                     </View>
                 </View>
                 {details?.items.map((item, index) => (
                     <View style={{ width: "100%", paddingHorizontal: 15 }}>
                         <Text style={{ fontWeight: "bold", marginVertical: 5, fontSize: 15 }}>{"Item " + (index + 1)}</Text>
-                        <Image
-                            resizeMode="contain"
-                            source={{ uri: item.image }}
-                            style={{ width: "100%", height: 170, marginBottom: 10, borderRadius: 10, resizeMode: "contain" }}
-                        />
+                             <Image
+                                resizeMode="contain"
+                                source={{ uri: item.image[0] }}
+                                style={{ width: "100%", height: 170, marginBottom: 10, borderRadius: 10, resizeMode: "cover" }}
+                            /> 
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Item Name :</Text>
                             <Text style={{ fontWeight: "500", color: "grey" }}> {item.name} </Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Item theme :</Text>
-                            <Text style={{ fontWeight: "500", color: "grey" }}> {item.theme}</Text>
+                            <Text style={{ fontWeight: "500", color: "grey" }}> {item.name}</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
                             <Text style={{ fontWeight: "bold", color: "grey" }}>Size:</Text>
@@ -130,15 +130,15 @@ export default function OrderDetails({ navigation, route }) {
                 <View style={{ width: "100%", paddingHorizontal: 15, top: 10, }}>
                     <View style={{ flexDirection: "row", marginBottom: 10, justifyContent: "space-between", }}>
                         <Text style={{ fontWeight: "bold" }}>Order Sub Total :</Text>
-                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].order_sub_total} </Text>
+                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.order_sub_total} </Text>
                     </View>
                     <View style={{ flexDirection: "row", marginBottom: 10, justifyContent: "space-between", }}>
                         <Text style={{ fontWeight: "bold" }}>Tax :</Text>
-                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].tax}</Text>
+                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.tax}</Text>
                     </View>
                     <View style={{ flexDirection: "row", marginBottom: 10, justifyContent: "space-between", }}>
                         <Text style={{ fontWeight: "bold" }}>Order total :</Text>
-                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.artist_orders[0].order_total} </Text>
+                        <Text style={{ fontWeight: "500", color: "grey" }}> {details?.order_total} </Text>
                     </View>
                 </View>
             </View>

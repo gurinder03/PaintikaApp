@@ -40,6 +40,7 @@ export default function Address({ navigation, route }) {
   }, [isFocused]);
 
   useEffect(() => {
+    
     if (userId !== "" && authToken !== "") {
       // console.log("INSIDE SUCCESS>>>>>>");
       dispatch({
@@ -68,7 +69,7 @@ export default function Address({ navigation, route }) {
   const getAuthToken = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("authToken");
-      // console.log("🚀 ~ file: index.js:41 ~ getAuthToken ~ jsonValue:",  jsonValue);
+       console.log("🚀 ~ file: index.js:41 ~ getAuthToken ~ jsonValue:",  jsonValue);
       if (jsonValue !== null) {
         setauthToken(JSON.parse(jsonValue));
       }

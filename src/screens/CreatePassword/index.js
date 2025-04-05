@@ -41,7 +41,7 @@ export default function CreatePassword({navigation}) {
         Alert.alert("Confirm Password didn't matched with new password.");
       } else {
         const payload = {
-          token: authToken,
+          Authorization: authToken,
           id: userId,
           current_password: intialPassword,
           new_password: newPassword,
